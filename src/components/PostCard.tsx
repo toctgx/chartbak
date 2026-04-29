@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     borderBottomColor: COLORS.border,
   },
   cardHighlight: {
-    backgroundColor: '#FFFAF2',
+    backgroundColor: '#F2F7EE',
     borderLeftWidth: 3,
     borderLeftColor: COLORS.primary,
   },
