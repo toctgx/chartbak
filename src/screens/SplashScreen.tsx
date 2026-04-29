@@ -34,7 +34,7 @@ export default function SplashScreen({ onFinish }: Props) {
       <Animated.View
         style={[styles.content, { opacity: fadeAnim, transform: [{ scale: scaleAnim }] }]}
       >
-        <Text style={styles.emoji}>📋</Text>
+        <Text style={styles.emoji}>🏥</Text>
         <Text style={styles.title}>차트밖</Text>
         <Text style={styles.subtitle}>Chart Outside</Text>
         <Text style={styles.tagline}>의사한테 못 한 말, 여기서 써요</Text>
@@ -46,7 +46,7 @@ export default function SplashScreen({ onFinish }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#2E86DE',
+    backgroundColor: '#0464F1',
     justifyContent: 'center',
     alignItems: 'center',
   },

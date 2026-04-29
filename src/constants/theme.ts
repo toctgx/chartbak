@@ -1,35 +1,42 @@
-// 차트밖 × Niva 디자인 시스템
+// 차트밖 × DocVisit Design System (v3)
+// Bright Blue + Navy + Sky Blue
+// Pantone 참고: 286 C (Blue), 282 C (Navy), 290 C (Sky Blue)
 export const COLORS = {
-  // ── Primary — Warm Amber (Niva 기반) ──────────────────
-  primary: '#E8A838',          // 주 액션 색상 — 버튼, 활성 탭
-  primaryLight: '#FCE2A2',     // 하이라이트 배경, 탭 활성 박스
-  primaryPale: '#FEF6E4',      // 카드 강조 배경
-  primaryDark: '#B87E20',      // 눌렸을 때
+  // ── Primary — Bright Blue ─────────────────────────────
+  primary: '#0464F1',          // Pantone 286 C 유사 (Bright Blue)
+  primaryLight: '#CBE6FC',     // Sky Blue (Pantone 290 C 유사)
+  primaryPale: '#EFF6FF',      // Very Light Blue (카드 강조 배경)
+  primaryDark: '#0350C0',      // Deep Blue
 
   // ── Background ────────────────────────────────────────
-  background: '#FAF8F5',       // 크림 화이트 (Niva) — 차가운 #F8F9FA 대신
+  background: '#F8FAFF',       // Very Light Blue-White
   surface: '#FFFFFF',
-  surfaceSecondary: '#F3EFE9', // 따뜻한 보조 배경
+  surfaceSecondary: '#EFF5FF', // Light Blue-Gray
 
   // ── Text ──────────────────────────────────────────────
-  textPrimary: '#252728',      // Deep Charcoal (Niva)
-  textSecondary: '#71747C',
-  textTertiary: '#B0B3BB',
+  textPrimary: '#133568',      // Dark Navy (Pantone 282 C 유사)
+  textSecondary: '#5C7792',    // Slate Blue
+  textTertiary: '#9DB2C7',     // Light Slate
   textInverse: '#FFFFFF',
 
   // ── 역할 색상 ─────────────────────────────────────────
-  patient: '#3B82F6',          // 환자 — 블루
-  caregiver: '#22C55E',        // 환우 — 그린
+  patient: '#0464F1',          // Bright Blue (환자)
+  caregiver: '#7290AA',        // Slate Blue (환우)
 
   // ── 상태 ──────────────────────────────────────────────
-  success: '#22C55E',
-  warning: '#F59E0B',
-  error: '#EF4444',
-  info: '#3B82F6',
+  success: '#1A9E5C',          // Medical Green
+  warning: '#E8940A',          // Warm Amber
+  error: '#E53E3E',
+  info: '#0464F1',
 
-  // ── 구분선 / 보조 ─────────────────────────────────────
-  border: '#EDE6DF',           // 따뜻한 베이지 톤 구분선 (Niva)
-  borderDark: '#C6B8A9',       // 더 진한 베이지
+  // ── 보조 색상 (DocVisit 브랜딩) ───────────────────────
+  navyDeep: '#0A2347',         // Deep Navy
+  skyBlue: '#CBE6FC',          // Sky Blue
+  slateBlue: '#7290AA',        // Slate Blue
+
+  // ── 구분선 ────────────────────────────────────────────
+  border: '#D6E4F3',           // Light Blue-Gray Border
+  borderDark: '#A8C4DE',
 };
 
 export const FONTS = {
@@ -59,25 +66,24 @@ export const SPACING = {
 export const RADIUS = {
   sm: 10,
   md: 14,
-  lg: 22,      // Niva — 더 큰 radius
+  lg: 20,      // DocVisit — 중간 radius
   xl: 28,
   full: 999,
 };
 
 export const SHADOWS = {
   sm: {
-    shadowColor: '#252728',
+    shadowColor: '#133568',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
+    shadowOpacity: 0.06,
     shadowRadius: 4,
     elevation: 1,
   },
   md: {
-    shadowColor: '#252728',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.07,
-    shadowRadius: 10,
-    elevation: 3,
+    shadowColor: '#133568',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 4,
   },
 };
-// cache-bust-1777439784
