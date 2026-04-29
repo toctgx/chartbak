@@ -1,39 +1,35 @@
-// 병갔왔 디자인 시스템
+// 차트밖 × Niva 디자인 시스템
 export const COLORS = {
-  // Primary - 따뜻하고 신뢰감 있는 블루
-  primary: '#2E86DE',
-  primaryLight: '#74B9FF',
-  primaryDark: '#1A6BB5',
+  // ── Primary — Warm Amber (Niva 기반) ──────────────────
+  primary: '#E8A838',          // 주 액션 색상 — 버튼, 활성 탭
+  primaryLight: '#FCE2A2',     // 하이라이트 배경, 탭 활성 박스
+  primaryPale: '#FEF6E4',      // 카드 강조 배경
+  primaryDark: '#B87E20',      // 눌렸을 때
 
-  // 배경
-  background: '#F8F9FA',
+  // ── Background ────────────────────────────────────────
+  background: '#FAF8F5',       // 크림 화이트 (Niva) — 차가운 #F8F9FA 대신
   surface: '#FFFFFF',
-  surfaceSecondary: '#F1F3F4',
+  surfaceSecondary: '#F3EFE9', // 따뜻한 보조 배경
 
-  // 텍스트
-  textPrimary: '#1A1A2E',
-  textSecondary: '#6C757D',
-  textTertiary: '#ADB5BD',
+  // ── Text ──────────────────────────────────────────────
+  textPrimary: '#252728',      // Deep Charcoal (Niva)
+  textSecondary: '#71747C',
+  textTertiary: '#B0B3BB',
   textInverse: '#FFFFFF',
 
-  // 공감 이모지 배경
-  emojiBlue: '#EBF5FF',
-  emojiGreen: '#EAFAF1',
-  emojiOrange: '#FEF9E7',
+  // ── 역할 색상 ─────────────────────────────────────────
+  patient: '#3B82F6',          // 환자 — 블루
+  caregiver: '#22C55E',        // 환우 — 그린
 
-  // 역할 색상
-  patient: '#2E86DE',   // 환자 - 블루
-  caregiver: '#27AE60', // 환우(보호자) - 그린
+  // ── 상태 ──────────────────────────────────────────────
+  success: '#22C55E',
+  warning: '#F59E0B',
+  error: '#EF4444',
+  info: '#3B82F6',
 
-  // 상태
-  success: '#27AE60',
-  warning: '#F39C12',
-  error: '#E74C3C',
-  info: '#3498DB',
-
-  // 구분선
-  border: '#E9ECEF',
-  borderDark: '#DEE2E6',
+  // ── 구분선 / 보조 ─────────────────────────────────────
+  border: '#EDE6DF',           // 따뜻한 베이지 톤 구분선 (Niva)
+  borderDark: '#C6B8A9',       // 더 진한 베이지
 };
 
 export const FONTS = {
@@ -61,26 +57,27 @@ export const SPACING = {
 };
 
 export const RADIUS = {
-  sm: 8,
-  md: 12,
-  lg: 16,
-  xl: 24,
+  sm: 10,
+  md: 14,
+  lg: 22,      // Niva — 더 큰 radius
+  xl: 28,
   full: 999,
 };
 
 export const SHADOWS = {
   sm: {
-    shadowColor: '#000',
+    shadowColor: '#252728',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
-    shadowRadius: 2,
+    shadowRadius: 4,
     elevation: 1,
   },
   md: {
-    shadowColor: '#000',
+    shadowColor: '#252728',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
+    shadowOpacity: 0.07,
+    shadowRadius: 10,
     elevation: 3,
   },
 };
+// cache-bust-1777439784

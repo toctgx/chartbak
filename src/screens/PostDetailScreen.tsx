@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, ScrollView,
-  TouchableOpacity, TextInput, KeyboardAvoidingView, Platform
+  TouchableOpacity, TextInput
 } from 'react-native';
-import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../constants/theme';
-import { Post, Comment, ReactionType, REACTION_LABELS, POST_TYPE_LABELS, POST_TYPE_EMOJIS } from '../types';
+import { COLORS, FONTS, SPACING, RADIUS } from '../constants/theme';
+import { Post, Comment, ReactionType, POST_TYPE_LABELS, POST_TYPE_EMOJIS } from '../types';
 import { DISEASES } from '../constants/diseases';
 import { MOCK_COMMENTS } from '../lib/mockData';
 import { formatDistanceToNow } from 'date-fns';
@@ -20,6 +20,7 @@ interface Props {
 export default function PostDetailScreen({ route, navigation, nickname, userRole }: Props) {
   const post = route?.params?.post;
   if (!post) return null;
+
   const [comments, setComments] = useState<Comment[]>(
     MOCK_COMMENTS.filter(c => c.post_id === post.id)
   );
@@ -41,10 +42,7 @@ export default function PostDetailScreen({ route, navigation, nickname, userRole
     setPostState(prev => ({
       ...prev,
       user_reaction: wasReacted ? null : type,
-      reactions: {
-        ...prev.reactions,
-        [type]: wasReacted ? prev.reactions[type] - 1 : prev.reactions[type] + 1,
-      },
+      reactions: { ...prev.reactions, [type]: wasReacted ? prev.reactions[type] - 1 : prev.reactions[type] + 1 },
     }));
   };
 
@@ -67,10 +65,7 @@ export default function PostDetailScreen({ route, navigation, nickname, userRole
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
+    <View style={styles.container}>
       {/* 헤더 */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -79,44 +74,35 @@ export default function PostDetailScreen({ route, navigation, nickname, userRole
         {disease && <Text style={styles.headerTitle}>{disease.emoji} {disease.name} 라운지</Text>}
       </View>
 
-      <ScrollView style={styles.scroll} contentContainerStyle={{ paddingBottom: 100 }}>
+      {/* 전체 스크롤 */}
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
         {/* 게시글 */}
         <View style={styles.post}>
-          {/* 태그 */}
           <View style={styles.tags}>
-            <View style={[
-              styles.roleTag,
-              { backgroundColor: post.author_role === 'patient' ? '#EBF5FF' : '#EAFAF1' }
-            ]}>
-              <Text style={[
-                styles.roleTagText,
-                { color: post.author_role === 'patient' ? COLORS.patient : COLORS.caregiver }
-              ]}>
+            <View style={[styles.roleTag, { backgroundColor: post.author_role === 'patient' ? '#EBF5FF' : '#EAFAF1' }]}>
+              <Text style={[styles.roleTagText, { color: post.author_role === 'patient' ? COLORS.patient : COLORS.caregiver }]}>
                 {post.author_role === 'patient' ? '환자' : '환우'}
               </Text>
             </View>
             <View style={styles.typeTag}>
-              <Text style={styles.typeTagText}>
-                {POST_TYPE_EMOJIS[post.post_type]} {POST_TYPE_LABELS[post.post_type]}
-              </Text>
+              <Text style={styles.typeTagText}>{POST_TYPE_EMOJIS[post.post_type]} {POST_TYPE_LABELS[post.post_type]}</Text>
             </View>
           </View>
 
-          {/* 제목 */}
           <Text style={styles.title}>{post.title}</Text>
-
-          {/* 작성자 + 시간 */}
           <View style={styles.metaRow}>
-            <Text style={styles.nickname}>{post.author_nickname}</Text>
+            <Text style={styles.nicknameTxt}>{post.author_nickname}</Text>
             <Text style={styles.separator}>·</Text>
             <Text style={styles.time}>{timeAgo}</Text>
           </View>
 
           <View style={styles.divider} />
-
-          {/* 본문 */}
           <Text style={styles.content}>{post.content}</Text>
-
           <View style={styles.divider} />
 
           {/* 공감 */}
@@ -125,23 +111,12 @@ export default function PostDetailScreen({ route, navigation, nickname, userRole
             {reactions.map(({ type, emoji, label }) => (
               <TouchableOpacity
                 key={type}
-                style={[
-                  styles.reactionBtn,
-                  postState.user_reaction === type && styles.reactionBtnActive
-                ]}
+                style={[styles.reactionBtn, postState.user_reaction === type && styles.reactionBtnActive]}
                 onPress={() => handleReact(type)}
               >
                 <Text style={styles.reactionEmoji}>{emoji}</Text>
-                <Text style={[
-                  styles.reactionLabel,
-                  postState.user_reaction === type && { color: COLORS.primary }
-                ]}>
-                  {label}
-                </Text>
-                <Text style={[
-                  styles.reactionCount,
-                  postState.user_reaction === type && { color: COLORS.primary }
-                ]}>
+                <Text style={[styles.reactionLabel, postState.user_reaction === type && { color: COLORS.primary }]}>{label}</Text>
+                <Text style={[styles.reactionCount, postState.user_reaction === type && { color: COLORS.primary }]}>
                   {postState.reactions[type]}
                 </Text>
               </TouchableOpacity>
@@ -153,19 +128,10 @@ export default function PostDetailScreen({ route, navigation, nickname, userRole
         <View style={styles.commentsSection}>
           <Text style={styles.commentsTitle}>💬 댓글 {comments.length}개</Text>
           {comments.map(comment => (
-            <View key={comment.id} style={[
-              styles.commentCard,
-              comment.parent_id && styles.commentReply
-            ]}>
+            <View key={comment.id} style={[styles.commentCard, comment.parent_id && styles.commentReply]}>
               <View style={styles.commentHeader}>
-                <View style={[
-                  styles.roleTagSmall,
-                  { backgroundColor: comment.author_role === 'patient' ? '#EBF5FF' : '#EAFAF1' }
-                ]}>
-                  <Text style={[
-                    styles.roleTagSmallText,
-                    { color: comment.author_role === 'patient' ? COLORS.patient : COLORS.caregiver }
-                  ]}>
+                <View style={[styles.roleTagSmall, { backgroundColor: comment.author_role === 'patient' ? '#EBF5FF' : '#EAFAF1' }]}>
+                  <Text style={[styles.roleTagSmallText, { color: comment.author_role === 'patient' ? COLORS.patient : COLORS.caregiver }]}>
                     {comment.author_role === 'patient' ? '환자' : '환우'}
                   </Text>
                 </View>
@@ -181,103 +147,105 @@ export default function PostDetailScreen({ route, navigation, nickname, userRole
             </View>
           ))}
         </View>
-      </ScrollView>
 
-      {/* 댓글 입력 */}
-      <View style={styles.commentInput}>
-        {replyTo && (
-          <View style={styles.replyIndicator}>
-            <Text style={styles.replyIndicatorText}>답글 작성 중</Text>
-            <TouchableOpacity onPress={() => setReplyTo(null)}>
-              <Text style={styles.replyCancel}>✕</Text>
+        {/* 댓글 입력 - 스크롤 안으로 이동 */}
+        <View style={styles.commentInputArea}>
+          {replyTo && (
+            <View style={styles.replyIndicator}>
+              <Text style={styles.replyIndicatorText}>답글 작성 중</Text>
+              <TouchableOpacity onPress={() => setReplyTo(null)}>
+                <Text style={styles.replyCancel}>✕</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+          <View style={styles.inputRow}>
+            <TextInput
+              style={styles.input}
+              placeholder={replyTo ? '답글을 입력하세요' : '댓글을 입력하세요'}
+              placeholderTextColor={COLORS.textTertiary}
+              value={commentText}
+              onChangeText={setCommentText}
+              multiline
+            />
+            <TouchableOpacity
+              style={[styles.sendBtn, !commentText.trim() && styles.sendBtnDisabled]}
+              onPress={handleComment}
+              disabled={!commentText.trim()}
+            >
+              <Text style={styles.sendBtnText}>전송</Text>
             </TouchableOpacity>
           </View>
-        )}
-        <View style={styles.inputRow}>
-          <TextInput
-            style={styles.input}
-            placeholder={replyTo ? '답글을 입력하세요' : '댓글을 입력하세요'}
-            placeholderTextColor={COLORS.textTertiary}
-            value={commentText}
-            onChangeText={setCommentText}
-            multiline
-          />
-          <TouchableOpacity
-            style={[styles.sendBtn, !commentText.trim() && styles.sendBtnDisabled]}
-            onPress={handleComment}
-            disabled={!commentText.trim()}
-          >
-            <Text style={styles.sendBtnText}>전송</Text>
-          </TouchableOpacity>
         </View>
-      </View>
-    </KeyboardAvoidingView>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   header: {
-    flexDirection: 'row', alignItems: 'center', gap: SPACING.md,
+    flexDirection: 'row', alignItems: 'center',
     paddingHorizontal: SPACING.lg, paddingTop: 56, paddingBottom: SPACING.md,
     backgroundColor: COLORS.surface, borderBottomWidth: 1, borderBottomColor: COLORS.border,
   },
-  back: { fontSize: FONTS.sizes.md, color: COLORS.primary },
+  back: { fontSize: FONTS.sizes.md, color: COLORS.primary, marginRight: SPACING.md },
   headerTitle: { fontSize: FONTS.sizes.sm, fontWeight: '600', color: COLORS.textPrimary },
   scroll: { flex: 1 },
+  scrollContent: { paddingBottom: SPACING.xxl },
   post: { backgroundColor: COLORS.surface, padding: SPACING.lg, marginBottom: SPACING.sm },
-  tags: { flexDirection: 'row', gap: SPACING.xs, marginBottom: SPACING.sm },
-  roleTag: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: RADIUS.full },
+  tags: { flexDirection: 'row', marginBottom: SPACING.sm },
+  roleTag: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: RADIUS.full, marginRight: 6 },
   roleTagText: { fontSize: FONTS.sizes.xs, fontWeight: '700' },
   typeTag: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: RADIUS.full, backgroundColor: COLORS.surfaceSecondary },
   typeTagText: { fontSize: FONTS.sizes.xs, color: COLORS.textSecondary },
   title: { fontSize: FONTS.sizes.xl, fontWeight: '800', color: COLORS.textPrimary, lineHeight: 28, marginBottom: SPACING.sm },
   metaRow: { flexDirection: 'row', alignItems: 'center', marginBottom: SPACING.md },
-  nickname: { fontSize: FONTS.sizes.sm, color: COLORS.textSecondary },
+  nicknameTxt: { fontSize: FONTS.sizes.sm, color: COLORS.textSecondary },
   separator: { color: COLORS.textTertiary, marginHorizontal: 6 },
   time: { fontSize: FONTS.sizes.sm, color: COLORS.textTertiary },
   divider: { height: 1, backgroundColor: COLORS.border, marginVertical: SPACING.md },
   content: { fontSize: FONTS.sizes.md, color: COLORS.textPrimary, lineHeight: 26 },
   reactionTitle: { fontSize: FONTS.sizes.sm, fontWeight: '600', color: COLORS.textSecondary, marginBottom: SPACING.sm },
-  reactionRow: { flexDirection: 'row', gap: SPACING.sm },
+  reactionRow: { flexDirection: 'row' },
   reactionBtn: {
-    flex: 1, alignItems: 'center', padding: SPACING.sm,
-    borderRadius: RADIUS.md, borderWidth: 1.5, borderColor: COLORS.border,
-    backgroundColor: COLORS.surface,
+    flex: 1, alignItems: 'center', padding: SPACING.sm, marginRight: SPACING.xs,
+    borderRadius: RADIUS.md, borderWidth: 1.5, borderColor: COLORS.border, backgroundColor: COLORS.surface,
   },
   reactionBtnActive: { borderColor: COLORS.primary, backgroundColor: '#EBF5FF' },
-  reactionEmoji: { fontSize: 24, marginBottom: 4 },
+  reactionEmoji: { fontSize: 22, marginBottom: 4 },
   reactionLabel: { fontSize: FONTS.sizes.xs, color: COLORS.textSecondary, marginBottom: 2 },
   reactionCount: { fontSize: FONTS.sizes.sm, fontWeight: '700', color: COLORS.textSecondary },
-  commentsSection: { backgroundColor: COLORS.surface, padding: SPACING.lg },
+  commentsSection: { backgroundColor: COLORS.surface, padding: SPACING.lg, marginBottom: SPACING.sm },
   commentsTitle: { fontSize: FONTS.sizes.md, fontWeight: '700', color: COLORS.textPrimary, marginBottom: SPACING.md },
   commentCard: {
     padding: SPACING.md, backgroundColor: COLORS.surfaceSecondary,
     borderRadius: RADIUS.md, marginBottom: SPACING.sm,
   },
   commentReply: { marginLeft: SPACING.lg, borderLeftWidth: 3, borderLeftColor: COLORS.primary + '40' },
-  commentHeader: { flexDirection: 'row', alignItems: 'center', gap: SPACING.xs, marginBottom: SPACING.xs },
-  roleTagSmall: { paddingHorizontal: 6, paddingVertical: 2, borderRadius: RADIUS.full },
+  commentHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: SPACING.xs },
+  roleTagSmall: { paddingHorizontal: 6, paddingVertical: 2, borderRadius: RADIUS.full, marginRight: 6 },
   roleTagSmallText: { fontSize: 10, fontWeight: '700' },
   commentNickname: { flex: 1, fontSize: FONTS.sizes.sm, fontWeight: '600', color: COLORS.textPrimary },
   commentTime: { fontSize: FONTS.sizes.xs, color: COLORS.textTertiary },
   commentContent: { fontSize: FONTS.sizes.sm, color: COLORS.textPrimary, lineHeight: 20, marginBottom: SPACING.xs },
   replyBtn: { fontSize: FONTS.sizes.xs, color: COLORS.primary, fontWeight: '600' },
-  commentInput: {
-    backgroundColor: COLORS.surface, borderTopWidth: 1, borderTopColor: COLORS.border,
-    padding: SPACING.md,
+  // 댓글 입력창 - 스크롤 안에 포함
+  commentInputArea: {
+    backgroundColor: COLORS.surface, margin: SPACING.md,
+    borderRadius: RADIUS.lg, padding: SPACING.md,
+    borderWidth: 1, borderColor: COLORS.border,
   },
   replyIndicator: {
     flexDirection: 'row', justifyContent: 'space-between',
-    paddingHorizontal: SPACING.sm, paddingBottom: SPACING.xs,
+    paddingBottom: SPACING.xs,
   },
   replyIndicatorText: { fontSize: FONTS.sizes.xs, color: COLORS.primary },
   replyCancel: { fontSize: FONTS.sizes.xs, color: COLORS.textTertiary },
-  inputRow: { flexDirection: 'row', gap: SPACING.sm, alignItems: 'flex-end' },
+  inputRow: { flexDirection: 'row', alignItems: 'flex-end' },
   input: {
     flex: 1, backgroundColor: COLORS.surfaceSecondary,
     borderRadius: RADIUS.md, paddingHorizontal: SPACING.md, paddingVertical: SPACING.sm,
-    fontSize: FONTS.sizes.sm, color: COLORS.textPrimary, maxHeight: 100,
+    fontSize: FONTS.sizes.sm, color: COLORS.textPrimary, maxHeight: 100, marginRight: SPACING.sm,
   },
   sendBtn: {
     backgroundColor: COLORS.primary, borderRadius: RADIUS.md,

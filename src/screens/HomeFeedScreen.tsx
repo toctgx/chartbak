@@ -4,6 +4,7 @@ import {
   TouchableOpacity, RefreshControl
 } from 'react-native';
 import { COLORS, FONTS, SPACING, RADIUS } from '../constants/theme';
+import { IconWrite, IconPatient, IconCaregiver } from '../components/Icons';
 import { Post, ReactionType } from '../types';
 import { MOCK_POSTS } from '../lib/mockData';
 import PostCard from '../components/PostCard';
@@ -73,7 +74,8 @@ export default function HomeFeedScreen({ navigation, userDiseaseIds, nickname }:
           style={styles.writeBtn}
           onPress={() => navigation.navigate('WritePost')}
         >
-          <Text style={styles.writeBtnText}>✏️ 글쓰기</Text>
+          <IconWrite size={15} />
+          <Text style={styles.writeBtnText}> 글쓰기</Text>
         </TouchableOpacity>
       </View>
 
@@ -94,30 +96,35 @@ export default function HomeFeedScreen({ navigation, userDiseaseIds, nickname }:
 
       {/* 필터 */}
       <View style={styles.filterRow}>
-        {(['all', 'patient', 'caregiver'] as const).map(f => (
-          <TouchableOpacity
-            key={f}
-            style={[styles.filterChip, filter === f && styles.filterChipActive]}
-            onPress={() => setFilter(f)}
-          >
-            <Text style={[styles.filterText, filter === f && styles.filterTextActive]}>
-              {f === 'all' ? '전체' : f === 'patient' ? '🏥 환자글' : '🫂 환우글'}
-            </Text>
-          </TouchableOpacity>
-        ))}
+        <TouchableOpacity style={[styles.filterChip, filter==='all' && styles.filterChipActive]} onPress={() => setFilter('all')}>
+          <Text style={[styles.filterText, filter==='all' && styles.filterTextActive]}>전체</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.filterChip, filter==='patient' && styles.filterChipActive]} onPress={() => setFilter('patient')}>
+          <IconPatient size={12} />
+          <Text style={[styles.filterText, filter==='patient' && styles.filterTextActive]}> 환자글</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.filterChip, filter==='caregiver' && styles.filterChipActive]} onPress={() => setFilter('caregiver')}>
+          <IconCaregiver size={12} />
+          <Text style={[styles.filterText, filter==='caregiver' && styles.filterTextActive]}> 환우글</Text>
+        </TouchableOpacity>
       </View>
 
       {/* 피드 */}
       <FlatList
         data={filtered}
         keyExtractor={item => item.id}
-        renderItem={({ item }) => (
-          <PostCard
-            post={item}
-            onPress={() => navigation.navigate('PostDetail', { post: item })}
-            onReact={handleReact}
-          />
-        )}
+        renderItem={({ item, index }) => {
+          const total = item.reactions.helpful + item.reactions.same + item.reactions.cheer;
+          const isHighlight = index === 0 || total > 50;
+          return (
+            <PostCard
+              post={item}
+              onPress={() => navigation.navigate('PostDetail', { post: item })}
+              onReact={handleReact}
+              highlight={isHighlight}
+            />
+          );
+        }}
         contentContainerStyle={styles.list}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={COLORS.primary} />}
         ListEmptyComponent={
@@ -141,10 +148,11 @@ const styles = StyleSheet.create({
   greeting: { fontSize: FONTS.sizes.sm, color: COLORS.textSecondary },
   nickname: { fontSize: FONTS.sizes.lg, fontWeight: '700', color: COLORS.textPrimary },
   writeBtn: {
-    backgroundColor: COLORS.primary, borderRadius: RADIUS.md,
+    backgroundColor: COLORS.textPrimary, borderRadius: RADIUS.md,
     paddingHorizontal: SPACING.md, paddingVertical: SPACING.sm,
+    flexDirection: 'row', alignItems: 'center',
   },
-  writeBtnText: { color: '#fff', fontWeight: '600', fontSize: FONTS.sizes.sm },
+  writeBtnText: { color: '#fff', fontWeight: '700', fontSize: FONTS.sizes.sm, letterSpacing: -0.2 },
   tabRow: {
     flexDirection: 'row', backgroundColor: COLORS.surface,
     borderBottomWidth: 1, borderBottomColor: COLORS.border,
@@ -158,17 +166,19 @@ const styles = StyleSheet.create({
   tabTextActive: { color: COLORS.primary, fontWeight: '700' },
   filterRow: {
     flexDirection: 'row', paddingHorizontal: SPACING.lg,
-    paddingVertical: SPACING.sm, gap: SPACING.xs, backgroundColor: COLORS.surface,
+    paddingVertical: SPACING.sm, backgroundColor: COLORS.surface,
     borderBottomWidth: 1, borderBottomColor: COLORS.border,
   },
   filterChip: {
+    flexDirection: 'row', alignItems: 'center',
     paddingHorizontal: SPACING.md, paddingVertical: 6,
     borderRadius: RADIUS.full, borderWidth: 1.5, borderColor: COLORS.border,
+    marginRight: SPACING.xs,
   },
   filterChipActive: { backgroundColor: COLORS.primary + '15', borderColor: COLORS.primary },
   filterText: { fontSize: FONTS.sizes.xs, color: COLORS.textSecondary },
   filterTextActive: { color: COLORS.primary, fontWeight: '600' },
-  list: { padding: SPACING.md },
+  list: { padding: SPACING.md, paddingBottom: SPACING.xxl },
   empty: { paddingTop: 80, alignItems: 'center' },
   emptyEmoji: { fontSize: 48, marginBottom: SPACING.md },
   emptyText: { fontSize: FONTS.sizes.md, color: COLORS.textSecondary, textAlign: 'center', lineHeight: 24 },

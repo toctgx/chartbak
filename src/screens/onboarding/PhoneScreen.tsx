@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity,
-  StyleSheet, KeyboardAvoidingView, Platform, Alert
+  StyleSheet, ScrollView, Alert, Platform
 } from 'react-native';
 import { COLORS, FONTS, SPACING, RADIUS } from '../../constants/theme';
 
@@ -29,7 +29,6 @@ export default function PhoneScreen({ onNext }: Props) {
       return;
     }
     setLoading(true);
-    // MVP: 실제 SMS 대신 시뮬레이션
     setTimeout(() => {
       setLoading(false);
       setStep('verify');
@@ -42,7 +41,6 @@ export default function PhoneScreen({ onNext }: Props) {
       Alert.alert('알림', '6자리 인증번호를 입력해주세요');
       return;
     }
-    // MVP: 000000 고정 테스트 코드
     if (code === '000000') {
       onNext(phone.replace(/\D/g, ''));
     } else {
@@ -51,90 +49,88 @@ export default function PhoneScreen({ onNext }: Props) {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
-      <View style={styles.header}>
-        <Text style={styles.step}>1 / 5</Text>
-        <View style={styles.progressBar}>
-          <View style={[styles.progressFill, { width: '20%' }]} />
+    <View style={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.header}>
+          <Text style={styles.step}>1 / 5</Text>
+          <View style={styles.progressBar}>
+            <View style={[styles.progressFill, { width: '20%' }]} />
+          </View>
         </View>
-      </View>
 
-      <View style={styles.content}>
-        <Text style={styles.emoji}>📱</Text>
-        <Text style={styles.title}>
-          {step === 'phone' ? '전화번호로 시작해요' : '인증번호를 입력해주세요'}
-        </Text>
-        <Text style={styles.desc}>
-          {step === 'phone'
-            ? '익명 서비스를 위해 전화번호만 사용하고\n번호는 암호화되어 저장됩니다'
-            : `${phone}으로 발송된\n6자리 인증번호를 입력해주세요`}
-        </Text>
+        <View style={styles.content}>
+          <Text style={styles.emoji}>📱</Text>
+          <Text style={styles.title}>
+            {step === 'phone' ? '전화번호로 시작해요' : '인증번호를 입력해주세요'}
+          </Text>
+          <Text style={styles.desc}>
+            {step === 'phone'
+              ? '익명 서비스를 위해 전화번호만 사용하고\n번호는 암호화되어 저장됩니다'
+              : `${phone}으로 발송된\n6자리 인증번호를 입력해주세요`}
+          </Text>
 
-        {step === 'phone' ? (
-          <TextInput
-            style={styles.input}
-            placeholder="010-0000-0000"
-            placeholderTextColor={COLORS.textTertiary}
-            keyboardType="phone-pad"
-            value={phone}
-            onChangeText={(t) => setPhone(formatPhone(t))}
-            maxLength={13}
-          />
-        ) : (
-          <TextInput
-            style={[styles.input, styles.codeInput]}
-            placeholder="000000"
-            placeholderTextColor={COLORS.textTertiary}
-            keyboardType="number-pad"
-            value={code}
-            onChangeText={setCode}
-            maxLength={6}
-          />
-        )}
+          {step === 'phone' ? (
+            <TextInput
+              style={styles.input}
+              placeholder="010-0000-0000"
+              placeholderTextColor={COLORS.textTertiary}
+              keyboardType="phone-pad"
+              value={phone}
+              onChangeText={(t) => setPhone(formatPhone(t))}
+              maxLength={13}
+            />
+          ) : (
+            <TextInput
+              style={[styles.input, styles.codeInput]}
+              placeholder="000000"
+              placeholderTextColor={COLORS.textTertiary}
+              keyboardType="number-pad"
+              value={code}
+              onChangeText={setCode}
+              maxLength={6}
+            />
+          )}
 
-        {step === 'phone' && (
-          <TouchableOpacity
-            style={[styles.button, loading && styles.buttonDisabled]}
-            onPress={handleSendCode}
-            disabled={loading}
-          >
-            <Text style={styles.buttonText}>
-              {loading ? '발송 중...' : '인증번호 받기'}
-            </Text>
-          </TouchableOpacity>
-        )}
-
-        {step === 'verify' && (
-          <>
-            <TouchableOpacity style={styles.button} onPress={handleVerify}>
-              <Text style={styles.buttonText}>확인</Text>
+          {step === 'phone' && (
+            <TouchableOpacity
+              style={[styles.button, loading && styles.buttonDisabled]}
+              onPress={handleSendCode}
+              disabled={loading}
+            >
+              <Text style={styles.buttonText}>
+                {loading ? '발송 중...' : '인증번호 받기'}
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => setStep('phone')}>
-              <Text style={styles.resend}>전화번호 다시 입력</Text>
-            </TouchableOpacity>
-          </>
-        )}
-      </View>
-    </KeyboardAvoidingView>
+          )}
+
+          {step === 'verify' && (
+            <>
+              <TouchableOpacity style={styles.button} onPress={handleVerify}>
+                <Text style={styles.buttonText}>확인</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => setStep('phone')}>
+                <Text style={styles.resend}>전화번호 다시 입력</Text>
+              </TouchableOpacity>
+            </>
+          )}
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
+  scrollContent: { flexGrow: 1, paddingBottom: SPACING.xl },
   header: { paddingHorizontal: SPACING.lg, paddingTop: 60 },
   step: { fontSize: FONTS.sizes.sm, color: COLORS.textSecondary, marginBottom: SPACING.sm },
-  progressBar: {
-    height: 4, backgroundColor: COLORS.border, borderRadius: 2
-  },
-  progressFill: {
-    height: '100%', backgroundColor: COLORS.primary, borderRadius: 2
-  },
-  content: {
-    flex: 1, paddingHorizontal: SPACING.lg, paddingTop: SPACING.xxl
-  },
+  progressBar: { height: 4, backgroundColor: COLORS.border, borderRadius: 2 },
+  progressFill: { height: '100%', backgroundColor: COLORS.primary, borderRadius: 2 },
+  content: { flex: 1, paddingHorizontal: SPACING.lg, paddingTop: SPACING.xxl },
   emoji: { fontSize: 48, marginBottom: SPACING.md },
   title: {
     fontSize: FONTS.sizes.xxl, fontWeight: '700',
@@ -155,9 +151,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.border,
     marginBottom: SPACING.md,
   },
-  codeInput: {
-    letterSpacing: 8, textAlign: 'center', fontSize: FONTS.sizes.xxl
-  },
+  codeInput: { letterSpacing: 8, textAlign: 'center', fontSize: FONTS.sizes.xxl },
   button: {
     backgroundColor: COLORS.primary,
     borderRadius: RADIUS.md,
@@ -166,9 +160,7 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.md,
   },
   buttonDisabled: { opacity: 0.6 },
-  buttonText: {
-    color: COLORS.textInverse, fontSize: FONTS.sizes.lg, fontWeight: '600'
-  },
+  buttonText: { color: COLORS.textInverse, fontSize: FONTS.sizes.lg, fontWeight: '600' },
   resend: {
     textAlign: 'center', color: COLORS.textSecondary,
     fontSize: FONTS.sizes.sm, marginTop: SPACING.xs

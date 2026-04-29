@@ -121,7 +121,7 @@ export default function MyPageScreen({ user, onLogout }: Props) {
       {/* 법적 고지 */}
       <View style={styles.disclaimer}>
         <Text style={styles.disclaimerText}>
-          ⚠️ 병갔왔의 모든 게시글은 의료 조언이 아닙니다.{'\n'}
+          ⚠️ 차트밖의 모든 게시글은 의료 조언이 아닙니다.{'\n'}
           증상 및 치료에 대해서는 반드시 전문 의료인과 상담하세요.
         </Text>
       </View>
@@ -137,18 +137,19 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.sm,
     paddingTop: 64,
   },
-  avatarRow: { flexDirection: 'row', alignItems: 'center', gap: SPACING.md, marginBottom: SPACING.lg },
+  avatarRow: { flexDirection: 'row', alignItems: 'center', marginBottom: SPACING.lg },
   avatar: {
     width: 64, height: 64, borderRadius: 32,
     justifyContent: 'center', alignItems: 'center',
+    marginRight: SPACING.md,
   },
   avatarEmoji: { fontSize: 32 },
   profileInfo: { flex: 1 },
   nickname: { fontSize: FONTS.sizes.xl, fontWeight: '800', color: COLORS.textPrimary, marginBottom: 6 },
   roleBadge: { alignSelf: 'flex-start', paddingHorizontal: 10, paddingVertical: 4, borderRadius: RADIUS.full },
   roleText: { fontSize: FONTS.sizes.sm, fontWeight: '700' },
-  infoGrid: { flexDirection: 'row', gap: SPACING.md },
-  infoItem: { flex: 1, alignItems: 'center' },
+  infoGrid: { flexDirection: 'row' },
+  infoItem: { flex: 1, alignItems: 'center', marginRight: SPACING.xs },
   infoLabel: { fontSize: FONTS.sizes.xs, color: COLORS.textTertiary, marginBottom: 4 },
   infoValue: { fontSize: FONTS.sizes.sm, fontWeight: '700', color: COLORS.textPrimary },
   section: {
@@ -158,17 +159,18 @@ const styles = StyleSheet.create({
   },
   sectionTitle: { fontSize: FONTS.sizes.md, fontWeight: '700', color: COLORS.textPrimary, marginBottom: SPACING.md },
   diseaseCard: {
-    flexDirection: 'row', alignItems: 'center', gap: SPACING.md,
+    flexDirection: 'row', alignItems: 'center',
     paddingVertical: SPACING.sm,
     borderBottomWidth: 1, borderBottomColor: COLORS.border,
   },
-  diseaseEmoji: { fontSize: 28 },
+  diseaseEmoji: { fontSize: 28, marginRight: SPACING.md },
   diseaseName: { fontSize: FONTS.sizes.md, fontWeight: '600', color: COLORS.textPrimary },
   diseaseCategory: { fontSize: FONTS.sizes.xs, color: COLORS.textTertiary },
-  statsRow: { flexDirection: 'row', gap: SPACING.sm },
+  statsRow: { flexDirection: 'row' },
   statCard: {
     flex: 1, backgroundColor: COLORS.surfaceSecondary,
     borderRadius: RADIUS.md, padding: SPACING.md, alignItems: 'center',
+    marginRight: SPACING.sm,
   },
   statEmoji: { fontSize: 24, marginBottom: 4 },
   statValue: { fontSize: FONTS.sizes.xl, fontWeight: '800', color: COLORS.textPrimary, marginBottom: 2 },

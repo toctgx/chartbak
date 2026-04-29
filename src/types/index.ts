@@ -1,4 +1,4 @@
-// 병갔왔 - 타입 정의
+// 차트밖 - 타입 정의
 
 export type UserRole = 'patient' | 'caregiver'; // 환자 | 환우(보호자)
 
