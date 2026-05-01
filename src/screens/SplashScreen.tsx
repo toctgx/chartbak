@@ -1,7 +1,7 @@
-// v2-bright
+// v2-glass
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
-import { COLORS, FONTS, SPACING } from '../constants/theme';
+import { FONTS, SPACING } from '../constants/theme';
 
 interface Props {
   onFinish: () => void;
@@ -46,7 +46,7 @@ export default function SplashScreen({ onFinish }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#6B835B',
+    backgroundColor: '#1A2812',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -60,17 +60,17 @@ const styles = StyleSheet.create({
   title: {
     fontSize: FONTS.sizes.xxxl,
     fontWeight: '800',
-    color: COLORS.textInverse,
+    color: '#F0EDE8',
     letterSpacing: -1,
   },
   subtitle: {
     fontSize: FONTS.sizes.md,
-    color: 'rgba(255,255,255,0.8)',
+    color: 'rgba(240,237,232,0.6)',
     marginTop: SPACING.xs,
   },
   tagline: {
     fontSize: FONTS.sizes.sm,
-    color: 'rgba(255,255,255,0.65)',
+    color: 'rgba(240,237,232,0.4)',
     marginTop: SPACING.lg,
   },
 });
