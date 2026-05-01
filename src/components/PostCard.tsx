@@ -28,7 +28,7 @@ export default function PostCard({ post, onPress, highlight }: Props) {
       {/* 태그 행 */}
       <View style={styles.tagRow}>
         {/* 역할 */}
-        <View style={[styles.roleTag, { backgroundColor: post.author_role === 'patient' ? '#EFF6FF' : '#F0FDF4' }]}>
+        <View style={[styles.roleTag, { backgroundColor: post.author_role === 'patient' ? 'rgba(96,165,250,0.15)' : 'rgba(52,211,153,0.15)' }]}>
           {post.author_role === 'patient'
             ? <IconPatient size={10} />
             : <IconCaregiver size={10} />
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     borderBottomColor: COLORS.border,
   },
   cardHighlight: {
-    backgroundColor: '#F2F7EE',
+    backgroundColor: 'rgba(232,168,56,0.08)',
     borderLeftWidth: 3,
     borderLeftColor: COLORS.primary,
   },
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 7, paddingVertical: 3,
     borderRadius: RADIUS.full, marginRight: 5,
   },
-  diseaseText: { fontSize: 11, color: '#92610A', fontWeight: '600' },
+  diseaseText: { fontSize: 11, color: COLORS.primary, fontWeight: '600' },
   time: { fontSize: 11, color: COLORS.textTertiary, marginLeft: 'auto' as any },
   title: {
     fontSize: FONTS.sizes.md, fontWeight: '700',
