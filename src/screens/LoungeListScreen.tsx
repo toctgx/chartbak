@@ -1,10 +1,10 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import {
-  View, Text, StyleSheet, ScrollView,
-  TouchableOpacity, TextInput, FlatList
+  View, Text, StyleSheet,
+  TouchableOpacity, FlatList
 } from 'react-native';
 import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../constants/theme';
-import { DISEASES, DISEASE_CATEGORIES, DiseaseCategory } from '../constants/diseases';
+import { DISEASES } from '../constants/diseases';
 import { MOCK_POSTS } from '../lib/mockData';
 
 interface Props {
@@ -19,18 +19,6 @@ MOCK_POSTS.forEach(p => {
 });
 
 export default function LoungeListScreen({ navigation, userDiseaseIds }: Props) {
-  const [search, setSearch] = useState('');
-  const [activeCategory, setActiveCategory] = useState<DiseaseCategory | '전체' | '내 질환'>('전체');
-
-  const filtered = useMemo(() => DISEASES.filter(d => {
-    const matchSearch = d.name.includes(search) || d.category.includes(search);
-    if (activeCategory === '내 질환') return matchSearch && userDiseaseIds.includes(d.id);
-    if (activeCategory === '전체') return matchSearch;
-    return matchSearch && d.category === activeCategory;
-  }), [search, activeCategory, userDiseaseIds]);
-
-  const categories = ['내 질환', '전체', ...DISEASE_CATEGORIES] as const;
-
   const handleLoungePress = (disease: typeof DISEASES[0]) => {
     navigation.navigate('LoungeDetail', { disease });
   };
@@ -43,57 +31,12 @@ export default function LoungeListScreen({ navigation, userDiseaseIds }: Props) 
         <Text style={styles.subtitle}>질환별 환자·환우 커뮤니티</Text>
       </View>
 
-      {/* 검색 */}
-      <View style={styles.searchRow}>
-        <View style={styles.searchBox}>
-          <Text style={styles.searchIcon}>🔍</Text>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="질환명 검색"
-            placeholderTextColor={COLORS.textTertiary}
-            value={search}
-            onChangeText={setSearch}
-          />
-          {search.length > 0 && (
-            <TouchableOpacity onPress={() => setSearch('')}>
-              <Text style={{ color: COLORS.textTertiary, paddingHorizontal: 4 }}>✕</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-      </View>
-
-      {/* 카테고리 필터 */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.catScroll}
-        contentContainerStyle={styles.catContent}
-      >
-        {categories.map(cat => (
-          <TouchableOpacity
-            key={cat}
-            style={[styles.catChip, activeCategory === cat && styles.catChipActive]}
-            onPress={() => setActiveCategory(cat as any)}
-          >
-            <Text style={[styles.catText, activeCategory === cat && styles.catTextActive]}>
-              {cat === '내 질환' ? '⭐ 내 질환' : cat}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-
       {/* 질환 목록 */}
       <FlatList
-        data={filtered}
+        data={DISEASES}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.list}
         showsVerticalScrollIndicator={false}
-        ListEmptyComponent={
-          <View style={styles.empty}>
-            <Text style={styles.emptyEmoji}>🔍</Text>
-            <Text style={styles.emptyText}>검색 결과가 없어요</Text>
-          </View>
-        }
         renderItem={({ item }) => {
           const isMyDisease = userDiseaseIds.includes(item.id);
           const postCount = POST_COUNTS[item.id] || 0;
@@ -147,33 +90,6 @@ const styles = StyleSheet.create({
   title: { fontSize: FONTS.sizes.xxl, fontWeight: '800', color: COLORS.textPrimary, letterSpacing: -0.5 },
   subtitle: { fontSize: FONTS.sizes.sm, color: COLORS.textSecondary, marginTop: 2 },
 
-  searchRow: {
-    paddingHorizontal: SPACING.lg, paddingVertical: SPACING.sm,
-    backgroundColor: COLORS.surface,
-    borderBottomWidth: 1, borderBottomColor: COLORS.border,
-  },
-  searchBox: {
-    flexDirection: 'row', alignItems: 'center',
-    backgroundColor: COLORS.surfaceSecondary,
-    borderRadius: RADIUS.md,
-    paddingHorizontal: SPACING.md, paddingVertical: SPACING.sm,
-  },
-  searchIcon: { fontSize: 15, marginRight: SPACING.sm },
-  searchInput: { flex: 1, fontSize: FONTS.sizes.md, color: COLORS.textPrimary },
-
-  catScroll: { flexGrow: 0, backgroundColor: COLORS.surface },
-  catContent: { paddingHorizontal: SPACING.lg, paddingVertical: SPACING.sm, flexDirection: 'row' },
-  catChip: {
-    paddingHorizontal: SPACING.md, paddingVertical: 7,
-    borderRadius: RADIUS.full,
-    backgroundColor: COLORS.surfaceSecondary,
-    borderWidth: 1.5, borderColor: COLORS.border,
-    marginRight: SPACING.sm,
-  },
-  catChipActive: { backgroundColor: COLORS.primary, borderColor: COLORS.primary },
-  catText: { fontSize: FONTS.sizes.sm, color: COLORS.textSecondary, fontWeight: '500' },
-  catTextActive: { color: '#fff', fontWeight: '700' },
-
   list: { padding: SPACING.md, paddingBottom: SPACING.xxl },
 
   // ── 카드 — 가로 리스트 스타일 ──────────────────────────
@@ -214,8 +130,4 @@ const styles = StyleSheet.create({
   statText: { fontSize: FONTS.sizes.xs, color: COLORS.textSecondary },
   statDot: { fontSize: FONTS.sizes.xs, color: COLORS.textTertiary, marginHorizontal: 4 },
   arrow: { fontSize: 22, color: COLORS.borderDark, marginLeft: SPACING.sm },
-
-  empty: { paddingTop: 60, alignItems: 'center' },
-  emptyEmoji: { fontSize: 40, marginBottom: SPACING.md },
-  emptyText: { fontSize: FONTS.sizes.md, color: COLORS.textSecondary },
 });
