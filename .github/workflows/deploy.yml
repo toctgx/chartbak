@@ -25,6 +25,13 @@ jobs:
       - name: Build web
         run: npx expo export --platform web
 
+      - name: Fix asset base paths for GitHub Pages
+        run: |
+          sed -i 's|src="/_expo/|src="/byeonggasswatwo/_expo/|g' dist/index.html
+          sed -i 's|href="/favicon|href="/byeonggasswatwo/favicon|g' dist/index.html
+          echo "Patched index.html:"
+          grep -E 'src=|href=' dist/index.html
+
       - name: Add .nojekyll
         run: touch dist/.nojekyll
 
