@@ -104,8 +104,8 @@ const styles = StyleSheet.create({
     ...SHADOWS.sm,
   },
   cardMine: {
-    borderColor: 'rgba(232,168,56,0.3)',
-    backgroundColor: '#FFFAF2',
+    borderColor: 'rgba(232,168,56,0.4)',
+    backgroundColor: 'rgba(232,168,56,0.08)',
   },
   emojiBox: {
     width: 50, height: 50,
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 7, paddingVertical: 2,
     borderRadius: RADIUS.full,
   },
-  myBadgeText: { fontSize: 10, fontWeight: '700', color: '#92610A' },
+  myBadgeText: { fontSize: 10, fontWeight: '700', color: COLORS.primary },
   cardCategory: { fontSize: FONTS.sizes.xs, color: COLORS.textTertiary, marginBottom: 4 },
   cardStats: { flexDirection: 'row', alignItems: 'center' },
   statText: { fontSize: FONTS.sizes.xs, color: COLORS.textSecondary },
