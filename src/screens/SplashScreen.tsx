@@ -46,7 +46,7 @@ export default function SplashScreen({ onFinish }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1A2812',
+    backgroundColor: '#060D1E',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -60,17 +60,17 @@ const styles = StyleSheet.create({
   title: {
     fontSize: FONTS.sizes.xxxl,
     fontWeight: '800',
-    color: '#F0EDE8',
+    color: '#F0F4FF',
     letterSpacing: -1,
   },
   subtitle: {
     fontSize: FONTS.sizes.md,
-    color: 'rgba(240,237,232,0.6)',
+    color: 'rgba(240,244,255,0.6)',
     marginTop: SPACING.xs,
   },
   tagline: {
     fontSize: FONTS.sizes.sm,
-    color: 'rgba(240,237,232,0.4)',
+    color: 'rgba(240,244,255,0.4)',
     marginTop: SPACING.lg,
   },
 });
