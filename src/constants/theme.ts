@@ -1,26 +1,26 @@
-// 차트밖 × 네이비 글래스모피즘
-// Deep Navy Blue + Black + White
+// 차트밖 × 글래스모피즘 v2
+// Dark Olive Green + Amber Accent + Glass
 export const COLORS = {
-  // ── Primary — Deep Navy Blue ─────────────────────────
-  primary: '#4B7FE8',          // 밝은 블루 (버튼 CTA)
-  primaryLight: 'rgba(75,127,232,0.25)',
-  primaryPale: 'rgba(75,127,232,0.12)',
-  primaryDark: '#1A4FBF',
+  // ── Primary — Amber ─────────────────────────────────
+  primary: '#E8A838',
+  primaryLight: 'rgba(232,168,56,0.25)',
+  primaryPale: 'rgba(232,168,56,0.12)',
+  primaryDark: '#D4921E',
 
   // ── Background ──────────────────────────────────────
-  background: '#060D1E',       // 딥 다크 네이비
-  surface: 'rgba(15,45,120,0.18)',    // 네이비 글래스
-  surfaceSecondary: 'rgba(15,45,120,0.10)',
+  background: '#2B3820',
+  surface: 'rgba(255,255,255,0.09)',
+  surfaceSecondary: 'rgba(255,255,255,0.05)',
 
   // ── Text ────────────────────────────────────────────
-  textPrimary: '#F0F4FF',      // 쿨 화이트
-  textSecondary: 'rgba(240,244,255,0.65)',
-  textTertiary: 'rgba(240,244,255,0.35)',
-  textInverse: '#060D1E',
+  textPrimary: '#F0EDE8',
+  textSecondary: 'rgba(240,237,232,0.65)',
+  textTertiary: 'rgba(240,237,232,0.35)',
+  textInverse: '#2B3820',
 
   // ── 역할 색상 ───────────────────────────────────────
-  patient: '#60A5FA',          // 환자 — 스카이 블루
-  caregiver: '#34D399',        // 환우 — 민트 그린
+  patient: '#60A5FA',
+  caregiver: '#34D399',
 
   // ── 상태 ────────────────────────────────────────────
   success: '#34D399',
@@ -29,13 +29,13 @@ export const COLORS = {
   info: '#60A5FA',
 
   // ── 보조 ────────────────────────────────────────────
-  peach: 'rgba(75,127,232,0.15)',
-  terracotta: '#1A4FBF',
-  deepBrown: '#0F2D78',
+  peach: 'rgba(232,168,56,0.15)',
+  terracotta: '#D4921E',
+  deepBrown: '#B87E20',
 
   // ── 구분선 ──────────────────────────────────────────
-  border: 'rgba(255,255,255,0.14)',
-  borderDark: 'rgba(255,255,255,0.24)',
+  border: 'rgba(255,255,255,0.16)',
+  borderDark: 'rgba(255,255,255,0.28)',
 };
 
 export const FONTS = {
@@ -74,15 +74,15 @@ export const SHADOWS = {
   sm: {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
+    shadowOpacity: 0.15,
+    shadowRadius: 3,
     elevation: 2,
   },
   md: {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
     elevation: 4,
   },
 };
