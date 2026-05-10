@@ -1,17 +1,20 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { COLORS, FONTS } from '../constants/theme';
-import { IconHome, IconHomeActive, IconLounge, IconLoungeActive, IconMyPage, IconMyPageActive } from '../components/Icons';
+import {
+  IconHome, IconHomeActive,
+  IconDiary, IconDiaryActive,
+  IconMyPage, IconMyPageActive,
+} from '../components/Icons';
 
 import HomeFeedScreen from '../screens/HomeFeedScreen';
-import LoungeListScreen from '../screens/LoungeListScreen';
-import LoungeDetailScreen from '../screens/LoungeDetailScreen';
+import DiaryScreen from '../screens/DiaryScreen';
 import WritePostScreen from '../screens/WritePostScreen';
 import PostDetailScreen from '../screens/PostDetailScreen';
 import MyPageScreen from '../screens/MyPageScreen';
-import { User, Post } from '../types';
+import { User } from '../types';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -59,57 +62,14 @@ function HomeStack({ user, onNewPost }: { user: User; onNewPost: (post: any) => 
   );
 }
 
-function LoungeStack({ user, onNewPost }: { user: User; onNewPost: (post: any) => void }) {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="LoungeList">
-        {(props) => (
-          <LoungeListScreen
-            {...props}
-            userDiseaseIds={user.disease_ids}
-          />
-        )}
-      </Stack.Screen>
-      <Stack.Screen name="LoungeDetail">
-        {(props) => (
-          <LoungeDetailScreen
-            {...props}
-            nickname={user.nickname}
-            userRole={user.role}
-          />
-        )}
-      </Stack.Screen>
-      <Stack.Screen name="PostDetail">
-        {(props) => (
-          <PostDetailScreen
-            {...props}
-            nickname={user.nickname}
-            userRole={user.role}
-          />
-        )}
-      </Stack.Screen>
-      <Stack.Screen name="WritePost">
-        {(props) => (
-          <WritePostScreen
-            {...props}
-            userDiseaseIds={user.disease_ids}
-            userRole={user.role}
-            nickname={user.nickname}
-            onSubmit={onNewPost}
-          />
-        )}
-      </Stack.Screen>
-    </Stack.Navigator>
-  );
-}
-
-const styles = StyleSheet.create({
-  iconBox: {
-    width: 40, height: 36, borderRadius: 10,
-    backgroundColor: COLORS.primaryLight,
-    alignItems: 'center', justifyContent: 'center',
-  },
-});
+const iconBoxStyle = {
+  width: 40,
+  height: 36,
+  borderRadius: 10,
+  backgroundColor: COLORS.primaryLight,
+  alignItems: 'center' as const,
+  justifyContent: 'center' as const,
+};
 
 export default function AppNavigator({ user, onLogout, onNewPost }: AppNavigatorProps) {
   return (
@@ -130,12 +90,13 @@ export default function AppNavigator({ user, onLogout, onNewPost }: AppNavigator
         tabBarIconStyle: { marginTop: 2 },
       }}
     >
+      {/* 피드 */}
       <Tab.Screen
         name="HomeTab"
         options={{
           tabBarLabel: '피드',
           tabBarIcon: ({ focused }) => (
-            <View style={focused ? styles.iconBox : undefined}>
+            <View style={focused ? iconBoxStyle : undefined}>
               {focused ? <IconHomeActive size={24} /> : <IconHome size={24} />}
             </View>
           ),
@@ -143,25 +104,34 @@ export default function AppNavigator({ user, onLogout, onNewPost }: AppNavigator
       >
         {() => <HomeStack user={user} onNewPost={onNewPost} />}
       </Tab.Screen>
+
+      {/* 한줄일기 */}
       <Tab.Screen
-        name="LoungeTab"
+        name="DiaryTab"
         options={{
-          tabBarLabel: '라운지',
+          tabBarLabel: '한줄일기',
           tabBarIcon: ({ focused }) => (
-            <View style={focused ? styles.iconBox : undefined}>
-              {focused ? <IconLoungeActive size={24} /> : <IconLounge size={24} />}
+            <View style={focused ? iconBoxStyle : undefined}>
+              {focused ? <IconDiaryActive size={24} /> : <IconDiary size={24} />}
             </View>
           ),
         }}
       >
-        {() => <LoungeStack user={user} onNewPost={onNewPost} />}
+        {() => (
+          <DiaryScreen
+            nickname={user.nickname}
+            userRole={user.role}
+          />
+        )}
       </Tab.Screen>
+
+      {/* 마이 */}
       <Tab.Screen
         name="MyPage"
         options={{
           tabBarLabel: '마이',
           tabBarIcon: ({ focused }) => (
-            <View style={focused ? styles.iconBox : undefined}>
+            <View style={focused ? iconBoxStyle : undefined}>
               {focused ? <IconMyPageActive size={24} /> : <IconMyPage size={24} />}
             </View>
           ),

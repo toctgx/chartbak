@@ -56,6 +56,29 @@ const SVG_MYPAGE_ACTIVE = `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/200
   <path d="M7 44c0-9.4 7.6-17 17-17s17 7.6 17 17" fill="#FDD878"/>
 </svg>`;
 
+// ── 탭바: 한줄일기 ───────────────────────────────────────
+const SVG_DIARY = `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+  <rect x="8" y="4" width="28" height="36" rx="4" fill="#B0B3BB"/>
+  <rect x="9" y="5" width="26" height="34" rx="3" fill="#D0D4DA"/>
+  <line x1="14" y1="16" x2="32" y2="16" stroke="#B0B3BB" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="14" y1="22" x2="32" y2="22" stroke="#B0B3BB" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="14" y1="28" x2="24" y2="28" stroke="#B0B3BB" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="36" cy="36" r="8" fill="#D0D4DA"/>
+  <line x1="33" y1="36" x2="39" y2="36" stroke="#B0B3BB" stroke-width="2" stroke-linecap="round"/>
+  <line x1="36" y1="33" x2="36" y2="39" stroke="#B0B3BB" stroke-width="2" stroke-linecap="round"/>
+</svg>`;
+
+const SVG_DIARY_ACTIVE = `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+  <rect x="8" y="4" width="28" height="36" rx="4" fill="#F5B731"/>
+  <rect x="9" y="5" width="26" height="34" rx="3" fill="#FDD878"/>
+  <line x1="14" y1="16" x2="32" y2="16" stroke="#E8A838" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="14" y1="22" x2="32" y2="22" stroke="#E8A838" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="14" y1="28" x2="24" y2="28" stroke="#E8A838" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="36" cy="36" r="8" fill="#F5B731"/>
+  <line x1="33" y1="36" x2="39" y2="36" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <line x1="36" y1="33" x2="36" y2="39" stroke="white" stroke-width="2" stroke-linecap="round"/>
+</svg>`;
+
 // ── 환자 태그 ─────────────────────────────────────────────
 const SVG_PATIENT = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <circle cx="12" cy="8" r="5" fill="#3B82F6"/>
@@ -170,6 +193,11 @@ const SVG_SEARCH = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="#B0B3BB" stroke-width="2.5" stroke-linecap="round"/>
 </svg>`;
 
+const SVG_SEARCH_ACTIVE = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="11" cy="11" r="7" stroke="#7089C9" stroke-width="2.5" fill="none"/>
+  <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="#7089C9" stroke-width="2.5" stroke-linecap="round"/>
+</svg>`;
+
 // ─────────────────────────────────────────────────────────
 // React 컴포넌트
 // ─────────────────────────────────────────────────────────
@@ -182,6 +210,8 @@ export const IconLounge       = ({ size = 26 }: IconProps) => <Image source={{ u
 export const IconLoungeActive = ({ size = 26 }: IconProps) => <Image source={{ uri: svg2uri(SVG_LOUNGE_ACTIVE) }} style={{ width: size, height: size }} />;
 export const IconMyPage       = ({ size = 26 }: IconProps) => <Image source={{ uri: svg2uri(SVG_MYPAGE) }} style={{ width: size, height: size }} />;
 export const IconMyPageActive = ({ size = 26 }: IconProps) => <Image source={{ uri: svg2uri(SVG_MYPAGE_ACTIVE) }} style={{ width: size, height: size }} />;
+export const IconDiary       = ({ size = 26 }: IconProps) => <Image source={{ uri: svg2uri(SVG_DIARY) }} style={{ width: size, height: size }} />;
+export const IconDiaryActive = ({ size = 26 }: IconProps) => <Image source={{ uri: svg2uri(SVG_DIARY_ACTIVE) }} style={{ width: size, height: size }} />;
 
 export const IconPatient   = ({ size = 14 }: IconProps) => <Image source={{ uri: svg2uri(SVG_PATIENT) }} style={{ width: size, height: size }} />;
 export const IconCaregiver = ({ size = 14 }: IconProps) => <Image source={{ uri: svg2uri(SVG_CAREGIVER) }} style={{ width: size, height: size }} />;
@@ -200,7 +230,8 @@ export const IconTypeHospital  = ({ size = 16 }: IconProps) => <Image source={{ 
 
 export const IconWrite   = ({ size = 18 }: IconProps) => <Image source={{ uri: svg2uri(SVG_WRITE) }} style={{ width: size, height: size }} />;
 export const IconComment = ({ size = 14 }: IconProps) => <Image source={{ uri: svg2uri(SVG_COMMENT) }} style={{ width: size, height: size }} />;
-export const IconSearch  = ({ size = 16 }: IconProps) => <Image source={{ uri: svg2uri(SVG_SEARCH) }} style={{ width: size, height: size }} />;
+export const IconSearch       = ({ size = 16 }: IconProps) => <Image source={{ uri: svg2uri(SVG_SEARCH) }} style={{ width: size, height: size }} />;
+export const IconSearchActive = ({ size = 16 }: IconProps) => <Image source={{ uri: svg2uri(SVG_SEARCH_ACTIVE) }} style={{ width: size, height: size }} />;
 
 // ── Deprecated (SvgXml 방식 제거) ─────────────────────────
 export const IconHeart     = ({ size = 14, active = false }: IconProps & { active?: boolean }) =>

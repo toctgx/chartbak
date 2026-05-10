@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-nati
 import { COLORS, FONTS, SPACING, RADIUS } from '../../constants/theme';
 import { AGE_GROUPS } from '../../types';
 
+
 interface Props {
   nickname: string;
   onNext: (ageGroup: string, diagnosisYear: number) => void;
@@ -17,10 +18,7 @@ export default function BasicInfoScreen({ nickname, onNext }: Props) {
 
   return (
     <View style={styles.container}>
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <Text style={styles.step}>5 / 5</Text>
           <View style={styles.progressBar}>
@@ -40,42 +38,45 @@ export default function BasicInfoScreen({ nickname, onNext }: Props) {
           <View style={styles.nicknameBox}>
             <Text style={styles.nicknameLabel}>내 닉네임</Text>
             <Text style={styles.nickname}>{nickname}</Text>
-            <Text style={styles.nicknameNote}>* 닉네임은 익명으로 자동 생성됩니다</Text>
           </View>
 
-          {/* 나이대 */}
-          <Text style={styles.sectionTitle}>나이대</Text>
-          <View style={styles.chipGrid}>
-            {AGE_GROUPS.map(age => (
-              <TouchableOpacity
-                key={age}
-                style={[styles.chip, ageGroup === age && styles.chipSelected]}
-                onPress={() => setAgeGroup(age)}
-              >
-                <Text style={[styles.chipText, ageGroup === age && styles.chipTextSelected]}>
-                  {age}
-                </Text>
-              </TouchableOpacity>
-            ))}
+          {/* 나이대 — 칩 토글 (wrap 그리드) */}
+          <View style={styles.section}>
+            <Text style={styles.sectionLabel}>나이대</Text>
+            <View style={styles.chipGrid}>
+              {AGE_GROUPS.map(age => (
+                <TouchableOpacity
+                  key={age}
+                  style={[styles.chip, ageGroup === age && styles.chipSelected]}
+                  onPress={() => setAgeGroup(prev => (prev === age ? null : age))}
+                  activeOpacity={0.8}
+                >
+                  <Text style={[styles.chipText, ageGroup === age && styles.chipTextSelected]}>
+                    {age}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
 
-          {/* 진단 연도 */}
-          <Text style={styles.sectionTitle}>진단 받은 연도</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.yearScroll}>
-            <View style={styles.yearRow}>
+          {/* 진단연도 — 칩 토글 (가로 스크롤) */}
+          <View style={styles.section}>
+            <Text style={styles.sectionLabel}>진단 받은 연도</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.yearScroll}>
               {YEARS.map(year => (
                 <TouchableOpacity
                   key={year}
                   style={[styles.chip, diagnosisYear === year && styles.chipSelected]}
-                  onPress={() => setDiagnosisYear(year)}
+                  onPress={() => setDiagnosisYear(prev => (prev === year ? null : year))}
+                  activeOpacity={0.8}
                 >
                   <Text style={[styles.chipText, diagnosisYear === year && styles.chipTextSelected]}>
                     {year}년
                   </Text>
                 </TouchableOpacity>
               ))}
-            </View>
-          </ScrollView>
+            </ScrollView>
+          </View>
 
           {/* 시작 버튼 */}
           <TouchableOpacity
@@ -87,6 +88,8 @@ export default function BasicInfoScreen({ nickname, onNext }: Props) {
           </TouchableOpacity>
         </View>
       </ScrollView>
+
+
     </View>
   );
 }
@@ -102,31 +105,65 @@ const styles = StyleSheet.create({
   emoji: { fontSize: 48, marginBottom: SPACING.md },
   title: { fontSize: FONTS.sizes.xxl, fontWeight: '700', color: COLORS.textPrimary, marginBottom: SPACING.sm },
   desc: { fontSize: FONTS.sizes.md, color: COLORS.textSecondary, lineHeight: 24, marginBottom: SPACING.lg },
+
   nicknameBox: {
-    backgroundColor: COLORS.primaryLight + '22', borderRadius: RADIUS.md,
-    padding: SPACING.md, marginBottom: SPACING.xl,
+    backgroundColor: COLORS.primaryPale,
+    borderRadius: RADIUS.md,
+    paddingVertical: SPACING.sm,
+    paddingHorizontal: SPACING.md,
+    marginBottom: SPACING.xl,
     borderWidth: 1, borderColor: COLORS.primaryLight,
+    flexDirection: 'row', alignItems: 'center', gap: 10,
   },
-  nicknameLabel: { fontSize: FONTS.sizes.xs, color: COLORS.textSecondary, marginBottom: 4 },
-  nickname: { fontSize: FONTS.sizes.xl, fontWeight: '700', color: COLORS.primary },
-  nicknameNote: { fontSize: FONTS.sizes.xs, color: COLORS.textTertiary, marginTop: 4 },
-  sectionTitle: { fontSize: FONTS.sizes.md, fontWeight: '600', color: COLORS.textPrimary, marginBottom: SPACING.sm },
-  chipGrid: { flexDirection: 'row', flexWrap: 'wrap', marginBottom: SPACING.xl },
-  yearScroll: { marginBottom: SPACING.xl },
-  yearRow: { flexDirection: 'row' },
+  nicknameLabel: { fontSize: FONTS.sizes.xs, color: COLORS.textSecondary },
+  nickname: { fontSize: FONTS.sizes.md, fontWeight: '700', color: COLORS.primary },
+
+  section: { marginBottom: SPACING.xl },
+  sectionLabel: {
+    fontSize: FONTS.sizes.xs,
+    color: COLORS.textTertiary,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    fontWeight: '600',
+    marginBottom: SPACING.sm,
+  },
+
+  chipGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
   chip: {
-    paddingHorizontal: SPACING.md, paddingVertical: SPACING.sm,
-    borderRadius: RADIUS.full, backgroundColor: COLORS.surface,
-    borderWidth: 1.5, borderColor: COLORS.border,
-    marginBottom: SPACING.sm, marginRight: SPACING.sm,
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+    borderRadius: RADIUS.full,
+    borderWidth: 1.5,
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.surface,
   },
-  chipSelected: { backgroundColor: COLORS.primary + '15', borderColor: COLORS.primary },
-  chipText: { fontSize: FONTS.sizes.sm, color: COLORS.textPrimary, fontWeight: '500' },
-  chipTextSelected: { color: COLORS.primary, fontWeight: '700' },
+  chipSelected: {
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
+  },
+  chipText: {
+    fontSize: FONTS.sizes.sm,
+    color: COLORS.textSecondary,
+    fontWeight: '500',
+  },
+  chipTextSelected: {
+    color: '#fff',
+    fontWeight: '700',
+  },
+
+  yearScroll: {
+    gap: 8,
+    paddingVertical: 2,
+  },
+
   button: {
     backgroundColor: COLORS.primary, borderRadius: RADIUS.md,
     paddingVertical: SPACING.md, alignItems: 'center',
-    marginBottom: SPACING.lg,
+    marginTop: SPACING.sm, marginBottom: SPACING.lg,
   },
   buttonDisabled: { opacity: 0.4 },
   buttonText: { color: '#fff', fontSize: FONTS.sizes.lg, fontWeight: '600' },

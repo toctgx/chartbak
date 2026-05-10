@@ -89,7 +89,10 @@ export default function App() {
   if (step === 'disease') {
     return (
       <SafeAreaProvider>
-        <DiseaseSelectScreen onNext={(ids) => { setDiseaseIds(ids); setStep('nickname'); }} />
+        <DiseaseSelectScreen
+          onNext={(ids) => { setDiseaseIds(ids); setStep('nickname'); }}
+          onBack={() => setStep('role')}
+        />
         <StatusBar style="dark" />
       </SafeAreaProvider>
     );

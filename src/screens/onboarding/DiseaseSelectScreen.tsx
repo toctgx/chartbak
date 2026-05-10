@@ -8,21 +8,36 @@ import { DISEASES } from '../../constants/diseases';
 
 interface Props {
   onNext: (diseaseIds: string[]) => void;
+  onBack?: () => void;
 }
 
-export default function DiseaseSelectScreen({ onNext }: Props) {
+// 암 카테고리 분리
+const CANCER_DISEASES = DISEASES.filter(d => d.category === '암');
+const NON_CANCER_DISEASES = DISEASES.filter(d => d.category !== '암');
+const CANCER_IDS = new Set(CANCER_DISEASES.map(d => d.id));
+
+export default function DiseaseSelectScreen({ onNext, onBack }: Props) {
   const [selected, setSelected] = useState<string[]>([]);
   const [search, setSearch] = useState('');
+  const [cancerExpanded, setCancerExpanded] = useState(false);
 
-  const filtered = useMemo(() =>
-    search.trim()
-      ? DISEASES.filter(d =>
-          d.name.includes(search.trim()) ||
-          d.category.includes(search.trim()) ||
-          (d.description || '').includes(search.trim())
-        )
-      : DISEASES,
-    [search]
+  const isSearching = search.trim().length > 0;
+
+  const filteredNonCancer = useMemo(() =>
+    NON_CANCER_DISEASES.filter(d =>
+      !isSearching ||
+      d.name.includes(search.trim()) ||
+      d.category.includes(search.trim()) ||
+      (d.description || '').includes(search.trim())
+    ), [search, isSearching]
+  );
+
+  const filteredCancer = useMemo(() =>
+    CANCER_DISEASES.filter(d =>
+      !isSearching ||
+      d.name.includes(search.trim()) ||
+      (d.description || '').includes(search.trim())
+    ), [search, isSearching]
   );
 
   const toggle = (id: string) => {
@@ -37,6 +52,7 @@ export default function DiseaseSelectScreen({ onNext }: Props) {
     }
   };
 
+  const selectedCancerCount = selected.filter(id => CANCER_IDS.has(id)).length;
   const selectedDiseases = DISEASES.filter(d => selected.includes(d.id));
 
   return (
@@ -44,10 +60,17 @@ export default function DiseaseSelectScreen({ onNext }: Props) {
       {/* 헤더 */}
       <View style={styles.header}>
         <View style={styles.headerTop}>
-          <View>
-            <Text style={styles.step}>3 / 5</Text>
-            <Text style={styles.title}>질환 선택</Text>
-            <Text style={styles.desc}>최대 5개 · <Text style={styles.count}>{selected.length}/5</Text></Text>
+          <View style={styles.headerLeft}>
+            {onBack && (
+              <TouchableOpacity onPress={onBack} style={styles.backBtn} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+                <Text style={styles.backIcon}>←</Text>
+              </TouchableOpacity>
+            )}
+            <View>
+              <Text style={styles.step}>3 / 5</Text>
+              <Text style={styles.title}>질환 선택</Text>
+              <Text style={styles.desc}>최대 5개 · <Text style={styles.count}>{selected.length}/5</Text></Text>
+            </View>
           </View>
           <TouchableOpacity
             style={[styles.doneBtn, selected.length === 0 && styles.doneBtnDisabled]}
@@ -101,12 +124,66 @@ export default function DiseaseSelectScreen({ onNext }: Props) {
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
-        {filtered.length === 0 ? (
+        {/* 암 그룹 (검색 중이 아닐 때 or 검색 결과 있을 때) */}
+        {filteredCancer.length > 0 && (
+          <>
+            {/* 암 그룹 헤더 */}
+            <TouchableOpacity
+              style={[styles.item, styles.groupItem, selectedCancerCount > 0 && styles.itemSelected]}
+              onPress={() => setCancerExpanded(prev => !prev)}
+              activeOpacity={0.8}
+            >
+              <View style={styles.itemLeft}>
+                <Text style={styles.itemEmoji}>🎗️</Text>
+                <View>
+                  <Text style={[styles.itemName, selectedCancerCount > 0 && styles.itemNameSelected]}>
+                    암{selectedCancerCount > 0 ? ` (${selectedCancerCount}종 선택)` : ''}
+                  </Text>
+                  <Text style={styles.itemCategory}>암 전체 · {CANCER_DISEASES.length}종류</Text>
+                </View>
+              </View>
+              <Text style={styles.expandIcon}>
+                {(cancerExpanded || isSearching) ? '▲' : '▼'}
+              </Text>
+            </TouchableOpacity>
+
+            {/* 암 서브 목록 */}
+            {(cancerExpanded || isSearching) && filteredCancer.map(disease => {
+              const isSelected = selected.includes(disease.id);
+              return (
+                <TouchableOpacity
+                  key={disease.id}
+                  style={[styles.item, styles.subItem, isSelected && styles.itemSelected]}
+                  onPress={() => toggle(disease.id)}
+                  activeOpacity={0.8}
+                >
+                  <View style={styles.itemLeft}>
+                    <Text style={styles.subItemEmoji}>{disease.emoji}</Text>
+                    <View>
+                      <Text style={[styles.itemName, styles.subItemName, isSelected && styles.itemNameSelected]}>
+                        {disease.name}
+                      </Text>
+                      {disease.description ? (
+                        <Text style={styles.itemCategory}>{disease.description}</Text>
+                      ) : null}
+                    </View>
+                  </View>
+                  <View style={[styles.check, isSelected && styles.checkSelected]}>
+                    {isSelected && <Text style={styles.checkMark}>✓</Text>}
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </>
+        )}
+
+        {/* 일반 질환 목록 */}
+        {filteredNonCancer.length === 0 && filteredCancer.length === 0 ? (
           <View style={styles.empty}>
             <Text style={styles.emptyText}>검색 결과가 없어요</Text>
           </View>
         ) : (
-          filtered.map(disease => {
+          filteredNonCancer.map(disease => {
             const isSelected = selected.includes(disease.id);
             return (
               <TouchableOpacity
@@ -143,6 +220,9 @@ const styles = StyleSheet.create({
 
   header: { paddingHorizontal: SPACING.lg, paddingTop: 60, paddingBottom: SPACING.sm, backgroundColor: COLORS.surface, borderBottomWidth: 1, borderBottomColor: COLORS.border },
   headerTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: SPACING.sm },
+  headerLeft: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  backBtn: { paddingRight: 4 },
+  backIcon: { fontSize: 22, color: COLORS.textPrimary, fontWeight: '300' },
   step: { fontSize: FONTS.sizes.xs, color: COLORS.textTertiary, marginBottom: 2 },
   progressBar: { height: 3, backgroundColor: COLORS.border, borderRadius: 2 },
   progressFill: { height: '100%', backgroundColor: COLORS.primary, borderRadius: 2 },
@@ -162,9 +242,9 @@ const styles = StyleSheet.create({
   selectedTag: {
     backgroundColor: COLORS.primaryPale, borderRadius: RADIUS.full,
     paddingHorizontal: 12, paddingVertical: 6, marginRight: 6,
-    borderWidth: 1, borderColor: 'rgba(232,168,56,0.3)',
+    borderWidth: 1, borderColor: COLORS.primaryLight,
   },
-  selectedTagText: { fontSize: FONTS.sizes.sm, color: '#92610A', fontWeight: '700' },
+  selectedTagText: { fontSize: FONTS.sizes.sm, color: COLORS.primaryDark, fontWeight: '700' },
 
   searchRow: {
     flexDirection: 'row', alignItems: 'center',
@@ -189,12 +269,22 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1, borderBottomColor: COLORS.border,
     backgroundColor: COLORS.surface,
   },
-  itemSelected: { backgroundColor: '#FFFAF2' },
+  groupItem: {
+    backgroundColor: COLORS.surfaceSecondary,
+  },
+  subItem: {
+    paddingLeft: SPACING.lg + 16,
+    backgroundColor: COLORS.surface,
+  },
+  subItemEmoji: { fontSize: 18, marginRight: 10, width: 24, textAlign: 'center' },
+  subItemName: { fontSize: FONTS.sizes.sm },
+  itemSelected: { backgroundColor: COLORS.primaryPale },
   itemLeft: { flexDirection: 'row', alignItems: 'center', flex: 1 },
   itemEmoji: { fontSize: 22, marginRight: 12, width: 28, textAlign: 'center' },
   itemName: { fontSize: FONTS.sizes.md, fontWeight: '600', color: COLORS.textPrimary, marginBottom: 2 },
-  itemNameSelected: { color: '#92610A', fontWeight: '800' },
+  itemNameSelected: { color: COLORS.primaryDark, fontWeight: '800' },
   itemCategory: { fontSize: FONTS.sizes.xs, color: COLORS.textTertiary },
+  expandIcon: { fontSize: 12, color: COLORS.textTertiary, marginLeft: 8 },
 
   check: {
     width: 24, height: 24, borderRadius: 12,
@@ -206,13 +296,4 @@ const styles = StyleSheet.create({
 
   empty: { paddingTop: 40, alignItems: 'center' },
   emptyText: { fontSize: FONTS.sizes.md, color: COLORS.textTertiary },
-
-  buttonArea: { padding: SPACING.lg },
-  button: {
-    backgroundColor: COLORS.primary, borderRadius: RADIUS.md,
-    paddingVertical: SPACING.md, alignItems: 'center',
-  },
-  buttonDisabled: { opacity: 0.4 },
-  buttonText: { color: '#fff', fontSize: FONTS.sizes.lg, fontWeight: '700' },
 });
-// FORCE_REBUILD_1777461126

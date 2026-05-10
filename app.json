@@ -25,7 +25,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png",
-      "baseUrl": "/byeonggasswatwo"
+<<<<<<< HEAD
+      "output": "single",
+      "bundler": "metro"
+    },
+    "experiments": {
+      "baseUrl": "/chartbak"
     }
   }
 }
