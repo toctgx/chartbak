@@ -84,7 +84,7 @@ export default function AppNavigator({ user, onLogout, onNewPost }: AppNavigator
           paddingTop: 8,
           height: 72,
         },
-        tabBarActiveTintColor: '#4B7FE8',
+        tabBarActiveTintColor: '#E8A838',
         tabBarInactiveTintColor: COLORS.textTertiary,
         tabBarLabelStyle: { fontSize: FONTS.sizes.xs, fontWeight: '700', marginTop: 2 },
         tabBarIconStyle: { marginTop: 2 },

@@ -176,14 +176,14 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   quoteCard: {
-    backgroundColor: 'rgba(15,45,120,0.25)',
+    backgroundColor: 'rgba(255,255,255,0.09)',
     borderRadius: RADIUS.lg,
     padding: SPACING.md,
     borderWidth: 1,
     borderColor: COLORS.border,
   },
   quoteCardSelected: {
-    backgroundColor: 'rgba(75,127,232,0.18)',
+    backgroundColor: 'rgba(232,168,56,0.18)',
     borderColor: COLORS.primary,
   },
   quoteText: {
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   submitBtnDisabled: {
-    backgroundColor: 'rgba(75,127,232,0.3)',
+    backgroundColor: 'rgba(232,168,56,0.30)',
   },
   submitBtnText: {
     fontSize: FONTS.sizes.md,
