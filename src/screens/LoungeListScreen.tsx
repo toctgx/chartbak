@@ -48,7 +48,7 @@ export default function LoungeListScreen({ navigation, userDiseaseIds }: Props) 
             >
               {/* 왼쪽: 이모지 + 텍스트 */}
               <View style={[styles.emojiBox, { backgroundColor: isMyDisease ? COLORS.primaryPale : COLORS.surfaceSecondary }]}>
-                <Text style={styles.emoji}>{item.emoji}</Text>
+                <Text style={styles.emojiInitial}>{item.name.charAt(0)}</Text>
               </View>
               <View style={styles.cardBody}>
                 <View style={styles.cardTop}>
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     marginRight: SPACING.md,
     flexShrink: 0,
   },
-  emoji: { fontSize: 26 },
+  emojiInitial: { fontSize: 18, fontWeight: '700', color: COLORS.primary },
   cardBody: { flex: 1 },
   cardTop: { flexDirection: 'row', alignItems: 'center', marginBottom: 3 },
   cardName: { fontSize: FONTS.sizes.md, fontWeight: '800', color: COLORS.textPrimary, letterSpacing: -0.2 },

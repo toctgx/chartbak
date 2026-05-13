@@ -21,7 +21,7 @@ export default function MyPageScreen({ user, onLogout }: Props) {
             styles.avatar,
             { backgroundColor: user.role === 'patient' ? COLORS.patient + '20' : COLORS.caregiver + '20' }
           ]}>
-            <Text style={styles.avatarEmoji}>{user.role === 'patient' ? '🏥' : '🫂'}</Text>
+            <Text style={styles.avatarEmoji}>{user.role === 'patient' ? '환' : '원'}</Text>
           </View>
           <View style={styles.profileInfo}>
             <Text style={styles.nickname}>{user.nickname}</Text>
@@ -59,10 +59,10 @@ export default function MyPageScreen({ user, onLogout }: Props) {
 
       {/* 내 질환 라운지 */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>⭐ 내 질환 라운지</Text>
+        <Text style={styles.sectionTitle}>내 질환 라운지</Text>
         {userDiseases.map(disease => (
           <View key={disease.id} style={styles.diseaseCard}>
-            <Text style={styles.diseaseEmoji}>{disease.emoji}</Text>
+  
             <View>
               <Text style={styles.diseaseName}>{disease.name}</Text>
               <Text style={styles.diseaseCategory}>{disease.category}</Text>
@@ -73,15 +73,14 @@ export default function MyPageScreen({ user, onLogout }: Props) {
 
       {/* 활동 통계 */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>📊 나의 활동</Text>
+        <Text style={styles.sectionTitle}>나의 활동</Text>
         <View style={styles.statsRow}>
           {[
-            { label: '작성한 글', value: '3', emoji: '✏️' },
-            { label: '받은 공감', value: '47', emoji: '💙' },
-            { label: '댓글', value: '12', emoji: '💬' },
+            { label: '작성한 글', value: '3' },
+            { label: '받은 공감', value: '47' },
+            { label: '댓글', value: '12' },
           ].map(stat => (
             <View key={stat.label} style={styles.statCard}>
-              <Text style={styles.statEmoji}>{stat.emoji}</Text>
               <Text style={styles.statValue}>{stat.value}</Text>
               <Text style={styles.statLabel}>{stat.label}</Text>
             </View>
@@ -93,12 +92,12 @@ export default function MyPageScreen({ user, onLogout }: Props) {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>설정</Text>
         {[
-          { label: '📋 내 게시글 보기', action: () => {} },
-          { label: '💙 내가 공감한 글', action: () => {} },
-          { label: '🔔 알림 설정', action: () => {} },
-          { label: '🔒 개인정보 처리방침', action: () => {} },
-          { label: '📜 서비스 이용약관', action: () => {} },
-          { label: '💬 문의하기', action: () => {} },
+          { label: '내 게시글 보기', action: () => {} },
+          { label: '내가 공감한 글', action: () => {} },
+          { label: '알림 설정', action: () => {} },
+          { label: '개인정보 처리방침', action: () => {} },
+          { label: '서비스 이용약관', action: () => {} },
+          { label: '문의하기', action: () => {} },
         ].map(item => (
           <TouchableOpacity key={item.label} style={styles.menuItem} onPress={item.action}>
             <Text style={styles.menuLabel}>{item.label}</Text>
@@ -121,7 +120,7 @@ export default function MyPageScreen({ user, onLogout }: Props) {
       {/* 법적 고지 */}
       <View style={styles.disclaimer}>
         <Text style={styles.disclaimerText}>
-          ⚠️ 차트밖의 모든 게시글은 의료 조언이 아닙니다.{'\n'}
+          차트밖의 모든 게시글은 의료 조언이 아닙니다.{'\n'}
           증상 및 치료에 대해서는 반드시 전문 의료인과 상담하세요.
         </Text>
       </View>

@@ -62,7 +62,7 @@ export default function QuoteCheerModal({
         <View style={styles.sheet}>
           {/* 헤더 */}
           <View style={styles.handle} />
-          <Text style={styles.title}>✉️ 명언으로 응원하기</Text>
+          <Text style={styles.title}>명언으로 응원하기</Text>
           <Text style={styles.subtitle}>
             <Text style={styles.nickname}>{authorNickname}</Text>님의 오늘에 어울리는 명언을 골라주세요
           </Text>
@@ -101,7 +101,7 @@ export default function QuoteCheerModal({
           {/* 하단 버튼 */}
           <View style={styles.footer}>
             <TouchableOpacity style={styles.shuffleBtn} onPress={handleShuffle} activeOpacity={0.7}>
-              <Text style={styles.shuffleBtnText}>🔄 다른 명언 보기</Text>
+              <Text style={styles.shuffleBtnText}>다른 명언 보기</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -113,7 +113,7 @@ export default function QuoteCheerModal({
               {submitting ? (
                 <ActivityIndicator color="#fff" size="small" />
               ) : (
-                <Text style={styles.submitBtnText}>이걸로 응원할게요 💌</Text>
+                <Text style={styles.submitBtnText}>이걸로 응원할게요</Text>
               )}
             </TouchableOpacity>
           </View>

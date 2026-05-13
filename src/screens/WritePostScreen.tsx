@@ -162,7 +162,7 @@ export default function WritePostScreen({ navigation, userDiseaseIds, userRole, 
           {/* 사진 */}
           {images.length < 3 && (
             <TouchableOpacity style={styles.toolBtn} onPress={pickImage}>
-              <Text style={styles.toolBtnIcon}>📷</Text>
+              <Text style={styles.toolBtnIcon}>사진</Text>
             </TouchableOpacity>
           )}
 
@@ -173,7 +173,7 @@ export default function WritePostScreen({ navigation, userDiseaseIds, userRole, 
               onPress={() => { setShowTypeMenu(v => !v); setShowDiseaseMenu(false); }}
             >
               <Text style={[styles.toolChipText, postType && styles.toolChipTextActive]}>
-                {postType ? `${POST_TYPE_EMOJIS[postType]} ${POST_TYPE_LABELS[postType]}` : '유형'}
+                {postType ? POST_TYPE_LABELS[postType] : '유형'}
               </Text>
               <Text style={styles.toolChipArrow}>▾</Text>
             </TouchableOpacity>
@@ -186,7 +186,7 @@ export default function WritePostScreen({ navigation, userDiseaseIds, userRole, 
                     onPress={() => { setPostType(type); setShowTypeMenu(false); }}
                   >
                     <Text style={[styles.popupItemText, postType === type && styles.popupItemTextActive]}>
-                      {POST_TYPE_EMOJIS[type]} {POST_TYPE_LABELS[type]}
+                      {POST_TYPE_LABELS[type]}
                     </Text>
                   </TouchableOpacity>
                 ))}
@@ -202,7 +202,7 @@ export default function WritePostScreen({ navigation, userDiseaseIds, userRole, 
                 onPress={() => { setShowDiseaseMenu(v => !v); setShowTypeMenu(false); }}
               >
                 <Text style={styles.toolChipTextActive}>
-                  {selectedDisease ? `${selectedDisease.emoji} ${selectedDisease.name}` : '질환'}
+                  {selectedDisease ? selectedDisease.name : '질환'}
                 </Text>
                 <Text style={styles.toolChipArrow}>▾</Text>
               </TouchableOpacity>
@@ -215,7 +215,7 @@ export default function WritePostScreen({ navigation, userDiseaseIds, userRole, 
                       onPress={() => { setDiseaseId(d.id); setShowDiseaseMenu(false); }}
                     >
                       <Text style={[styles.popupItemText, diseaseId === d.id && styles.popupItemTextActive]}>
-                        {d.emoji} {d.name}
+                        {d.name}
                       </Text>
                     </TouchableOpacity>
                   ))}

@@ -13,11 +13,11 @@ import PostCard from '../components/PostCard';
 type FeedTab = 'my' | 'all' | 'popular';
 type SortKey = 'latest' | 'popular' | 'reaction' | 'comment';
 
-const SORT_OPTIONS: { key: SortKey; label: string; icon: string }[] = [
-  { key: 'latest',   label: '최신순',    icon: '🕐' },
-  { key: 'popular',  label: '인기순',    icon: '🔥' },
-  { key: 'reaction', label: '공감많은순', icon: '💙' },
-  { key: 'comment',  label: '댓글많은순', icon: '💬' },
+const SORT_OPTIONS: { key: SortKey; label: string }[] = [
+  { key: 'latest',   label: '최신순' },
+  { key: 'popular',  label: '인기순' },
+  { key: 'reaction', label: '공감많은순' },
+  { key: 'comment',  label: '댓글많은순' },
 ];
 
 interface Props {
@@ -176,7 +176,7 @@ export default function HomeFeedScreen({ navigation, userDiseaseIds }: Props) {
               <IconSearch size={16} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.sortBtn} onPress={() => setSortOpen(true)}>
-              <Text style={styles.sortBtnText}>{currentSort.icon} {currentSort.label}</Text>
+              <Text style={styles.sortBtnText}>{currentSort.label}</Text>
               <Text style={styles.sortArrow}>⌄</Text>
             </TouchableOpacity>
           </View>
@@ -213,7 +213,7 @@ export default function HomeFeedScreen({ navigation, userDiseaseIds }: Props) {
         keyboardShouldPersistTaps="handled"
         ListEmptyComponent={
           <View style={styles.empty}>
-            <Text style={styles.emptyEmoji}>{searchQuery ? '🔎' : '🌱'}</Text>
+
             <Text style={styles.emptyText}>
               {searchQuery ? `"${searchQuery}" 검색 결과가 없어요` : '아직 글이 없어요\n첫 번째 글을 남겨보세요!'}
             </Text>
@@ -237,7 +237,6 @@ export default function HomeFeedScreen({ navigation, userDiseaseIds }: Props) {
               ]}
               onPress={() => { setSort(option.key); setSortOpen(false); }}
             >
-              <Text style={styles.dropdownIcon}>{option.icon}</Text>
               <Text style={[styles.dropdownLabel, sort === option.key && styles.dropdownLabelActive]}>
                 {option.label}
               </Text>

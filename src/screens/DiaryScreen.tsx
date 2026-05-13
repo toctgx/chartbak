@@ -129,7 +129,7 @@ function DiaryCard({ entry, onCheerPress }: DiaryCardProps) {
           activeOpacity={0.7}
         >
           <Text style={styles.cheersPreviewText}>
-            💌 명언 응원 {entry.cheers.length}개
+            명언 응원 {entry.cheers.length}개
             <Text style={styles.cheersToggle}> {showCheers ? '접기' : '보기'}</Text>
           </Text>
         </TouchableOpacity>
@@ -152,7 +152,7 @@ function DiaryCard({ entry, onCheerPress }: DiaryCardProps) {
         onPress={() => onCheerPress(entry)}
         activeOpacity={0.75}
       >
-        <Text style={styles.cheerBtnText}>✉️ 명언으로 응원하기</Text>
+        <Text style={styles.cheerBtnText}>명언으로 응원하기</Text>
       </TouchableOpacity>
     </View>
   );
@@ -171,7 +171,7 @@ export default function DiaryScreen({ nickname, userRole }: DiaryScreenProps) {
     const trimmed = inputText.trim();
     if (!trimmed) return;
     if (trimmed.length > 100) {
-      Alert.alert('한 줄만요!', '100자 이내로 써주세요 😊');
+      Alert.alert('한 줄만요!', '100자 이내로 써주세요.');
       return;
     }
 
@@ -242,7 +242,7 @@ export default function DiaryScreen({ nickname, userRole }: DiaryScreenProps) {
         </View>
       ) : (
         <View style={styles.todayDone}>
-          <Text style={styles.todayDoneText}>✅ 오늘 일기 작성 완료 · 내일 또 만나요</Text>
+          <Text style={styles.todayDoneText}>오늘 일기 작성 완료 · 내일 또 만나요</Text>
         </View>
       )}
 

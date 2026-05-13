@@ -31,10 +31,10 @@ export default function PostDetailScreen({ route, navigation, nickname, userRole
   const disease = DISEASES.find(d => d.id === post.disease_id);
   const timeAgo = formatDistanceToNow(new Date(post.created_at), { addSuffix: true, locale: ko });
 
-  const reactions: { type: ReactionType; emoji: string; label: string }[] = [
-    { type: 'helpful', emoji: '💙', label: '도움됐어요' },
-    { type: 'same', emoji: '🤝', label: '나도그래요' },
-    { type: 'cheer', emoji: '💪', label: '힘내세요' },
+  const reactions: { type: ReactionType; label: string }[] = [
+    { type: 'helpful', label: '도움됐어요' },
+    { type: 'same', label: '나도그래요' },
+    { type: 'cheer', label: '힘내세요' },
   ];
 
   const handleReact = (type: ReactionType) => {
@@ -71,7 +71,7 @@ export default function PostDetailScreen({ route, navigation, nickname, userRole
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text style={styles.back}>← 뒤로</Text>
         </TouchableOpacity>
-        {disease && <Text style={styles.headerTitle}>{disease.emoji} {disease.name} 라운지</Text>}
+        {disease && <Text style={styles.headerTitle}>{disease.name} 라운지</Text>}
       </View>
 
       {/* 전체 스크롤 */}
@@ -90,7 +90,7 @@ export default function PostDetailScreen({ route, navigation, nickname, userRole
               </Text>
             </View>
             <View style={styles.typeTag}>
-              <Text style={styles.typeTagText}>{POST_TYPE_EMOJIS[post.post_type]} {POST_TYPE_LABELS[post.post_type]}</Text>
+              <Text style={styles.typeTagText}>{POST_TYPE_LABELS[post.post_type]}</Text>
             </View>
           </View>
 
@@ -108,13 +108,12 @@ export default function PostDetailScreen({ route, navigation, nickname, userRole
           {/* 공감 */}
           <Text style={styles.reactionTitle}>이 글이 도움이 됐나요?</Text>
           <View style={styles.reactionRow}>
-            {reactions.map(({ type, emoji, label }) => (
+            {reactions.map(({ type, label }) => (
               <TouchableOpacity
                 key={type}
                 style={[styles.reactionBtn, postState.user_reaction === type && styles.reactionBtnActive]}
                 onPress={() => handleReact(type)}
               >
-                <Text style={styles.reactionEmoji}>{emoji}</Text>
                 <Text style={[styles.reactionLabel, postState.user_reaction === type && { color: COLORS.primary }]}>{label}</Text>
                 <Text style={[styles.reactionCount, postState.user_reaction === type && { color: COLORS.primary }]}>
                   {postState.reactions[type]}
@@ -126,7 +125,7 @@ export default function PostDetailScreen({ route, navigation, nickname, userRole
 
         {/* 댓글 */}
         <View style={styles.commentsSection}>
-          <Text style={styles.commentsTitle}>💬 댓글 {comments.length}개</Text>
+          <Text style={styles.commentsTitle}>댓글 {comments.length}개</Text>
           {comments.map(comment => (
             <View key={comment.id} style={[styles.commentCard, comment.parent_id && styles.commentReply]}>
               <View style={styles.commentHeader}>

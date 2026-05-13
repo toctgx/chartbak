@@ -134,7 +134,7 @@ export default function DiseaseSelectScreen({ onNext, onBack }: Props) {
               activeOpacity={0.8}
             >
               <View style={styles.itemLeft}>
-                <Text style={styles.itemEmoji}>🎗️</Text>
+
                 <View>
                   <Text style={[styles.itemName, selectedCancerCount > 0 && styles.itemNameSelected]}>
                     암{selectedCancerCount > 0 ? ` (${selectedCancerCount}종 선택)` : ''}
@@ -158,7 +158,7 @@ export default function DiseaseSelectScreen({ onNext, onBack }: Props) {
                   activeOpacity={0.8}
                 >
                   <View style={styles.itemLeft}>
-                    <Text style={styles.subItemEmoji}>{disease.emoji}</Text>
+
                     <View>
                       <Text style={[styles.itemName, styles.subItemName, isSelected && styles.itemNameSelected]}>
                         {disease.name}
@@ -193,7 +193,7 @@ export default function DiseaseSelectScreen({ onNext, onBack }: Props) {
                 activeOpacity={0.8}
               >
                 <View style={styles.itemLeft}>
-                  <Text style={styles.itemEmoji}>{disease.emoji}</Text>
+
                   <View>
                     <Text style={[styles.itemName, isSelected && styles.itemNameSelected]}>
                       {disease.name}

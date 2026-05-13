@@ -24,7 +24,6 @@ export default function RoleScreen({ onNext }: Props) {
         </View>
 
         <View style={styles.content}>
-          <Text style={styles.emoji}>🤝</Text>
           <Text style={styles.title}>어떤 분이신가요?</Text>
           <Text style={styles.desc}>
             역할에 따라 다른 관점의 이야기를 나눌 수 있어요.{'\n'}
@@ -39,7 +38,7 @@ export default function RoleScreen({ onNext }: Props) {
             ]}
             onPress={() => setSelected('patient')}
           >
-            <Text style={styles.cardEmoji}>🏥</Text>
+
             <View style={styles.cardText}>
               <Text style={[styles.cardTitle, selected === 'patient' && { color: COLORS.patient }]}>
                 환자 (본인)
@@ -61,7 +60,7 @@ export default function RoleScreen({ onNext }: Props) {
             ]}
             onPress={() => setSelected('caregiver')}
           >
-            <Text style={styles.cardEmoji}>🫂</Text>
+
             <View style={styles.cardText}>
               <Text style={[styles.cardTitle, selected === 'caregiver' && { color: COLORS.caregiver }]}>
                 환우 (보호자)
@@ -77,7 +76,7 @@ export default function RoleScreen({ onNext }: Props) {
 
           <View style={styles.notice}>
             <Text style={styles.noticeText}>
-              💡 역할은 나중에 마이페이지에서 변경할 수 있어요
+              역할은 나중에 마이페이지에서 변경할 수 있어요
             </Text>
           </View>
 

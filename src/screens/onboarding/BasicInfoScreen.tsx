@@ -27,7 +27,6 @@ export default function BasicInfoScreen({ nickname, onNext }: Props) {
         </View>
 
         <View style={styles.content}>
-          <Text style={styles.emoji}>✨</Text>
           <Text style={styles.title}>거의 다 됐어요!</Text>
           <Text style={styles.desc}>
             마지막으로 기본 정보를 알려주세요.{'\n'}
@@ -84,7 +83,7 @@ export default function BasicInfoScreen({ nickname, onNext }: Props) {
             onPress={() => ageGroup && diagnosisYear && onNext(ageGroup, diagnosisYear)}
             disabled={!ageGroup || !diagnosisYear}
           >
-            <Text style={styles.buttonText}>🏥 차트밖 시작하기!</Text>
+            <Text style={styles.buttonText}>차트밖 시작하기</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

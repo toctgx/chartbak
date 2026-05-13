@@ -63,7 +63,7 @@ export default function PhoneScreen({ onNext }: Props) {
         </View>
 
         <View style={styles.content}>
-          <Text style={styles.emoji}>📱</Text>
+
           <Text style={styles.title}>
             {step === 'phone' ? '전화번호로 시작해요' : '인증번호를 입력해주세요'}
           </Text>

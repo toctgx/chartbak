@@ -47,7 +47,7 @@ export default function LoungeDetailScreen({ route, navigation, nickname, userRo
           <Text style={styles.backText}>←</Text>
         </TouchableOpacity>
         <View style={styles.headerCenter}>
-          <Text style={styles.headerEmoji}>{disease?.emoji}</Text>
+
           <View>
             <Text style={styles.headerTitle}>{disease?.name} 라운지</Text>
             <Text style={styles.headerSub}>{disease?.category}</Text>
@@ -92,11 +92,11 @@ export default function LoungeDetailScreen({ route, navigation, nickname, userRo
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); setTimeout(() => setRefreshing(false), 800); }} tintColor={COLORS.primary} />}
         ListEmptyComponent={
           <View style={styles.empty}>
-            <Text style={styles.emptyEmoji}>{disease?.emoji}</Text>
+
             <Text style={styles.emptyTitle}>{disease?.name} 라운지</Text>
             <Text style={styles.emptyText}>아직 글이 없어요{'\n'}첫 번째 글을 남겨보세요!</Text>
             <TouchableOpacity style={styles.writeEmptyBtn} onPress={() => navigation.navigate('WritePost')}>
-              <Text style={styles.writeEmptyText}>✏️ 첫 글 쓰기</Text>
+              <Text style={styles.writeEmptyText}>첫 글 쓰기</Text>
             </TouchableOpacity>
           </View>
         }

@@ -42,7 +42,6 @@ export default function NicknameScreen({ diseaseIds, onNext }: Props) {
       </View>
 
       <View style={styles.content}>
-        <Text style={styles.emoji}>🎭</Text>
         <Text style={styles.title}>닉네임을 정해주세요</Text>
         <Text style={styles.desc}>
           모든 활동은 이 닉네임으로 이루어져요.{'\n'}
@@ -77,14 +76,14 @@ export default function NicknameScreen({ diseaseIds, onNext }: Props) {
           {loading ? (
             <ActivityIndicator color={COLORS.primary} size="small" />
           ) : (
-            <Text style={styles.autoBtnText}>🎲 닉네임 자동 생성하기</Text>
+            <Text style={styles.autoBtnText}>닉네임 자동 생성하기</Text>
           )}
         </TouchableOpacity>
 
         {/* 안내 */}
         <View style={styles.notice}>
           <Text style={styles.noticeText}>
-            💡 닉네임은 마이페이지에서 언제든지 변경할 수 있어요
+            닉네임은 마이페이지에서 언제든지 변경할 수 있어요
           </Text>
         </View>
 

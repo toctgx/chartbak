@@ -67,7 +67,7 @@ export default function SearchScreen({ navigation }: Props) {
 
       {/* 검색창 */}
       <View style={styles.searchBar}>
-        <Text style={styles.searchIcon}>🔍</Text>
+
         <TextInput
           style={styles.input}
           placeholder="질환명, 증상, 키워드로 검색"
@@ -88,7 +88,7 @@ export default function SearchScreen({ navigation }: Props) {
       {/* 검색 전: 추천 키워드 */}
       {!submitted ? (
         <View style={styles.recentWrap}>
-          <Text style={styles.recentTitle}>🔥 많이 찾는 키워드</Text>
+          <Text style={styles.recentTitle}>많이 찾는 키워드</Text>
           <View style={styles.chipRow}>
             {RECENT_KEYWORDS.map(kw => (
               <TouchableOpacity
@@ -126,7 +126,7 @@ export default function SearchScreen({ navigation }: Props) {
           }}
           ListEmptyComponent={
             <View style={styles.empty}>
-              <Text style={styles.emptyEmoji}>🔎</Text>
+
               <Text style={styles.emptyText}>
                 "{submitted}"에 대한{'\n'}검색 결과가 없어요
               </Text>
