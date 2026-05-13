@@ -1,41 +1,42 @@
-// 차트밖 × 글래스모피즘 v2
-// Dark Olive Green + Amber Accent + Glass
+// 차트밖 v3 — Light Mode / Warm Neutral
+// 차분하고 읽기 편한 커뮤니티 앱
+
 export const COLORS = {
-  // ── Primary — Amber ─────────────────────────────────
-  primary: '#E8A838',
-  primaryLight: 'rgba(232,168,56,0.25)',
-  primaryPale: 'rgba(232,168,56,0.12)',
-  primaryDark: '#D4921E',
+  // ── Brand ────────────────────────────────────────────
+  // 올리브 그린 계열 1색 — CTA / 액티브 상태에만 사용
+  primary: '#4A6741',
+  primaryLight: 'rgba(74,103,65,0.12)',
+  primaryPale: 'rgba(74,103,65,0.06)',
+  primaryDark: '#3A5130',
 
   // ── Background ──────────────────────────────────────
-  background: '#2B3820',
-  surface: 'rgba(255,255,255,0.09)',
-  surfaceSecondary: 'rgba(255,255,255,0.05)',
+  // 순수 흰색이 아닌 따뜻한 크림 — 눈이 편안함
+  background: '#F5F3EF',
+  surface: '#FFFFFF',
+  surfaceSecondary: '#F0EDE8',
 
   // ── Text ────────────────────────────────────────────
-  textPrimary: '#F0EDE8',
-  textSecondary: 'rgba(240,237,232,0.65)',
-  textTertiary: 'rgba(240,237,232,0.35)',
-  textInverse: '#2B3820',
+  // 순수 블랙 대신 87% 불투명 — 크림 배경과 온도 맞춤
+  textPrimary: 'rgba(0,0,0,0.87)',
+  textSecondary: 'rgba(0,0,0,0.50)',
+  textTertiary: 'rgba(0,0,0,0.32)',
+  textInverse: '#FFFFFF',
 
   // ── 역할 색상 ───────────────────────────────────────
-  patient: '#60A5FA',
-  caregiver: '#34D399',
+  // 색을 줄이고 아이콘+텍스트로만 구분
+  // 아주 옅은 차별화만 유지
+  patient: '#4A6741',    // 올리브 그린 (환자)
+  caregiver: '#6B7280',  // 중립 슬레이트 (환우/보호자)
 
   // ── 상태 ────────────────────────────────────────────
-  success: '#34D399',
-  warning: '#FBBF24',
-  error: '#F87171',
-  info: '#60A5FA',
-
-  // ── 보조 ────────────────────────────────────────────
-  peach: 'rgba(232,168,56,0.15)',
-  terracotta: '#D4921E',
-  deepBrown: '#B87E20',
+  success: '#4A6741',
+  warning: '#92600A',
+  error: '#B91C1C',
+  info: 'rgba(0,0,0,0.55)',
 
   // ── 구분선 ──────────────────────────────────────────
-  border: 'rgba(255,255,255,0.16)',
-  borderDark: 'rgba(255,255,255,0.28)',
+  border: 'rgba(0,0,0,0.08)',
+  borderDark: 'rgba(0,0,0,0.14)',
 };
 
 export const FONTS = {
@@ -71,18 +72,19 @@ export const RADIUS = {
 };
 
 export const SHADOWS = {
+  // 스택 섀도우 — 단일 무거운 그림자 대신 2겹 저알파
   sm: {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.15,
-    shadowRadius: 3,
-    elevation: 2,
+    shadowOpacity: 0.06,
+    shadowRadius: 2,
+    elevation: 1,
   },
   md: {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.08,
     shadowRadius: 6,
-    elevation: 4,
+    elevation: 3,
   },
 };

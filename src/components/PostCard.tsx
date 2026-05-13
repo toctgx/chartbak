@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { IconPatient, IconCaregiver } from './Icons';
-import { COLORS, FONTS, SPACING, RADIUS } from '../constants/theme';
+import { COLORS, FONTS, SPACING } from '../constants/theme';
 import { Post, POST_TYPE_LABELS, ReactionType } from '../types';
 import { DISEASES } from '../constants/diseases';
 import { formatDistanceToNow } from 'date-fns';
@@ -18,49 +17,43 @@ export default function PostCard({ post, onPress, highlight }: Props) {
   const disease = DISEASES.find(d => d.id === post.disease_id);
   const timeAgo = formatDistanceToNow(new Date(post.created_at), { addSuffix: true, locale: ko });
   const totalReactions = post.reactions.helpful + post.reactions.same + post.reactions.cheer;
+  const isPatient = post.author_role === 'patient';
+
+  // 메타 텍스트: "환자 · 경험나눔 · 당뇨"
+  const metaParts = [
+    isPatient ? '환자' : '환우',
+    POST_TYPE_LABELS[post.post_type],
+    disease?.name,
+  ].filter(Boolean);
 
   return (
     <TouchableOpacity
       style={[styles.card, highlight && styles.cardHighlight]}
       onPress={onPress}
-      activeOpacity={0.85}
+      activeOpacity={0.7}
     >
-      {/* 태그 행 */}
-      <View style={styles.tagRow}>
-        {/* 역할 */}
-        <View style={[styles.roleTag, { backgroundColor: post.author_role === 'patient' ? 'rgba(96,165,250,0.15)' : 'rgba(52,211,153,0.15)' }]}>
-          {post.author_role === 'patient'
-            ? <IconPatient size={10} />
-            : <IconCaregiver size={10} />
-          }
-          <Text style={[styles.roleText, { color: post.author_role === 'patient' ? COLORS.patient : COLORS.caregiver }]}>
-            {post.author_role === 'patient' ? '환자' : '환우'}
-          </Text>
-        </View>
-
-        {/* 글 유형 */}
-        <View style={styles.typeTag}>
-          <Text style={styles.typeText}>{POST_TYPE_LABELS[post.post_type]}</Text>
-        </View>
-
-        {/* 질환 */}
-        {disease && (
-          <View style={styles.diseaseTag}>
-            <Text style={styles.diseaseText}>{disease.name}</Text>
-          </View>
-        )}
-
-        {/* 시간 */}
-        <Text style={styles.time}>{timeAgo}</Text>
-      </View>
-
       {/* 제목 */}
       <Text style={styles.title} numberOfLines={2}>{post.title}</Text>
 
-      {/* 반응 수 (있을 때만 작게) */}
-      {totalReactions > 0 && (
-        <Text style={styles.reactionCount}>공감 {totalReactions} · 댓글 {post.comment_count}</Text>
-      )}
+      {/* 메타 + 공감/댓글 */}
+      <View style={styles.footer}>
+        {/* 역할 인디케이터 + 메타 */}
+        <View style={styles.metaRow}>
+          <View style={[styles.roleDot, { backgroundColor: isPatient ? COLORS.patient : COLORS.caregiver }]} />
+          <Text style={styles.meta}>{metaParts.join(' · ')}</Text>
+          <Text style={styles.dot}>·</Text>
+          <Text style={styles.time}>{timeAgo}</Text>
+        </View>
+
+        {/* 공감/댓글 수 */}
+        {(totalReactions > 0 || post.comment_count > 0) && (
+          <Text style={styles.counts}>
+            {totalReactions > 0 && `공감 ${totalReactions}`}
+            {totalReactions > 0 && post.comment_count > 0 && '  '}
+            {post.comment_count > 0 && `댓글 ${post.comment_count}`}
+          </Text>
+        )}
+      </View>
     </TouchableOpacity>
   );
 }
@@ -69,46 +62,60 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: COLORS.surface,
     paddingHorizontal: SPACING.md,
-    paddingVertical: 12,
+    paddingVertical: 14,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
   },
   cardHighlight: {
-    backgroundColor: 'rgba(232,168,56,0.08)',
-    borderLeftWidth: 3,
+    // 하이라이트: 배경 살짝 크림 틴트, 왼쪽 얇은 선
+    backgroundColor: COLORS.primaryPale,
+    borderLeftWidth: 2,
     borderLeftColor: COLORS.primary,
   },
-  tagRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap',
+
+  title: {
+    fontSize: FONTS.sizes.md,
+    fontWeight: '600',
+    color: COLORS.textPrimary,
+    lineHeight: 22,
+    letterSpacing: -0.2,
     marginBottom: 6,
   },
-  roleTag: {
-    flexDirection: 'row', alignItems: 'center',
-    paddingHorizontal: 7, paddingVertical: 3,
-    borderRadius: RADIUS.full, marginRight: 5,
+
+  footer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
-  roleText: { fontSize: 11, fontWeight: '700', marginLeft: 3 },
-  typeTag: {
-    backgroundColor: COLORS.surfaceSecondary,
-    paddingHorizontal: 7, paddingVertical: 3,
-    borderRadius: RADIUS.full, marginRight: 5,
+
+  metaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    flex: 1,
   },
-  typeText: { fontSize: 11, color: COLORS.textSecondary, fontWeight: '500' },
-  diseaseTag: {
-    backgroundColor: COLORS.primaryPale,
-    paddingHorizontal: 7, paddingVertical: 3,
-    borderRadius: RADIUS.full, marginRight: 5,
+  roleDot: {
+    width: 5,
+    height: 5,
+    borderRadius: 999,
+    marginRight: 2,
   },
-  diseaseText: { fontSize: 11, color: COLORS.primary, fontWeight: '600' },
-  time: { fontSize: 11, color: COLORS.textTertiary, marginLeft: 'auto' as any },
-  title: {
-    fontSize: FONTS.sizes.md, fontWeight: '700',
-    color: COLORS.textPrimary, lineHeight: 22, letterSpacing: -0.2,
-    marginBottom: 4,
+  meta: {
+    fontSize: FONTS.sizes.xs,
+    color: COLORS.textSecondary,
   },
-  reactionCount: {
-    fontSize: 11, color: COLORS.textTertiary, marginTop: 2,
+  dot: {
+    fontSize: FONTS.sizes.xs,
+    color: COLORS.textTertiary,
+  },
+  time: {
+    fontSize: FONTS.sizes.xs,
+    color: COLORS.textTertiary,
+  },
+
+  counts: {
+    fontSize: FONTS.sizes.xs,
+    color: COLORS.textTertiary,
+    flexShrink: 0,
   },
 });

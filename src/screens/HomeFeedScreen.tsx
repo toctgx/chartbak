@@ -208,6 +208,7 @@ export default function HomeFeedScreen({ navigation, userDiseaseIds }: Props) {
           );
         }}
         contentContainerStyle={styles.list}
+        ItemSeparatorComponent={() => null}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={COLORS.primary} />}
         keyboardShouldPersistTaps="handled"
         ListEmptyComponent={
@@ -253,53 +254,60 @@ export default function HomeFeedScreen({ navigation, userDiseaseIds }: Props) {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
 
+  // 탭 — 라이트 모드, 흰 배경 위에 그린 언더라인
   tabRow: {
-    flexDirection: 'row', backgroundColor: COLORS.surface,
-    borderBottomWidth: 1, borderBottomColor: COLORS.border,
+    flexDirection: 'row',
+    backgroundColor: COLORS.surface,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border,
   },
   tab: {
-    flex: 1, paddingVertical: SPACING.md, alignItems: 'center',
+    flex: 1, paddingVertical: 13, alignItems: 'center',
     borderBottomWidth: 2, borderBottomColor: 'transparent',
   },
   tabActive: { borderBottomColor: COLORS.primary },
   tabText: { fontSize: FONTS.sizes.sm, color: COLORS.textSecondary, fontWeight: '500' },
   tabTextActive: { color: COLORS.primary, fontWeight: '700' },
 
-  // 기본 필터 행
+  // 필터 행 — 크림 배경, 얇은 테두리 칩
   filterRow: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    paddingHorizontal: SPACING.lg, paddingVertical: SPACING.sm,
+    paddingHorizontal: SPACING.md, paddingVertical: SPACING.sm,
     backgroundColor: COLORS.surface,
     borderBottomWidth: 1, borderBottomColor: COLORS.border,
   },
   filterChips: { flexDirection: 'row', gap: SPACING.xs },
   filterChip: {
     flexDirection: 'row', alignItems: 'center',
-    paddingHorizontal: SPACING.md, paddingVertical: 6,
-    borderRadius: RADIUS.full, borderWidth: 1.5, borderColor: COLORS.border,
+    paddingHorizontal: 12, paddingVertical: 5,
+    borderRadius: RADIUS.full,
+    borderWidth: 1, borderColor: COLORS.border,
+    backgroundColor: COLORS.surface,
   },
-  filterChipActive: { backgroundColor: COLORS.primary + '15', borderColor: COLORS.primary },
+  filterChipActive: {
+    backgroundColor: COLORS.primaryPale,
+    borderColor: COLORS.primary,
+  },
   filterText: { fontSize: FONTS.sizes.xs, color: COLORS.textSecondary },
   filterTextActive: { color: COLORS.primary, fontWeight: '600' },
 
   rightActions: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   iconBtn: {
-    padding: 6,
-    borderRadius: RADIUS.full,
-    borderWidth: 1.5,
-    borderColor: COLORS.border,
-    backgroundColor: COLORS.surface,
-    width: 32, height: 32,
+    width: 30, height: 30,
     alignItems: 'center', justifyContent: 'center',
+    borderRadius: RADIUS.full,
+    borderWidth: 1, borderColor: COLORS.border,
+    backgroundColor: COLORS.surface,
   },
   sortBtn: {
     flexDirection: 'row', alignItems: 'center', gap: 3,
-    paddingHorizontal: 10, paddingVertical: 6,
-    borderRadius: RADIUS.full, borderWidth: 1.5, borderColor: COLORS.border,
+    paddingHorizontal: 10, paddingVertical: 5,
+    borderRadius: RADIUS.full,
+    borderWidth: 1, borderColor: COLORS.border,
     backgroundColor: COLORS.surface,
   },
   sortBtnText: { fontSize: FONTS.sizes.xs, color: COLORS.textSecondary, fontWeight: '500' },
-  sortArrow: { fontSize: 11, color: COLORS.textTertiary },
+  sortArrow: { fontSize: 10, color: COLORS.textTertiary },
 
   // 검색 행
   searchRow: {
@@ -317,7 +325,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     fontSize: FONTS.sizes.sm,
     color: COLORS.textPrimary,
-    borderWidth: 1.5,
+    borderWidth: 1,
     borderColor: COLORS.primary,
   },
   searchCloseBtn: { padding: 6 },
@@ -326,31 +334,38 @@ const styles = StyleSheet.create({
   searchResultBar: {
     paddingHorizontal: SPACING.lg, paddingVertical: 6,
     backgroundColor: COLORS.primaryPale,
-    borderBottomWidth: 1, borderBottomColor: COLORS.primaryLight,
+    borderBottomWidth: 1, borderBottomColor: COLORS.border,
   },
   searchResultText: { fontSize: FONTS.sizes.xs, color: COLORS.primary, fontWeight: '600' },
 
-  list: { padding: SPACING.md, paddingBottom: SPACING.xxl },
-  empty: { paddingTop: 80, alignItems: 'center' },
-  emptyEmoji: { fontSize: 48, marginBottom: SPACING.md },
+  // 피드 리스트 — 카드 사이 패딩 없이 구분선으로만
+  list: { paddingBottom: SPACING.xxl },
+  empty: { paddingTop: 80, alignItems: 'center', paddingHorizontal: SPACING.xl },
+  emptyEmoji: { fontSize: 40, marginBottom: SPACING.sm },
   emptyText: { fontSize: FONTS.sizes.md, color: COLORS.textSecondary, textAlign: 'center', lineHeight: 24 },
 
-  modalBackdrop: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.2)' },
+  modalBackdrop: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.15)' },
   dropdown: {
-    position: 'absolute', top: 106, right: SPACING.lg,
-    backgroundColor: COLORS.surface, borderRadius: RADIUS.md,
-    borderWidth: 1, borderColor: COLORS.border, minWidth: 150,
-    shadowColor: '#000', shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.12, shadowRadius: 8, elevation: 8,
+    position: 'absolute', top: 106, right: SPACING.md,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.md,
+    borderWidth: 1, borderColor: COLORS.border,
+    minWidth: 150,
+    // 2겹 저알파 섀도우
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 6,
   },
   dropdownItem: {
     flexDirection: 'row', alignItems: 'center',
-    paddingVertical: 13, paddingHorizontal: SPACING.md, gap: 8,
+    paddingVertical: 12, paddingHorizontal: SPACING.md, gap: 8,
   },
   dropdownItemBorder: { borderBottomWidth: 1, borderBottomColor: COLORS.border },
-  dropdownItemActive: { backgroundColor: COLORS.primary + '10' },
-  dropdownIcon: { fontSize: 15 },
+  dropdownItemActive: { backgroundColor: COLORS.primaryPale },
+  dropdownIcon: { fontSize: 14 },
   dropdownLabel: { flex: 1, fontSize: FONTS.sizes.sm, color: COLORS.textPrimary },
   dropdownLabelActive: { color: COLORS.primary, fontWeight: '700' },
-  dropdownCheck: { fontSize: 14, color: COLORS.primary, fontWeight: '700' },
+  dropdownCheck: { fontSize: 13, color: COLORS.primary, fontWeight: '700' },
 });
