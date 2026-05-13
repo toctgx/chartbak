@@ -303,13 +303,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: SPACING.md,
     marginBottom: SPACING.sm,
-    backgroundColor: 'rgba(255,255,255,0.09)',
+    backgroundColor: COLORS.surface,
     borderRadius: RADIUS.lg,
     borderWidth: 1,
     borderColor: COLORS.border,
     paddingHorizontal: SPACING.md,
     paddingVertical: 4,
     gap: 8,
+    ...SHADOWS.sm,
   },
   input: {
     flex: 1,
@@ -324,7 +325,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   writeBtnDisabled: {
-    backgroundColor: 'rgba(232,168,56,0.30)',
+    backgroundColor: COLORS.primaryPale,
   },
   writeBtnText: {
     fontSize: FONTS.sizes.sm,
@@ -336,14 +337,14 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.sm,
     paddingVertical: 10,
     paddingHorizontal: SPACING.md,
-    backgroundColor: 'rgba(52,211,153,0.1)',
+    backgroundColor: COLORS.primaryPale,
     borderRadius: RADIUS.md,
     borderWidth: 1,
-    borderColor: 'rgba(52,211,153,0.3)',
+    borderColor: COLORS.primaryLight,
   },
   todayDoneText: {
     fontSize: FONTS.sizes.sm,
-    color: COLORS.caregiver,
+    color: COLORS.primary,
     textAlign: 'center',
   },
 
@@ -355,7 +356,7 @@ const styles = StyleSheet.create({
 
   // 카드
   card: {
-    backgroundColor: 'rgba(255,255,255,0.09)',
+    backgroundColor: COLORS.surface,
     borderRadius: RADIUS.lg,
     borderWidth: 1,
     borderColor: COLORS.border,
@@ -412,7 +413,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   cheerItem: {
-    backgroundColor: 'rgba(232,168,56,0.10)',
+    backgroundColor: COLORS.primaryPale,
     borderRadius: RADIUS.md,
     padding: 10,
     borderLeftWidth: 2,
@@ -436,9 +437,9 @@ const styles = StyleSheet.create({
     marginTop: 4,
     paddingVertical: 9,
     borderRadius: RADIUS.md,
-    backgroundColor: 'rgba(232,168,56,0.12)',
+    backgroundColor: COLORS.primaryPale,
     borderWidth: 1,
-    borderColor: 'rgba(232,168,56,0.30)',
+    borderColor: COLORS.primaryLight,
     alignItems: 'center',
   },
   cheerBtnText: {

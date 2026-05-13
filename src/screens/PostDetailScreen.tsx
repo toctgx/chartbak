@@ -84,8 +84,8 @@ export default function PostDetailScreen({ route, navigation, nickname, userRole
         {/* 게시글 */}
         <View style={styles.post}>
           <View style={styles.tags}>
-            <View style={[styles.roleTag, { backgroundColor: post.author_role === 'patient' ? '#EBF5FF' : '#EAFAF1' }]}>
-              <Text style={[styles.roleTagText, { color: post.author_role === 'patient' ? COLORS.patient : COLORS.caregiver }]}>
+            <View style={[styles.roleTag, { backgroundColor: COLORS.surfaceSecondary }]}>
+              <Text style={[styles.roleTagText, { color: COLORS.textSecondary }]}>
                 {post.author_role === 'patient' ? '환자' : '환우'}
               </Text>
             </View>
@@ -129,8 +129,8 @@ export default function PostDetailScreen({ route, navigation, nickname, userRole
           {comments.map(comment => (
             <View key={comment.id} style={[styles.commentCard, comment.parent_id && styles.commentReply]}>
               <View style={styles.commentHeader}>
-                <View style={[styles.roleTagSmall, { backgroundColor: comment.author_role === 'patient' ? '#EBF5FF' : '#EAFAF1' }]}>
-                  <Text style={[styles.roleTagSmallText, { color: comment.author_role === 'patient' ? COLORS.patient : COLORS.caregiver }]}>
+                <View style={[styles.roleTagSmall, { backgroundColor: COLORS.surfaceSecondary }]}>
+                  <Text style={[styles.roleTagSmallText, { color: COLORS.textSecondary }]}>
                     {comment.author_role === 'patient' ? '환자' : '환우'}
                   </Text>
                 </View>
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     flex: 1, alignItems: 'center', padding: SPACING.sm, marginRight: SPACING.xs,
     borderRadius: RADIUS.md, borderWidth: 1.5, borderColor: COLORS.border, backgroundColor: COLORS.surface,
   },
-  reactionBtnActive: { borderColor: COLORS.primary, backgroundColor: '#EBF5FF' },
+  reactionBtnActive: { borderColor: COLORS.primary, backgroundColor: COLORS.primaryPale },
   reactionEmoji: { fontSize: 22, marginBottom: 4 },
   reactionLabel: { fontSize: FONTS.sizes.xs, color: COLORS.textSecondary, marginBottom: 2 },
   reactionCount: { fontSize: FONTS.sizes.sm, fontWeight: '700', color: COLORS.textSecondary },

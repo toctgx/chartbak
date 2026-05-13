@@ -104,8 +104,8 @@ const styles = StyleSheet.create({
     ...SHADOWS.sm,
   },
   cardMine: {
-    borderColor: 'rgba(232,168,56,0.4)',
-    backgroundColor: 'rgba(232,168,56,0.08)',
+    borderColor: COLORS.primaryLight,
+    backgroundColor: COLORS.primaryPale,
   },
   emojiBox: {
     width: 50, height: 50,

@@ -27,11 +27,11 @@ export default function MyPageScreen({ user, onLogout }: Props) {
             <Text style={styles.nickname}>{user.nickname}</Text>
             <View style={[
               styles.roleBadge,
-              { backgroundColor: user.role === 'patient' ? '#EBF5FF' : '#EAFAF1' }
+              { backgroundColor: COLORS.surfaceSecondary }
             ]}>
               <Text style={[
                 styles.roleText,
-                { color: user.role === 'patient' ? COLORS.patient : COLORS.caregiver }
+                { color: user.role === 'patient' ? COLORS.primary : COLORS.caregiver }
               ]}>
                 {user.role === 'patient' ? '환자' : '환우(보호자)'}
               </Text>
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center', alignItems: 'center',
     marginRight: SPACING.md,
   },
-  avatarEmoji: { fontSize: 32 },
+  avatarEmoji: { fontSize: 22, fontWeight: '800', color: COLORS.primary } as any,
   profileInfo: { flex: 1 },
   nickname: { fontSize: FONTS.sizes.xl, fontWeight: '800', color: COLORS.textPrimary, marginBottom: 6 },
   roleBadge: { alignSelf: 'flex-start', paddingHorizontal: 10, paddingVertical: 4, borderRadius: RADIUS.full },
@@ -191,10 +191,11 @@ const styles = StyleSheet.create({
   disclaimer: {
     margin: SPACING.lg,
     padding: SPACING.md,
-    backgroundColor: '#FFF8E1', borderRadius: RADIUS.md,
+    backgroundColor: COLORS.surfaceSecondary, borderRadius: RADIUS.md,
+    borderWidth: 1, borderColor: COLORS.border,
   },
   disclaimerText: {
-    fontSize: FONTS.sizes.xs, color: '#856404',
+    fontSize: FONTS.sizes.xs, color: COLORS.textSecondary,
     lineHeight: 18, textAlign: 'center',
   },
 });

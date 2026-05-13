@@ -245,12 +245,12 @@ const styles = StyleSheet.create({
   cancelText: { fontSize: FONTS.sizes.md, color: COLORS.textSecondary },
   headerTitle: { fontSize: FONTS.sizes.md, fontWeight: '700', color: COLORS.textPrimary },
   submitBtn: {
-    backgroundColor: '#1A9E5C',
+    backgroundColor: COLORS.primary,
     borderRadius: RADIUS.full,
     paddingHorizontal: SPACING.md,
     paddingVertical: 6,
   },
-  submitBtnDisabled: { backgroundColor: '#C8E6D6' },
+  submitBtnDisabled: { backgroundColor: COLORS.primaryPale },
   submitText: { color: '#FFFFFF', fontWeight: '700', fontSize: FONTS.sizes.sm },
 
   scroll: { flex: 1 },
@@ -331,11 +331,11 @@ const styles = StyleSheet.create({
     gap: 3,
   },
   toolChipActive: {
-    backgroundColor: '#EBF7F1',
-    borderColor: '#AADCC3',
+    backgroundColor: COLORS.primaryPale,
+    borderColor: COLORS.primaryLight,
   },
   toolChipText: { fontSize: FONTS.sizes.sm, color: COLORS.textTertiary },
-  toolChipTextActive: { fontSize: FONTS.sizes.sm, color: '#1A9E5C', fontWeight: '600' },
+  toolChipTextActive: { fontSize: FONTS.sizes.sm, color: COLORS.primary, fontWeight: '600' },
   toolChipArrow: { fontSize: 10, color: COLORS.textTertiary },
 
   // 팝업 메뉴
@@ -362,7 +362,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderBottomColor: '#F0F0F0',
   },
-  popupItemActive: { backgroundColor: '#EBF7F1' },
+  popupItemActive: { backgroundColor: COLORS.primaryPale },
   popupItemText: { fontSize: FONTS.sizes.sm, color: COLORS.textPrimary },
-  popupItemTextActive: { color: '#1A9E5C', fontWeight: '700' },
+  popupItemTextActive: { color: COLORS.primary, fontWeight: '700' },
 });

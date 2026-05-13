@@ -66,7 +66,7 @@ const iconBoxStyle = {
   width: 40,
   height: 36,
   borderRadius: 10,
-  backgroundColor: COLORS.primaryLight,
+  backgroundColor: COLORS.primaryPale,
   alignItems: 'center' as const,
   justifyContent: 'center' as const,
 };
@@ -79,12 +79,12 @@ export default function AppNavigator({ user, onLogout, onNewPost }: AppNavigator
         tabBarStyle: {
           borderTopWidth: 1,
           borderTopColor: COLORS.border,
-          backgroundColor: 'rgba(6,13,30,0.97)',
+          backgroundColor: COLORS.surface,
           paddingBottom: 8,
           paddingTop: 8,
           height: 72,
         },
-        tabBarActiveTintColor: '#E8A838',
+        tabBarActiveTintColor: COLORS.primary,
         tabBarInactiveTintColor: COLORS.textTertiary,
         tabBarLabelStyle: { fontSize: FONTS.sizes.xs, fontWeight: '700', marginTop: 2 },
         tabBarIconStyle: { marginTop: 2 },

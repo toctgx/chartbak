@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.6)',
   },
   sheet: {
-    backgroundColor: '#0D1B3E',
+    backgroundColor: COLORS.surface,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     paddingHorizontal: SPACING.md,
@@ -176,14 +176,14 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   quoteCard: {
-    backgroundColor: 'rgba(255,255,255,0.09)',
+    backgroundColor: COLORS.surfaceSecondary,
     borderRadius: RADIUS.lg,
     padding: SPACING.md,
     borderWidth: 1,
     borderColor: COLORS.border,
   },
   quoteCardSelected: {
-    backgroundColor: 'rgba(232,168,56,0.18)',
+    backgroundColor: COLORS.primaryPale,
     borderColor: COLORS.primary,
   },
   quoteText: {
@@ -194,7 +194,8 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   quoteTextSelected: {
-    color: '#fff',
+    color: COLORS.textPrimary,
+    fontWeight: '600',
   },
   quoteAuthor: {
     fontSize: FONTS.sizes.xs,
@@ -225,7 +226,7 @@ const styles = StyleSheet.create({
   shuffleBtn: {
     paddingVertical: 12,
     borderRadius: RADIUS.md,
-    backgroundColor: 'rgba(255,255,255,0.06)',
+    backgroundColor: COLORS.surfaceSecondary,
     borderWidth: 1,
     borderColor: COLORS.border,
     alignItems: 'center',
@@ -242,7 +243,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   submitBtnDisabled: {
-    backgroundColor: 'rgba(232,168,56,0.30)',
+    backgroundColor: COLORS.primaryPale,
   },
   submitBtnText: {
     fontSize: FONTS.sizes.md,
