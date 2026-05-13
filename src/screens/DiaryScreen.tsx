@@ -129,7 +129,7 @@ function DiaryCard({ entry, onCheerPress }: DiaryCardProps) {
           activeOpacity={0.7}
         >
           <Text style={styles.cheersPreviewText}>
-            명언 응원 {entry.cheers.length}개
+            응원 {entry.cheers.length}개
             <Text style={styles.cheersToggle}> {showCheers ? '접기' : '보기'}</Text>
           </Text>
         </TouchableOpacity>
@@ -152,7 +152,7 @@ function DiaryCard({ entry, onCheerPress }: DiaryCardProps) {
         onPress={() => onCheerPress(entry)}
         activeOpacity={0.75}
       >
-        <Text style={styles.cheerBtnText}>명언으로 응원하기</Text>
+        <Text style={styles.cheerBtnText}>응원하기</Text>
       </TouchableOpacity>
     </View>
   );
