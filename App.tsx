@@ -1,10 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import {
+  useFonts,
+  Nunito_400Regular,
+  Nunito_600SemiBold,
+  Nunito_700Bold,
+  Nunito_800ExtraBold,
+} from '@expo-google-fonts/nunito';
+import * as SplashScreen from 'expo-splash-screen';
 
-import SplashScreen from './src/screens/SplashScreen';
+import SplashScreenComp from './src/screens/SplashScreen';
 import PhoneScreen from './src/screens/onboarding/PhoneScreen';
 import RoleScreen from './src/screens/onboarding/RoleScreen';
 import DiseaseSelectScreen from './src/screens/onboarding/DiseaseSelectScreen';
@@ -14,8 +22,8 @@ import AppNavigator from './src/navigation/AppNavigator';
 
 import { User, UserRole } from './src/types';
 import { MOCK_USER } from './src/lib/mockData';
-import { generateNickname } from './src/lib/supabase';
-import { DISEASES } from './src/constants/diseases';
+
+SplashScreen.preventAutoHideAsync();
 
 type AppStep =
   | 'splash'
@@ -27,17 +35,28 @@ type AppStep =
   | 'app';
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    Nunito_400Regular,
+    Nunito_600SemiBold,
+    Nunito_700Bold,
+    Nunito_800ExtraBold,
+  });
+
   const [step, setStep] = useState<AppStep>('splash');
   const [user, setUser] = useState<User | null>(null);
 
-  // 온보딩 임시 상태
   const [phone, setPhone] = useState('');
   const [role, setRole] = useState<UserRole>('patient');
   const [diseaseIds, setDiseaseIds] = useState<string[]>([]);
   const [nickname, setNickname] = useState('');
 
-  // MVP: 자동 로그인 시뮬레이션 (실제로는 Supabase session 확인)
-  // setUser(MOCK_USER); setStep('app'); // 개발 시 주석 해제로 바로 앱 진입 가능
+  useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) return null;
 
   const handleOnboardingComplete = (ageGroup: string, diagnosisYear: number) => {
     const newUser: User = {
@@ -55,14 +74,13 @@ export default function App() {
   };
 
   const handleNewPost = (post: any) => {
-    // MVP: 새 글 추가 (실제로는 Supabase insert)
     console.log('New post:', post);
   };
 
   if (step === 'splash') {
     return (
       <SafeAreaProvider>
-        <SplashScreen onFinish={() => setStep('phone')} />
+        <SplashScreenComp onFinish={() => setStep('phone')} />
         <StatusBar style="light" />
       </SafeAreaProvider>
     );
@@ -72,7 +90,7 @@ export default function App() {
     return (
       <SafeAreaProvider>
         <PhoneScreen onNext={(p) => { setPhone(p); setStep('role'); }} />
-        <StatusBar style="dark" />
+        <StatusBar style="light" />
       </SafeAreaProvider>
     );
   }
@@ -81,7 +99,7 @@ export default function App() {
     return (
       <SafeAreaProvider>
         <RoleScreen onNext={(r) => { setRole(r); setStep('disease'); }} />
-        <StatusBar style="dark" />
+        <StatusBar style="light" />
       </SafeAreaProvider>
     );
   }
@@ -93,7 +111,7 @@ export default function App() {
           onNext={(ids) => { setDiseaseIds(ids); setStep('nickname'); }}
           onBack={() => setStep('role')}
         />
-        <StatusBar style="dark" />
+        <StatusBar style="light" />
       </SafeAreaProvider>
     );
   }
@@ -105,7 +123,7 @@ export default function App() {
           diseaseIds={diseaseIds}
           onNext={(nick) => { setNickname(nick); setStep('basicinfo'); }}
         />
-        <StatusBar style="dark" />
+        <StatusBar style="light" />
       </SafeAreaProvider>
     );
   }
@@ -117,7 +135,7 @@ export default function App() {
           nickname={nickname}
           onNext={handleOnboardingComplete}
         />
-        <StatusBar style="dark" />
+        <StatusBar style="light" />
       </SafeAreaProvider>
     );
   }
@@ -133,7 +151,7 @@ export default function App() {
               onNewPost={handleNewPost}
             />
           </NavigationContainer>
-          <StatusBar style="dark" />
+          <StatusBar style="light" />
         </SafeAreaProvider>
       </GestureHandlerRootView>
     );

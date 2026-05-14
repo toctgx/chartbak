@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, TextInput,
-  TouchableOpacity, ScrollView, Alert, Image, Platform
+  TouchableOpacity, ScrollView, Alert, Image, Platform,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { COLORS, FONTS, SPACING, RADIUS } from '../constants/theme';
-import { PostType, POST_TYPE_LABELS, POST_TYPE_EMOJIS } from '../types';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../constants/theme';
+import { PostType, POST_TYPE_LABELS } from '../types';
 import { DISEASES } from '../constants/diseases';
 
 interface Props {
@@ -64,12 +64,9 @@ export default function WritePostScreen({ navigation, userDiseaseIds, userRole, 
     }
   };
 
-  const removeImage = (idx: number) => {
-    setImages(prev => prev.filter((_, i) => i !== idx));
-  };
-
   const userDiseases = DISEASES.filter(d => userDiseaseIds.includes(d.id));
   const isReady = postType && diseaseId && title.trim() && content.trim().length >= 10;
+  const selectedDisease = DISEASES.find(d => d.id === diseaseId);
 
   const handleSubmit = () => {
     if (!isReady) return;
@@ -80,16 +77,14 @@ export default function WritePostScreen({ navigation, userDiseaseIds, userRole, 
         onPress: () => {
           onSubmit({ post_type: postType, disease_id: diseaseId, title: title.trim(), content: content.trim(), author_nickname: nickname, author_role: userRole });
           navigation.goBack();
-        }
-      }
+        },
+      },
     ]);
   };
 
-  const selectedDisease = DISEASES.find(d => d.id === diseaseId);
-
   return (
     <View style={styles.container}>
-      {/* 헤더 */}
+      {/* 헤더 — 흰 배경 (작성 집중) */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.cancelBtn}>
           <Text style={styles.cancelText}>취소</Text>
@@ -100,7 +95,7 @@ export default function WritePostScreen({ navigation, userDiseaseIds, userRole, 
           onPress={handleSubmit}
           disabled={!isReady}
         >
-          <Text style={styles.submitText}>올리기</Text>
+          <Text style={[styles.submitText, !isReady && styles.submitTextDisabled]}>올리기</Text>
         </TouchableOpacity>
       </View>
 
@@ -109,11 +104,10 @@ export default function WritePostScreen({ navigation, userDiseaseIds, userRole, 
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        {/* 제목 입력 */}
         <TextInput
           style={styles.titleInput}
           placeholder="제목"
-          placeholderTextColor="#CCCCCC"
+          placeholderTextColor={COLORS.textSecondary}
           value={title}
           onChangeText={setTitle}
           maxLength={100}
@@ -122,7 +116,6 @@ export default function WritePostScreen({ navigation, userDiseaseIds, userRole, 
 
         <View style={styles.divider} />
 
-        {/* 내용 입력 */}
         <TextInput
           style={styles.contentInput}
           placeholder={postType
@@ -133,20 +126,22 @@ export default function WritePostScreen({ navigation, userDiseaseIds, userRole, 
                 hospital_review: '진료를 받은 병원이나 의사에 대한 솔직한 후기를 남겨주세요.',
               } as Record<PostType, string>)[postType]
             : '내용을 입력해주세요 (최소 10자)'}
-          placeholderTextColor="#CCCCCC"
+          placeholderTextColor={COLORS.textSecondary}
           value={content}
           onChangeText={setContent}
           multiline
           textAlignVertical="top"
         />
 
-        {/* 이미지 첨부 */}
         {images.length > 0 && (
           <View style={styles.imageRow}>
             {images.map((uri, idx) => (
               <View key={idx} style={styles.imageThumbnail}>
                 <Image source={{ uri }} style={styles.thumbnailImg} />
-                <TouchableOpacity style={styles.removeImg} onPress={() => removeImage(idx)}>
+                <TouchableOpacity
+                  style={styles.removeImg}
+                  onPress={() => setImages(prev => prev.filter((_, i) => i !== idx))}
+                >
                   <Text style={styles.removeImgText}>✕</Text>
                 </TouchableOpacity>
               </View>
@@ -157,12 +152,10 @@ export default function WritePostScreen({ navigation, userDiseaseIds, userRole, 
 
       {/* 하단 툴바 */}
       <View style={styles.toolbar}>
-        {/* 왼쪽: 사진 + 유형 + 질환 */}
         <View style={styles.toolbarLeft}>
-          {/* 사진 */}
           {images.length < 3 && (
             <TouchableOpacity style={styles.toolBtn} onPress={pickImage}>
-              <Text style={styles.toolBtnIcon}>사진</Text>
+              <Text style={styles.toolBtnText}>사진</Text>
             </TouchableOpacity>
           )}
 
@@ -175,7 +168,7 @@ export default function WritePostScreen({ navigation, userDiseaseIds, userRole, 
               <Text style={[styles.toolChipText, postType && styles.toolChipTextActive]}>
                 {postType ? POST_TYPE_LABELS[postType] : '유형'}
               </Text>
-              <Text style={styles.toolChipArrow}>▾</Text>
+              <Text style={[styles.toolChipArrow, postType && styles.toolChipTextActive]}>▾</Text>
             </TouchableOpacity>
             {showTypeMenu && (
               <View style={styles.popupMenu}>
@@ -204,7 +197,7 @@ export default function WritePostScreen({ navigation, userDiseaseIds, userRole, 
                 <Text style={styles.toolChipTextActive}>
                   {selectedDisease ? selectedDisease.name : '질환'}
                 </Text>
-                <Text style={styles.toolChipArrow}>▾</Text>
+                <Text style={[styles.toolChipArrow, styles.toolChipTextActive]}>▾</Text>
               </TouchableOpacity>
               {showDiseaseMenu && (
                 <View style={styles.popupMenu}>
@@ -230,54 +223,71 @@ export default function WritePostScreen({ navigation, userDiseaseIds, userRole, 
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#FFFFFF' },
+  container: { flex: 1, backgroundColor: COLORS.surface },
 
   header: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: SPACING.md,
     paddingTop: 52,
     paddingBottom: 12,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 0.5,
-    borderBottomColor: '#EBEBEB',
+    backgroundColor: COLORS.surface,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.borderCard,
   },
   cancelBtn: { paddingVertical: 4, paddingRight: 8 },
-  cancelText: { fontSize: FONTS.sizes.md, color: COLORS.textSecondary },
-  headerTitle: { fontSize: FONTS.sizes.md, fontWeight: '700', color: COLORS.textPrimary },
+  cancelText: {
+    fontSize: FONTS.sizes.md,
+    fontFamily: FONTS.regular,
+    color: COLORS.primary,
+  },
+  headerTitle: {
+    fontSize: FONTS.sizes.md,
+    fontFamily: FONTS.bold,
+    color: COLORS.textPrimary,
+  },
   submitBtn: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.accent,
     borderRadius: RADIUS.full,
     paddingHorizontal: SPACING.md,
-    paddingVertical: 6,
+    paddingVertical: 7,
   },
-  submitBtnDisabled: { backgroundColor: COLORS.primaryPale },
-  submitText: { color: '#FFFFFF', fontWeight: '700', fontSize: FONTS.sizes.sm },
+  submitBtnDisabled: {
+    backgroundColor: COLORS.lavender,
+  },
+  submitText: {
+    fontFamily: FONTS.bold,
+    fontSize: FONTS.sizes.sm,
+    color: COLORS.textOnAccent,
+  },
+  submitTextDisabled: {
+    color: COLORS.textSecondary,
+  },
 
   scroll: { flex: 1 },
-
   titleInput: {
     paddingHorizontal: SPACING.lg,
     paddingTop: SPACING.lg,
     paddingBottom: SPACING.sm,
     fontSize: 22,
-    fontWeight: '700',
-    color: '#111111',
+    fontFamily: FONTS.bold,
+    color: COLORS.textPrimary,
     lineHeight: 30,
   } as any,
-
   divider: {
     marginHorizontal: SPACING.lg,
     height: 1,
-    backgroundColor: '#F0F0F0',
+    backgroundColor: COLORS.borderCard,
     marginBottom: SPACING.sm,
   },
-
   contentInput: {
     paddingHorizontal: SPACING.lg,
     paddingTop: SPACING.sm,
     paddingBottom: SPACING.xl,
     fontSize: FONTS.sizes.md,
-    color: '#333333',
+    fontFamily: FONTS.regular,
+    color: COLORS.textPrimary,
     lineHeight: 26,
     minHeight: 300,
   } as any,
@@ -289,23 +299,33 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   imageThumbnail: { position: 'relative' },
-  thumbnailImg: { width: 72, height: 72, borderRadius: RADIUS.sm, backgroundColor: COLORS.border },
-  removeImg: {
-    position: 'absolute', top: -6, right: -6,
-    width: 18, height: 18, borderRadius: 9,
-    backgroundColor: '#333', alignItems: 'center', justifyContent: 'center',
+  thumbnailImg: {
+    width: 72,
+    height: 72,
+    borderRadius: RADIUS.sm,
+    backgroundColor: COLORS.background,
   },
-  removeImgText: { color: '#fff', fontSize: 10, fontWeight: '700' },
+  removeImg: {
+    position: 'absolute',
+    top: -6,
+    right: -6,
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: COLORS.textPrimary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  removeImgText: { color: COLORS.textOnDark, fontSize: 10, fontFamily: FONTS.bold },
 
-  // 하단 툴바
   toolbar: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: SPACING.md,
     paddingVertical: 10,
-    borderTopWidth: 0.5,
-    borderTopColor: '#EBEBEB',
-    backgroundColor: '#FFFFFF',
+    borderTopWidth: 1,
+    borderTopColor: COLORS.borderCard,
+    backgroundColor: COLORS.surface,
     paddingBottom: Platform.OS === 'ios' ? 28 : 10,
   },
   toolbarLeft: {
@@ -315,54 +335,75 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   toolBtn: {
-    width: 34, height: 34,
-    borderRadius: 17,
-    backgroundColor: '#F5F5F5',
-    alignItems: 'center', justifyContent: 'center',
-  },
-  toolBtnIcon: { fontSize: 18 },
-
-  toolChip: {
-    flexDirection: 'row', alignItems: 'center',
-    paddingHorizontal: 10, paddingVertical: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
     borderRadius: RADIUS.full,
-    borderWidth: 1, borderColor: '#E0E0E0',
-    backgroundColor: '#F8F8F8',
+    backgroundColor: COLORS.background,
+    borderWidth: 1,
+    borderColor: COLORS.borderCard,
+  },
+  toolBtnText: {
+    fontSize: FONTS.sizes.sm,
+    fontFamily: FONTS.semibold,
+    color: COLORS.textSecondary,
+  },
+  toolChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: RADIUS.full,
+    borderWidth: 1,
+    borderColor: COLORS.borderCard,
+    backgroundColor: COLORS.background,
     gap: 3,
   },
   toolChipActive: {
-    backgroundColor: COLORS.primaryPale,
-    borderColor: COLORS.primaryLight,
+    backgroundColor: COLORS.accentLight,
+    borderColor: COLORS.accent,
   },
-  toolChipText: { fontSize: FONTS.sizes.sm, color: COLORS.textTertiary },
-  toolChipTextActive: { fontSize: FONTS.sizes.sm, color: COLORS.primary, fontWeight: '600' },
-  toolChipArrow: { fontSize: 10, color: COLORS.textTertiary },
+  toolChipText: {
+    fontSize: FONTS.sizes.sm,
+    fontFamily: FONTS.regular,
+    color: COLORS.textSecondary,
+  },
+  toolChipTextActive: {
+    fontSize: FONTS.sizes.sm,
+    fontFamily: FONTS.semibold,
+    color: COLORS.textPrimary,
+  },
+  toolChipArrow: {
+    fontSize: 10,
+    color: COLORS.textSecondary,
+  },
 
-  // 팝업 메뉴
   popupMenu: {
     position: 'absolute',
     bottom: 42,
     left: 0,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.surface,
     borderRadius: RADIUS.md,
     borderWidth: 1,
-    borderColor: '#E8E8E8',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 6,
+    borderColor: COLORS.borderCard,
     minWidth: 160,
     zIndex: 100,
     overflow: 'hidden',
+    ...SHADOWS.card,
   },
   popupItem: {
     paddingHorizontal: SPACING.md,
     paddingVertical: 10,
     borderBottomWidth: 0.5,
-    borderBottomColor: '#F0F0F0',
+    borderBottomColor: COLORS.borderCard,
   },
-  popupItemActive: { backgroundColor: COLORS.primaryPale },
-  popupItemText: { fontSize: FONTS.sizes.sm, color: COLORS.textPrimary },
-  popupItemTextActive: { color: COLORS.primary, fontWeight: '700' },
+  popupItemActive: { backgroundColor: COLORS.accentLight },
+  popupItemText: {
+    fontSize: FONTS.sizes.sm,
+    fontFamily: FONTS.regular,
+    color: COLORS.textPrimary,
+  },
+  popupItemTextActive: {
+    fontFamily: FONTS.bold,
+    color: COLORS.primary,
+  },
 });

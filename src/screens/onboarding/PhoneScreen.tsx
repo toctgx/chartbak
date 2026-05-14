@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity,
-  StyleSheet, ScrollView, Alert, Platform
+  StyleSheet, ScrollView, Alert, Platform,
 } from 'react-native';
 import { COLORS, FONTS, SPACING, RADIUS } from '../../constants/theme';
 
@@ -55,6 +55,7 @@ export default function PhoneScreen({ onNext }: Props) {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
+        {/* 진행 바 */}
         <View style={styles.header}>
           <Text style={styles.step}>1 / 5</Text>
           <View style={styles.progressBar}>
@@ -63,7 +64,6 @@ export default function PhoneScreen({ onNext }: Props) {
         </View>
 
         <View style={styles.content}>
-
           <Text style={styles.title}>
             {step === 'phone' ? '전화번호로 시작해요' : '인증번호를 입력해주세요'}
           </Text>
@@ -77,7 +77,7 @@ export default function PhoneScreen({ onNext }: Props) {
             <TextInput
               style={styles.input}
               placeholder="010-0000-0000"
-              placeholderTextColor={COLORS.textTertiary}
+              placeholderTextColor={COLORS.textSecondary}
               keyboardType="phone-pad"
               value={phone}
               onChangeText={(t) => setPhone(formatPhone(t))}
@@ -87,7 +87,7 @@ export default function PhoneScreen({ onNext }: Props) {
             <TextInput
               style={[styles.input, styles.codeInput]}
               placeholder="000000"
-              placeholderTextColor={COLORS.textTertiary}
+              placeholderTextColor={COLORS.textSecondary}
               keyboardType="number-pad"
               value={code}
               onChangeText={setCode}
@@ -124,45 +124,62 @@ export default function PhoneScreen({ onNext }: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.background },
+  container: { flex: 1, backgroundColor: COLORS.primary },
   scrollContent: { flexGrow: 1, paddingBottom: SPACING.xl },
   header: { paddingHorizontal: SPACING.lg, paddingTop: 60 },
-  step: { fontSize: FONTS.sizes.sm, color: COLORS.textSecondary, marginBottom: SPACING.sm },
-  progressBar: { height: 4, backgroundColor: COLORS.border, borderRadius: 2 },
-  progressFill: { height: '100%', backgroundColor: COLORS.primary, borderRadius: 2 },
+  step: {
+    fontSize: FONTS.sizes.sm,
+    fontFamily: FONTS.regular,
+    color: COLORS.textOnDarkSoft,
+    marginBottom: SPACING.sm,
+  },
+  progressBar: { height: 4, backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: 2 },
+  progressFill: { height: '100%', backgroundColor: COLORS.accent, borderRadius: 2 },
   content: { flex: 1, paddingHorizontal: SPACING.lg, paddingTop: SPACING.xxl },
-  emoji: { fontSize: 48, marginBottom: SPACING.md },
   title: {
-    fontSize: FONTS.sizes.xxl, fontWeight: '700',
-    color: COLORS.textPrimary, marginBottom: SPACING.sm
+    fontSize: FONTS.sizes.xxl,
+    fontFamily: FONTS.bold,
+    color: COLORS.textOnDark,
+    marginBottom: SPACING.sm,
   },
   desc: {
-    fontSize: FONTS.sizes.md, color: COLORS.textSecondary,
-    lineHeight: 24, marginBottom: SPACING.xl
+    fontSize: FONTS.sizes.md,
+    fontFamily: FONTS.regular,
+    color: COLORS.textOnDarkSoft,
+    lineHeight: 24,
+    marginBottom: SPACING.xl,
   },
   input: {
-    backgroundColor: COLORS.surface,
-    borderRadius: RADIUS.md,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    borderRadius: RADIUS.lg,
     paddingHorizontal: SPACING.md,
     paddingVertical: SPACING.md,
     fontSize: FONTS.sizes.lg,
-    color: COLORS.textPrimary,
+    fontFamily: FONTS.regular,
+    color: COLORS.textOnDark,
     borderWidth: 1.5,
-    borderColor: COLORS.border,
+    borderColor: 'rgba(255,255,255,0.3)',
     marginBottom: SPACING.md,
   },
   codeInput: { letterSpacing: 8, textAlign: 'center', fontSize: FONTS.sizes.xxl },
   button: {
-    backgroundColor: COLORS.primary,
-    borderRadius: RADIUS.md,
+    backgroundColor: COLORS.accent,
+    borderRadius: RADIUS.full,
     paddingVertical: SPACING.md,
     alignItems: 'center',
     marginBottom: SPACING.md,
   },
   buttonDisabled: { opacity: 0.6 },
-  buttonText: { color: COLORS.textInverse, fontSize: FONTS.sizes.lg, fontWeight: '600' },
+  buttonText: {
+    color: COLORS.textOnAccent,
+    fontSize: FONTS.sizes.lg,
+    fontFamily: FONTS.bold,
+  },
   resend: {
-    textAlign: 'center', color: COLORS.textSecondary,
-    fontSize: FONTS.sizes.sm, marginTop: SPACING.xs
+    textAlign: 'center',
+    color: COLORS.textOnDarkSoft,
+    fontSize: FONTS.sizes.sm,
+    fontFamily: FONTS.regular,
+    marginTop: SPACING.xs,
   },
 });

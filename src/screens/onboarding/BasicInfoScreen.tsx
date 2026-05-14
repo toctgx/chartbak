@@ -94,36 +94,36 @@ export default function BasicInfoScreen({ nickname, onNext }: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.background },
+  container: { flex: 1, backgroundColor: COLORS.primary },
   scrollContent: { flexGrow: 1, paddingBottom: SPACING.xl },
   header: { paddingHorizontal: SPACING.lg, paddingTop: 60 },
-  step: { fontSize: FONTS.sizes.sm, color: COLORS.textSecondary, marginBottom: SPACING.sm },
-  progressBar: { height: 4, backgroundColor: COLORS.border, borderRadius: 2 },
-  progressFill: { height: '100%', backgroundColor: COLORS.primary, borderRadius: 2 },
+  step: { fontSize: FONTS.sizes.sm, fontFamily: FONTS.regular, color: COLORS.textOnDarkSoft, marginBottom: SPACING.sm },
+  progressBar: { height: 4, backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: 2 },
+  progressFill: { height: '100%', backgroundColor: COLORS.accent, borderRadius: 2 },
   content: { paddingHorizontal: SPACING.lg, paddingTop: SPACING.lg },
   emoji: { fontSize: 48, marginBottom: SPACING.md },
-  title: { fontSize: FONTS.sizes.xxl, fontWeight: '700', color: COLORS.textPrimary, marginBottom: SPACING.sm },
-  desc: { fontSize: FONTS.sizes.md, color: COLORS.textSecondary, lineHeight: 24, marginBottom: SPACING.lg },
+  title: { fontSize: FONTS.sizes.xxl, fontFamily: FONTS.bold, color: COLORS.textOnDark, marginBottom: SPACING.sm },
+  desc: { fontSize: FONTS.sizes.md, fontFamily: FONTS.regular, color: COLORS.textOnDarkSoft, lineHeight: 24, marginBottom: SPACING.lg },
 
   nicknameBox: {
-    backgroundColor: COLORS.primaryPale,
-    borderRadius: RADIUS.md,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    borderRadius: RADIUS.lg,
     paddingVertical: SPACING.sm,
     paddingHorizontal: SPACING.md,
     marginBottom: SPACING.xl,
-    borderWidth: 1, borderColor: COLORS.primaryLight,
+    borderWidth: 1, borderColor: 'rgba(255,255,255,0.25)',
     flexDirection: 'row', alignItems: 'center', gap: 10,
   },
-  nicknameLabel: { fontSize: FONTS.sizes.xs, color: COLORS.textSecondary },
-  nickname: { fontSize: FONTS.sizes.md, fontWeight: '700', color: COLORS.primary },
+  nicknameLabel: { fontSize: FONTS.sizes.xs, fontFamily: FONTS.regular, color: COLORS.textOnDarkSoft },
+  nickname: { fontSize: FONTS.sizes.md, fontFamily: FONTS.bold, color: COLORS.accent },
 
   section: { marginBottom: SPACING.xl },
   sectionLabel: {
     fontSize: FONTS.sizes.xs,
-    color: COLORS.textTertiary,
+    fontFamily: FONTS.bold,
+    color: COLORS.textOnDarkSoft,
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
-    fontWeight: '600',
+    letterSpacing: 1,
     marginBottom: SPACING.sm,
   },
 
@@ -137,21 +137,21 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: RADIUS.full,
     borderWidth: 1.5,
-    borderColor: COLORS.border,
-    backgroundColor: COLORS.surface,
+    borderColor: 'rgba(255,255,255,0.25)',
+    backgroundColor: 'rgba(255,255,255,0.12)',
   },
   chipSelected: {
-    backgroundColor: COLORS.primary,
-    borderColor: COLORS.primary,
+    backgroundColor: COLORS.accent,
+    borderColor: COLORS.accent,
   },
   chipText: {
     fontSize: FONTS.sizes.sm,
-    color: COLORS.textSecondary,
-    fontWeight: '500',
+    fontFamily: FONTS.regular,
+    color: COLORS.textOnDark,
   },
   chipTextSelected: {
-    color: '#fff',
-    fontWeight: '700',
+    fontFamily: FONTS.bold,
+    color: COLORS.textOnAccent,
   },
 
   yearScroll: {
@@ -160,10 +160,11 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: COLORS.primary, borderRadius: RADIUS.md,
+    backgroundColor: COLORS.accent,
+    borderRadius: RADIUS.full,
     paddingVertical: SPACING.md, alignItems: 'center',
     marginTop: SPACING.sm, marginBottom: SPACING.lg,
   },
-  buttonDisabled: { opacity: 0.4 },
-  buttonText: { color: '#fff', fontSize: FONTS.sizes.lg, fontWeight: '600' },
+  buttonDisabled: { opacity: 0.5 },
+  buttonText: { color: COLORS.textOnAccent, fontFamily: FONTS.bold, fontSize: FONTS.sizes.lg },
 });

@@ -1,7 +1,6 @@
-// v2-glass
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
-import { FONTS, SPACING } from '../constants/theme';
+import { COLORS, FONTS } from '../constants/theme';
 
 interface Props {
   onFinish: () => void;
@@ -34,8 +33,10 @@ export default function SplashScreen({ onFinish }: Props) {
       <Animated.View
         style={[styles.content, { opacity: fadeAnim, transform: [{ scale: scaleAnim }] }]}
       >
+        <View style={styles.logoCircle}>
+          <Text style={styles.logoText}>차</Text>
+        </View>
         <Text style={styles.title}>차트밖</Text>
-        <Text style={styles.subtitle}>Chart Outside</Text>
         <Text style={styles.tagline}>의사한테 못 한 말, 여기서 써요</Text>
       </Animated.View>
     </View>
@@ -45,27 +46,37 @@ export default function SplashScreen({ onFinish }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F3EF',
+    backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },
   content: {
     alignItems: 'center',
   },
+  logoCircle: {
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    backgroundColor: COLORS.accent,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  logoText: {
+    fontSize: 44,
+    fontFamily: FONTS.extrabold,
+    color: COLORS.textPrimary,
+  },
   title: {
     fontSize: FONTS.sizes.xxxl,
-    fontWeight: '800',
-    color: 'rgba(0,0,0,0.87)',
-    letterSpacing: -1,
-  },
-  subtitle: {
-    fontSize: FONTS.sizes.md,
-    color: 'rgba(0,0,0,0.50)',
-    marginTop: SPACING.xs,
+    fontFamily: FONTS.extrabold,
+    color: COLORS.textOnDark,
+    letterSpacing: 2,
+    marginBottom: 12,
   },
   tagline: {
     fontSize: FONTS.sizes.sm,
-    color: 'rgba(0,0,0,0.35)',
-    marginTop: SPACING.lg,
+    fontFamily: FONTS.regular,
+    color: COLORS.textOnDarkSoft,
   },
 });

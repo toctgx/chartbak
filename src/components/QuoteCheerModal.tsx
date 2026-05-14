@@ -1,4 +1,4 @@
-// 차트밖 — 명언으로 응원하기 모달
+// 차트밖 — 명언으로 응원하기 모달 (Wellness Aging Care 디자인)
 import React, { useState, useCallback } from 'react';
 import {
   Modal,
@@ -9,13 +9,13 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
-import { COLORS, FONTS, SPACING, RADIUS } from '../constants/theme';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../constants/theme';
 import { Quote, getRelevantQuotes } from '../data/quotes';
 
 interface QuoteCheerModalProps {
   visible: boolean;
-  diaryText: string;             // 일기 내용 (키워드 분석용)
-  authorNickname: string;        // 일기 작성자 닉네임
+  diaryText: string;
+  authorNickname: string;
   onClose: () => void;
   onSubmit: (quote: Quote) => void;
 }
@@ -60,11 +60,13 @@ export default function QuoteCheerModal({
         <TouchableOpacity style={styles.backdrop} onPress={handleClose} activeOpacity={1} />
 
         <View style={styles.sheet}>
-          {/* 헤더 */}
+          {/* 핸들 — 라벤더 */}
           <View style={styles.handle} />
+
           <Text style={styles.title}>응원하기</Text>
           <Text style={styles.subtitle}>
-            <Text style={styles.nickname}>{authorNickname}</Text>님의 오늘에 어울리는 명언을 골라주세요
+            <Text style={styles.nickname}>{authorNickname}</Text>
+            님의 오늘에 어울리는 명언을 골라주세요
           </Text>
 
           {/* 명언 카드 목록 */}
@@ -100,7 +102,11 @@ export default function QuoteCheerModal({
 
           {/* 하단 버튼 */}
           <View style={styles.footer}>
-            <TouchableOpacity style={styles.shuffleBtn} onPress={handleShuffle} activeOpacity={0.7}>
+            <TouchableOpacity
+              style={styles.shuffleBtn}
+              onPress={handleShuffle}
+              activeOpacity={0.7}
+            >
               <Text style={styles.shuffleBtnText}>다른 명언 보기</Text>
             </TouchableOpacity>
 
@@ -111,7 +117,7 @@ export default function QuoteCheerModal({
               activeOpacity={0.8}
             >
               {submitting ? (
-                <ActivityIndicator color="#fff" size="small" />
+                <ActivityIndicator color={COLORS.textOnAccent} size="small" />
               ) : (
                 <Text style={styles.submitBtnText}>응원할게요</Text>
               )}
@@ -124,28 +130,24 @@ export default function QuoteCheerModal({
 }
 
 const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    justifyContent: 'flex-end',
-  },
+  overlay: { flex: 1, justifyContent: 'flex-end' },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
   sheet: {
     backgroundColor: COLORS.surface,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
     paddingHorizontal: SPACING.md,
     paddingBottom: 40,
     maxHeight: '85%',
-    borderTopWidth: 1,
-    borderColor: COLORS.border,
+    ...SHADOWS.tabBar,
   },
   handle: {
     width: 36,
     height: 4,
-    backgroundColor: COLORS.border,
+    backgroundColor: COLORS.lavender,
     borderRadius: 2,
     alignSelf: 'center',
     marginTop: 12,
@@ -153,101 +155,94 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: FONTS.sizes.lg,
-    fontWeight: '700',
+    fontFamily: FONTS.bold,
     color: COLORS.textPrimary,
     textAlign: 'center',
     marginBottom: 6,
   },
   subtitle: {
     fontSize: FONTS.sizes.sm,
+    fontFamily: FONTS.regular,
     color: COLORS.textSecondary,
     textAlign: 'center',
     marginBottom: 20,
   },
   nickname: {
     color: COLORS.primary,
-    fontWeight: '600',
+    fontFamily: FONTS.bold,
   },
-  list: {
-    flexGrow: 0,
-  },
-  listContent: {
-    gap: 12,
-    paddingBottom: 8,
-  },
+  list: { flexGrow: 0 },
+  listContent: { gap: 12, paddingBottom: 8 },
+
   quoteCard: {
-    backgroundColor: COLORS.surfaceSecondary,
+    backgroundColor: COLORS.background,
     borderRadius: RADIUS.lg,
     padding: SPACING.md,
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    borderWidth: 1.5,
+    borderColor: COLORS.borderCard,
   },
   quoteCardSelected: {
-    backgroundColor: COLORS.primaryPale,
+    backgroundColor: COLORS.primary,
     borderColor: COLORS.primary,
   },
   quoteText: {
     fontSize: FONTS.sizes.sm,
+    fontFamily: FONTS.regular,
     color: COLORS.textPrimary,
     lineHeight: 22,
     fontStyle: 'italic',
     marginBottom: 8,
   },
   quoteTextSelected: {
-    color: COLORS.textPrimary,
-    fontWeight: '600',
+    color: COLORS.textOnDark,
+    fontFamily: FONTS.semibold,
   },
   quoteAuthor: {
     fontSize: FONTS.sizes.xs,
-    color: COLORS.textTertiary,
+    fontFamily: FONTS.regular,
+    color: COLORS.textSecondary,
     textAlign: 'right',
   },
-  quoteAuthorSelected: {
-    color: COLORS.primary,
-  },
+  quoteAuthorSelected: { color: COLORS.textOnDarkSoft },
+
   selectedBadge: {
     position: 'absolute',
     top: 10,
     right: 10,
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.accent,
     borderRadius: RADIUS.full,
     paddingHorizontal: 8,
     paddingVertical: 2,
   },
   selectedBadgeText: {
     fontSize: FONTS.sizes.xs,
-    color: '#fff',
-    fontWeight: '700',
+    fontFamily: FONTS.bold,
+    color: COLORS.textOnAccent,
   },
-  footer: {
-    marginTop: 16,
-    gap: 10,
-  },
+
+  footer: { marginTop: 16, gap: 10 },
   shuffleBtn: {
     paddingVertical: 12,
-    borderRadius: RADIUS.md,
-    backgroundColor: COLORS.surfaceSecondary,
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    borderRadius: RADIUS.full,
+    borderWidth: 1.5,
+    borderColor: COLORS.primary,
     alignItems: 'center',
   },
   shuffleBtnText: {
     fontSize: FONTS.sizes.sm,
-    color: COLORS.textSecondary,
-    fontWeight: '600',
+    fontFamily: FONTS.semibold,
+    color: COLORS.primary,
   },
   submitBtn: {
     paddingVertical: 14,
-    borderRadius: RADIUS.md,
-    backgroundColor: COLORS.primary,
+    borderRadius: RADIUS.full,
+    backgroundColor: COLORS.accent,
     alignItems: 'center',
   },
-  submitBtnDisabled: {
-    backgroundColor: COLORS.primaryPale,
-  },
+  submitBtnDisabled: { backgroundColor: COLORS.lavender },
   submitBtnText: {
     fontSize: FONTS.sizes.md,
-    color: '#fff',
-    fontWeight: '700',
+    fontFamily: FONTS.bold,
+    color: COLORS.textOnAccent,
   },
 });

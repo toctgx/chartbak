@@ -12,10 +12,7 @@ export default function RoleScreen({ onNext }: Props) {
 
   return (
     <View style={styles.container}>
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <Text style={styles.step}>2 / 5</Text>
           <View style={styles.progressBar}>
@@ -30,54 +27,29 @@ export default function RoleScreen({ onNext }: Props) {
             환자글과 보호자글은 구분되어 표시됩니다.
           </Text>
 
-          <TouchableOpacity
-            style={[
-              styles.card,
-              selected === 'patient' && styles.cardSelected,
-              { borderColor: selected === 'patient' ? COLORS.patient : COLORS.border }
-            ]}
-            onPress={() => setSelected('patient')}
-          >
-
-            <View style={styles.cardText}>
-              <Text style={[styles.cardTitle, selected === 'patient' && { color: COLORS.patient }]}>
-                환자 (본인)
-              </Text>
-              <Text style={styles.cardDesc}>
-                직접 진단받고 치료 중인 분{'\n'}1인칭 증상·부작용·심리 경험 공유
-              </Text>
-            </View>
-            <View style={[styles.radio, selected === 'patient' && { backgroundColor: COLORS.patient, borderColor: COLORS.patient }]}>
-              {selected === 'patient' && <View style={styles.radioDot} />}
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.card,
-              selected === 'caregiver' && styles.cardSelected,
-              { borderColor: selected === 'caregiver' ? COLORS.caregiver : COLORS.border }
-            ]}
-            onPress={() => setSelected('caregiver')}
-          >
-
-            <View style={styles.cardText}>
-              <Text style={[styles.cardTitle, selected === 'caregiver' && { color: COLORS.caregiver }]}>
-                환우 (보호자)
-              </Text>
-              <Text style={styles.cardDesc}>
-                아픈 가족을 곁에서 돌보는 분{'\n'}관찰자 시점, 보호자 부담 공유
-              </Text>
-            </View>
-            <View style={[styles.radio, selected === 'caregiver' && { backgroundColor: COLORS.caregiver, borderColor: COLORS.caregiver }]}>
-              {selected === 'caregiver' && <View style={styles.radioDot} />}
-            </View>
-          </TouchableOpacity>
+          {([
+            { role: 'patient' as UserRole, title: '환자 (본인)', desc: '직접 진단받고 치료 중인 분\n1인칭 증상·부작용·심리 경험 공유' },
+            { role: 'caregiver' as UserRole, title: '환우 (보호자)', desc: '아픈 가족을 곁에서 돌보는 분\n관찰자 시점, 보호자 부담 공유' },
+          ]).map(item => (
+            <TouchableOpacity
+              key={item.role}
+              style={[styles.card, selected === item.role && styles.cardSelected]}
+              onPress={() => setSelected(item.role)}
+            >
+              <View style={styles.cardText}>
+                <Text style={[styles.cardTitle, selected === item.role && styles.cardTitleSelected]}>
+                  {item.title}
+                </Text>
+                <Text style={styles.cardDesc}>{item.desc}</Text>
+              </View>
+              <View style={[styles.radio, selected === item.role && styles.radioSelected]}>
+                {selected === item.role && <View style={styles.radioDot} />}
+              </View>
+            </TouchableOpacity>
+          ))}
 
           <View style={styles.notice}>
-            <Text style={styles.noticeText}>
-              역할은 나중에 마이페이지에서 변경할 수 있어요
-            </Text>
+            <Text style={styles.noticeText}>역할은 나중에 마이페이지에서 변경할 수 있어요</Text>
           </View>
 
           <TouchableOpacity
@@ -94,42 +66,92 @@ export default function RoleScreen({ onNext }: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.background },
+  container: { flex: 1, backgroundColor: COLORS.primary },
   scrollContent: { flexGrow: 1, paddingBottom: SPACING.xl },
   header: { paddingHorizontal: SPACING.lg, paddingTop: 60 },
-  step: { fontSize: FONTS.sizes.sm, color: COLORS.textSecondary, marginBottom: SPACING.sm },
-  progressBar: { height: 4, backgroundColor: COLORS.border, borderRadius: 2 },
-  progressFill: { height: '100%', backgroundColor: COLORS.primary, borderRadius: 2 },
+  step: {
+    fontSize: FONTS.sizes.sm,
+    fontFamily: FONTS.regular,
+    color: COLORS.textOnDarkSoft,
+    marginBottom: SPACING.sm,
+  },
+  progressBar: { height: 4, backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: 2 },
+  progressFill: { height: '100%', backgroundColor: COLORS.accent, borderRadius: 2 },
   content: { paddingHorizontal: SPACING.lg, paddingTop: SPACING.xl },
-  emoji: { fontSize: 48, marginBottom: SPACING.md },
-  title: { fontSize: FONTS.sizes.xxl, fontWeight: '700', color: COLORS.textPrimary, marginBottom: SPACING.sm },
-  desc: { fontSize: FONTS.sizes.md, color: COLORS.textSecondary, lineHeight: 24, marginBottom: SPACING.xl },
+  title: {
+    fontSize: FONTS.sizes.xxl,
+    fontFamily: FONTS.bold,
+    color: COLORS.textOnDark,
+    marginBottom: SPACING.sm,
+  },
+  desc: {
+    fontSize: FONTS.sizes.md,
+    fontFamily: FONTS.regular,
+    color: COLORS.textOnDarkSoft,
+    lineHeight: 24,
+    marginBottom: SPACING.xl,
+  },
   card: {
-    backgroundColor: COLORS.surface, borderRadius: RADIUS.lg,
-    borderWidth: 2, padding: SPACING.md, marginBottom: SPACING.md,
-    flexDirection: 'row', alignItems: 'center', ...SHADOWS.sm,
+    backgroundColor: 'rgba(255,255,255,0.12)',
+    borderRadius: RADIUS.xl,
+    borderWidth: 2,
+    borderColor: 'rgba(255,255,255,0.15)',
+    padding: SPACING.md,
+    marginBottom: SPACING.md,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  cardSelected: { ...SHADOWS.md },
-  cardEmoji: { fontSize: 36, marginRight: SPACING.md },
+  cardSelected: {
+    backgroundColor: 'rgba(255,255,255,0.18)',
+    borderColor: COLORS.accent,
+  },
   cardText: { flex: 1 },
-  cardTitle: { fontSize: FONTS.sizes.lg, fontWeight: '700', color: COLORS.textPrimary, marginBottom: 4 },
-  cardDesc: { fontSize: FONTS.sizes.sm, color: COLORS.textSecondary, lineHeight: 20 },
+  cardTitle: {
+    fontSize: FONTS.sizes.lg,
+    fontFamily: FONTS.bold,
+    color: COLORS.textOnDark,
+    marginBottom: 4,
+  },
+  cardTitleSelected: { color: COLORS.accent },
+  cardDesc: {
+    fontSize: FONTS.sizes.sm,
+    fontFamily: FONTS.regular,
+    color: COLORS.textOnDarkSoft,
+    lineHeight: 20,
+  },
   radio: {
-    width: 22, height: 22, borderRadius: 11,
-    borderWidth: 2, borderColor: COLORS.border,
-    justifyContent: 'center', alignItems: 'center',
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    borderWidth: 2,
+    borderColor: 'rgba(255,255,255,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  radioDot: { width: 10, height: 10, borderRadius: 5, backgroundColor: '#fff' },
+  radioSelected: { backgroundColor: COLORS.accent, borderColor: COLORS.accent },
+  radioDot: { width: 10, height: 10, borderRadius: 5, backgroundColor: COLORS.textOnAccent },
   notice: {
-    backgroundColor: COLORS.surfaceSecondary, borderRadius: RADIUS.md,
-    padding: SPACING.md, marginBottom: SPACING.lg,
-  },
-  noticeText: { fontSize: FONTS.sizes.sm, color: COLORS.textSecondary },
-  button: {
-    backgroundColor: COLORS.primary, borderRadius: RADIUS.md,
-    paddingVertical: SPACING.md, alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.10)',
+    borderRadius: RADIUS.md,
+    padding: SPACING.md,
     marginBottom: SPACING.lg,
   },
-  buttonDisabled: { opacity: 0.4 },
-  buttonText: { color: COLORS.textInverse, fontSize: FONTS.sizes.lg, fontWeight: '600' },
+  noticeText: {
+    fontSize: FONTS.sizes.sm,
+    fontFamily: FONTS.regular,
+    color: COLORS.textOnDarkSoft,
+  },
+  button: {
+    backgroundColor: COLORS.accent,
+    borderRadius: RADIUS.full,
+    paddingVertical: SPACING.md,
+    alignItems: 'center',
+    marginBottom: SPACING.lg,
+  },
+  buttonDisabled: { opacity: 0.5 },
+  buttonText: {
+    color: COLORS.textOnAccent,
+    fontSize: FONTS.sizes.lg,
+    fontFamily: FONTS.bold,
+  },
 });

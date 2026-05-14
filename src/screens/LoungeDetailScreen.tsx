@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
-import { COLORS, FONTS, SPACING, RADIUS } from '../constants/theme';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../constants/theme';
 import { Post, ReactionType } from '../types';
 import { MOCK_POSTS } from '../lib/mockData';
 import PostCard from '../components/PostCard';
@@ -41,17 +41,14 @@ export default function LoungeDetailScreen({ route, navigation, nickname, userRo
 
   return (
     <View style={styles.container}>
-      {/* 헤더 */}
+      {/* 헤더 — 인디고 */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
           <Text style={styles.backText}>←</Text>
         </TouchableOpacity>
         <View style={styles.headerCenter}>
-
-          <View>
-            <Text style={styles.headerTitle}>{disease?.name} 라운지</Text>
-            <Text style={styles.headerSub}>{disease?.category}</Text>
-          </View>
+          <Text style={styles.headerTitle}>{disease?.name} 라운지</Text>
+          <Text style={styles.headerSub}>{disease?.category}</Text>
         </View>
         <TouchableOpacity
           style={styles.writeBtn}
@@ -61,7 +58,7 @@ export default function LoungeDetailScreen({ route, navigation, nickname, userRo
         </TouchableOpacity>
       </View>
 
-      {/* 필터 */}
+      {/* 필터 칩 */}
       <View style={styles.filterRow}>
         {(['all', 'patient', 'caregiver'] as const).map(f => (
           <TouchableOpacity
@@ -76,7 +73,6 @@ export default function LoungeDetailScreen({ route, navigation, nickname, userRo
         ))}
       </View>
 
-      {/* 피드 */}
       <FlatList
         data={filtered}
         keyExtractor={item => item.id}
@@ -89,10 +85,15 @@ export default function LoungeDetailScreen({ route, navigation, nickname, userRo
           />
         )}
         contentContainerStyle={styles.list}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); setTimeout(() => setRefreshing(false), 800); }} tintColor={COLORS.primary} />}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => { setRefreshing(true); setTimeout(() => setRefreshing(false), 800); }}
+            tintColor={COLORS.accent}
+          />
+        }
         ListEmptyComponent={
           <View style={styles.empty}>
-
             <Text style={styles.emptyTitle}>{disease?.name} 라운지</Text>
             <Text style={styles.emptyText}>아직 글이 없어요{'\n'}첫 번째 글을 남겨보세요!</Text>
             <TouchableOpacity style={styles.writeEmptyBtn} onPress={() => navigation.navigate('WritePost')}>
@@ -107,43 +108,88 @@ export default function LoungeDetailScreen({ route, navigation, nickname, userRo
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
+
   header: {
-    flexDirection: 'row', alignItems: 'center',
-    paddingHorizontal: SPACING.lg, paddingTop: 56, paddingBottom: SPACING.md,
-    backgroundColor: COLORS.surface,
-    borderBottomWidth: 1, borderBottomColor: COLORS.border,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: SPACING.lg,
+    paddingTop: 56,
+    paddingBottom: SPACING.md,
+    backgroundColor: COLORS.primary,
   },
   backBtn: { paddingRight: SPACING.md },
-  backText: { fontSize: FONTS.sizes.xl, color: COLORS.primary },
-  headerCenter: { flex: 1, flexDirection: 'row', alignItems: 'center' },
-  headerEmoji: { fontSize: 28, marginRight: SPACING.sm },
-  headerTitle: { fontSize: FONTS.sizes.md, fontWeight: '800', color: COLORS.textPrimary, letterSpacing: -0.3 },
-  headerSub: { fontSize: FONTS.sizes.xs, color: COLORS.textTertiary },
-  writeBtn: {
-    backgroundColor: COLORS.textPrimary, borderRadius: RADIUS.md,
-    paddingHorizontal: SPACING.md, paddingVertical: SPACING.sm,
+  backText: { fontSize: FONTS.sizes.xl, color: COLORS.textOnDark },
+  headerCenter: { flex: 1 },
+  headerTitle: {
+    fontSize: FONTS.sizes.md,
+    fontFamily: FONTS.extrabold,
+    color: COLORS.textOnDark,
   },
-  writeBtnText: { color: '#fff', fontSize: FONTS.sizes.sm, fontWeight: '700' },
+  headerSub: {
+    fontSize: FONTS.sizes.xs,
+    fontFamily: FONTS.regular,
+    color: COLORS.textOnDarkSoft,
+  },
+  writeBtn: {
+    backgroundColor: COLORS.accent,
+    borderRadius: RADIUS.full,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.sm,
+  },
+  writeBtnText: {
+    color: COLORS.textOnAccent,
+    fontSize: FONTS.sizes.sm,
+    fontFamily: FONTS.bold,
+  },
+
+  // 필터
   filterRow: {
-    flexDirection: 'row', paddingHorizontal: SPACING.lg, paddingVertical: SPACING.sm,
-    backgroundColor: COLORS.surface, borderBottomWidth: 1, borderBottomColor: COLORS.border,
+    flexDirection: 'row',
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.sm,
+    backgroundColor: COLORS.primary,
+    gap: SPACING.xs,
   },
   filterChip: {
-    paddingHorizontal: SPACING.md, paddingVertical: 6,
-    borderRadius: RADIUS.full, borderWidth: 1.5, borderColor: COLORS.border,
-    marginRight: SPACING.xs,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: 6,
+    borderRadius: RADIUS.full,
+    backgroundColor: 'rgba(255,255,255,0.18)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.25)',
   },
-  filterChipActive: { backgroundColor: COLORS.primary + '18', borderColor: COLORS.primary },
-  filterText: { fontSize: FONTS.sizes.xs, color: COLORS.textSecondary, fontWeight: '600' },
-  filterTextActive: { color: COLORS.primary },
-  list: { padding: SPACING.md, paddingBottom: SPACING.xxl },
-  empty: { paddingTop: 60, alignItems: 'center' },
-  emptyEmoji: { fontSize: 52, marginBottom: SPACING.md },
-  emptyTitle: { fontSize: FONTS.sizes.lg, fontWeight: '800', color: COLORS.textPrimary, marginBottom: SPACING.sm },
-  emptyText: { fontSize: FONTS.sizes.md, color: COLORS.textSecondary, textAlign: 'center', lineHeight: 24, marginBottom: SPACING.lg },
+  filterChipActive: {
+    backgroundColor: COLORS.accent,
+    borderColor: COLORS.accent,
+  },
+  filterText: {
+    fontSize: FONTS.sizes.xs,
+    fontFamily: FONTS.bold,
+    color: COLORS.textOnDark,
+  },
+  filterTextActive: { color: COLORS.textOnAccent },
+
+  list: { paddingVertical: SPACING.md, paddingBottom: 96 },
+  empty: { paddingTop: 60, alignItems: 'center', paddingHorizontal: SPACING.lg },
+  emptyTitle: {
+    fontSize: FONTS.sizes.lg,
+    fontFamily: FONTS.extrabold,
+    color: COLORS.textPrimary,
+    marginBottom: SPACING.sm,
+  },
+  emptyText: {
+    fontSize: FONTS.sizes.md,
+    fontFamily: FONTS.regular,
+    color: COLORS.textSecondary,
+    textAlign: 'center',
+    lineHeight: 24,
+    marginBottom: SPACING.lg,
+  },
   writeEmptyBtn: {
-    backgroundColor: COLORS.primary, borderRadius: RADIUS.md,
-    paddingHorizontal: SPACING.xl, paddingVertical: SPACING.md,
+    backgroundColor: COLORS.primary,
+    borderRadius: RADIUS.full,
+    paddingHorizontal: SPACING.xl,
+    paddingVertical: SPACING.md,
   },
-  writeEmptyText: { color: '#fff', fontWeight: '700', fontSize: FONTS.sizes.md },
+  writeEmptyText: { color: COLORS.textOnDark, fontFamily: FONTS.bold, fontSize: FONTS.sizes.md },
 });

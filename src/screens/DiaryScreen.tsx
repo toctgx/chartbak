@@ -1,4 +1,4 @@
-// 차트밖 — 한줄일기 피드
+// 차트밖 — 한줄일기 (Wellness Aging Care 디자인)
 import React, { useState, useCallback } from 'react';
 import {
   View,
@@ -17,14 +17,13 @@ import { UserRole } from '../types';
 import { Quote } from '../data/quotes';
 import QuoteCheerModal from '../components/QuoteCheerModal';
 
-// ── 타입 ──────────────────────────────────────────────────
 interface DiaryEntry {
   id: string;
   author_nickname: string;
   author_role: UserRole;
   text: string;
   created_at: string;
-  cheers: QuoteCheer[];       // 받은 명언 응원들
+  cheers: QuoteCheer[];
 }
 
 interface QuoteCheer {
@@ -39,7 +38,6 @@ interface DiaryScreenProps {
   userRole: UserRole;
 }
 
-// ── 목업 데이터 ───────────────────────────────────────────
 const MOCK_ENTRIES: DiaryEntry[] = [
   {
     id: '1',
@@ -76,68 +74,42 @@ const MOCK_ENTRIES: DiaryEntry[] = [
     author_role: 'patient',
     text: '두렵다. 다음 주 검사 결과가. 잘 잘 수가 없다.',
     created_at: '어제',
-    cheers: [
-      { id: 'c4', from_nickname: '당뇨_1203', quote_text: '가장 어두운 밤도 끝나고, 해는 뜬다.', quote_author: '빅토르 위고' },
-    ],
-  },
-  {
-    id: '5',
-    author_nickname: '크론병_7741',
-    author_role: 'patient',
-    text: '오늘은 통증이 조금 덜하다. 작은 거지만 감사하다.',
-    created_at: '어제',
     cheers: [],
   },
 ];
 
-// ── 유틸 ──────────────────────────────────────────────────
-function getRoleBadge(role: UserRole) {
-  return role === 'patient'
-    ? { label: '환자', color: COLORS.patient }
-    : { label: '환우', color: COLORS.caregiver };
-}
-
-// ── 한줄일기 카드 ─────────────────────────────────────────
-interface DiaryCardProps {
-  entry: DiaryEntry;
-  onCheerPress: (entry: DiaryEntry) => void;
-}
-
-function DiaryCard({ entry, onCheerPress }: DiaryCardProps) {
+function DiaryCard({ entry, onCheerPress }: { entry: DiaryEntry; onCheerPress: (e: DiaryEntry) => void }) {
   const [showCheers, setShowCheers] = useState(false);
-  const badge = getRoleBadge(entry.author_role);
+  const isPatient = entry.author_role === 'patient';
 
   return (
     <View style={styles.card}>
-      {/* 작성자 */}
       <View style={styles.cardHeader}>
-        <View style={[styles.roleBadge, { backgroundColor: badge.color + '22' }]}>
-          <Text style={[styles.roleBadgeText, { color: badge.color }]}>{badge.label}</Text>
+        <View style={[styles.roleBadge, isPatient ? styles.roleBadgePatient : styles.roleBadgeCare]}>
+          <Text style={[styles.roleBadgeText, isPatient ? styles.roleBadgeTextPatient : styles.roleBadgeTextCare]}>
+            {isPatient ? '환자' : '환우'}
+          </Text>
         </View>
         <Text style={styles.nickname}>{entry.author_nickname}</Text>
         <Text style={styles.time}>{entry.created_at}</Text>
       </View>
 
-      {/* 일기 본문 */}
       <Text style={styles.diaryText}>{entry.text}</Text>
 
-      {/* 받은 명언 응원 */}
       {entry.cheers.length > 0 && (
         <TouchableOpacity
           style={styles.cheersPreview}
           onPress={() => setShowCheers(!showCheers)}
-          activeOpacity={0.7}
         >
           <Text style={styles.cheersPreviewText}>
-            응원 {entry.cheers.length}개
-            <Text style={styles.cheersToggle}> {showCheers ? '접기' : '보기'}</Text>
+            응원 {entry.cheers.length}개 {showCheers ? '접기 ▲' : '보기 ▼'}
           </Text>
         </TouchableOpacity>
       )}
 
       {showCheers && (
         <View style={styles.cheersList}>
-          {entry.cheers.map((cheer) => (
+          {entry.cheers.map(cheer => (
             <View key={cheer.id} style={styles.cheerItem}>
               <Text style={styles.cheerQuote}>"{cheer.quote_text}"</Text>
               <Text style={styles.cheerMeta}>— {cheer.quote_author} · {cheer.from_nickname}</Text>
@@ -146,7 +118,6 @@ function DiaryCard({ entry, onCheerPress }: DiaryCardProps) {
         </View>
       )}
 
-      {/* 명언으로 응원하기 버튼 */}
       <TouchableOpacity
         style={styles.cheerBtn}
         onPress={() => onCheerPress(entry)}
@@ -158,7 +129,6 @@ function DiaryCard({ entry, onCheerPress }: DiaryCardProps) {
   );
 }
 
-// ── 메인 화면 ────────────────────────────────────────────
 export default function DiaryScreen({ nickname, userRole }: DiaryScreenProps) {
   const insets = useSafeAreaInsets();
   const [entries, setEntries] = useState<DiaryEntry[]>(MOCK_ENTRIES);
@@ -166,7 +136,6 @@ export default function DiaryScreen({ nickname, userRole }: DiaryScreenProps) {
   const [todayWritten, setTodayWritten] = useState(false);
   const [modalTarget, setModalTarget] = useState<DiaryEntry | null>(null);
 
-  // 오늘 일기 작성
   const handleWrite = useCallback(() => {
     const trimmed = inputText.trim();
     if (!trimmed) return;
@@ -174,7 +143,6 @@ export default function DiaryScreen({ nickname, userRole }: DiaryScreenProps) {
       Alert.alert('한 줄만요!', '100자 이내로 써주세요.');
       return;
     }
-
     const newEntry: DiaryEntry = {
       id: Date.now().toString(),
       author_nickname: nickname,
@@ -183,13 +151,11 @@ export default function DiaryScreen({ nickname, userRole }: DiaryScreenProps) {
       created_at: '방금',
       cheers: [],
     };
-
-    setEntries((prev) => [newEntry, ...prev]);
+    setEntries(prev => [newEntry, ...prev]);
     setInputText('');
     setTodayWritten(true);
   }, [inputText, nickname, userRole]);
 
-  // 명언 응원 제출
   const handleCheerSubmit = useCallback((quote: Quote) => {
     if (!modalTarget) return;
     const newCheer: QuoteCheer = {
@@ -198,10 +164,8 @@ export default function DiaryScreen({ nickname, userRole }: DiaryScreenProps) {
       quote_text: quote.text,
       quote_author: quote.author,
     };
-    setEntries((prev) =>
-      prev.map((e) =>
-        e.id === modalTarget.id ? { ...e, cheers: [...e.cheers, newCheer] } : e
-      )
+    setEntries(prev =>
+      prev.map(e => e.id === modalTarget.id ? { ...e, cheers: [...e.cheers, newCheer] } : e)
     );
     setModalTarget(null);
   }, [modalTarget, nickname]);
@@ -211,57 +175,52 @@ export default function DiaryScreen({ nickname, userRole }: DiaryScreenProps) {
       style={[styles.container, { paddingTop: insets.top }]}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      {/* 헤더 */}
+      {/* 헤더 — 인디고 배경 */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>한줄일기</Text>
         <Text style={styles.headerSub}>오늘의 감정을 한 줄로</Text>
-      </View>
 
-      {/* 작성 입력창 */}
-      {!todayWritten ? (
-        <View style={styles.writeBox}>
-          <TextInput
-            style={styles.input}
-            placeholder="오늘 하루 어떠셨나요? (100자 이내)"
-            placeholderTextColor={COLORS.textTertiary}
-            value={inputText}
-            onChangeText={setInputText}
-            multiline={false}
-            maxLength={100}
-            returnKeyType="done"
-            onSubmitEditing={handleWrite}
-          />
-          <TouchableOpacity
-            style={[styles.writeBtn, !inputText.trim() && styles.writeBtnDisabled]}
-            onPress={handleWrite}
-            disabled={!inputText.trim()}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.writeBtnText}>등록</Text>
-          </TouchableOpacity>
-        </View>
-      ) : (
-        <View style={styles.todayDone}>
-          <Text style={styles.todayDoneText}>오늘 일기 작성 완료 · 내일 또 만나요</Text>
-        </View>
-      )}
+        {/* 입력창 */}
+        {!todayWritten ? (
+          <View style={styles.writeBox}>
+            <TextInput
+              style={styles.input}
+              placeholder="오늘 하루 어떠셨나요? (100자 이내)"
+              placeholderTextColor="rgba(255,255,255,0.5)"
+              value={inputText}
+              onChangeText={setInputText}
+              multiline={false}
+              maxLength={100}
+              returnKeyType="done"
+              onSubmitEditing={handleWrite}
+            />
+            <TouchableOpacity
+              style={[styles.writeBtn, !inputText.trim() && styles.writeBtnDisabled]}
+              onPress={handleWrite}
+              disabled={!inputText.trim()}
+            >
+              <Text style={styles.writeBtnText}>등록</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={styles.todayDone}>
+            <Text style={styles.todayDoneText}>오늘 일기 작성 완료 · 내일 또 만나요 ✓</Text>
+          </View>
+        )}
+      </View>
 
       {/* 피드 */}
       <FlatList
         data={entries}
-        keyExtractor={(item) => item.id}
+        keyExtractor={item => item.id}
         renderItem={({ item }) => (
-          <DiaryCard
-            entry={item}
-            onCheerPress={setModalTarget}
-          />
+          <DiaryCard entry={item} onCheerPress={setModalTarget} />
         )}
-        contentContainerStyle={[styles.feed, { paddingBottom: insets.bottom + 20 }]}
+        contentContainerStyle={[styles.feed, { paddingBottom: insets.bottom + 96 }]}
         showsVerticalScrollIndicator={false}
         ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
       />
 
-      {/* 명언 응원 모달 */}
       {modalTarget && (
         <QuoteCheerModal
           visible={!!modalTarget}
@@ -275,93 +234,89 @@ export default function DiaryScreen({ nickname, userRole }: DiaryScreenProps) {
   );
 }
 
-// ── 스타일 ────────────────────────────────────────────────
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
+  container: { flex: 1, backgroundColor: COLORS.background },
+
+  // 헤더
   header: {
+    backgroundColor: COLORS.primary,
     paddingHorizontal: SPACING.md,
     paddingTop: SPACING.md,
-    paddingBottom: SPACING.sm,
+    paddingBottom: SPACING.md,
   },
   headerTitle: {
     fontSize: FONTS.sizes.xl,
-    fontWeight: '800',
-    color: COLORS.textPrimary,
+    fontFamily: FONTS.extrabold,
+    color: COLORS.textOnDark,
+    marginBottom: 2,
   },
   headerSub: {
     fontSize: FONTS.sizes.sm,
-    color: COLORS.textTertiary,
-    marginTop: 2,
+    fontFamily: FONTS.regular,
+    color: COLORS.textOnDarkSoft,
+    marginBottom: SPACING.md,
   },
 
-  // 작성 박스
+  // 입력창
   writeBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: SPACING.md,
-    marginBottom: SPACING.sm,
-    backgroundColor: COLORS.surface,
+    backgroundColor: 'rgba(255,255,255,0.15)',
     borderRadius: RADIUS.lg,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: 'rgba(255,255,255,0.25)',
     paddingHorizontal: SPACING.md,
     paddingVertical: 4,
     gap: 8,
-    ...SHADOWS.sm,
   },
   input: {
     flex: 1,
     fontSize: FONTS.sizes.sm,
-    color: COLORS.textPrimary,
+    fontFamily: FONTS.regular,
+    color: COLORS.textOnDark,
     paddingVertical: 12,
   },
   writeBtn: {
-    backgroundColor: COLORS.primary,
-    borderRadius: RADIUS.md,
-    paddingHorizontal: 14,
+    backgroundColor: COLORS.accent,
+    borderRadius: RADIUS.full,
+    paddingHorizontal: 16,
     paddingVertical: 8,
   },
   writeBtnDisabled: {
-    backgroundColor: COLORS.primaryPale,
+    backgroundColor: 'rgba(255,255,255,0.2)',
   },
   writeBtnText: {
     fontSize: FONTS.sizes.sm,
-    color: '#fff',
-    fontWeight: '700',
+    fontFamily: FONTS.bold,
+    color: COLORS.textOnAccent,
   },
   todayDone: {
-    marginHorizontal: SPACING.md,
-    marginBottom: SPACING.sm,
-    paddingVertical: 10,
+    paddingVertical: 12,
     paddingHorizontal: SPACING.md,
-    backgroundColor: COLORS.primaryPale,
+    backgroundColor: 'rgba(255,255,255,0.15)',
     borderRadius: RADIUS.md,
     borderWidth: 1,
-    borderColor: COLORS.primaryLight,
+    borderColor: 'rgba(255,255,255,0.25)',
   },
   todayDoneText: {
     fontSize: FONTS.sizes.sm,
-    color: COLORS.primary,
+    fontFamily: FONTS.semibold,
+    color: COLORS.accent,
     textAlign: 'center',
   },
 
   // 피드
   feed: {
     paddingHorizontal: SPACING.md,
-    paddingTop: 4,
+    paddingTop: SPACING.md,
   },
 
   // 카드
   card: {
     backgroundColor: COLORS.surface,
-    borderRadius: RADIUS.lg,
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    borderRadius: RADIUS.xl,
     padding: SPACING.md,
-    ...SHADOWS.sm,
+    ...SHADOWS.card,
   },
   cardHeader: {
     flexDirection: 'row',
@@ -371,80 +326,74 @@ const styles = StyleSheet.create({
   },
   roleBadge: {
     borderRadius: RADIUS.full,
-    paddingHorizontal: 7,
-    paddingVertical: 2,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
   },
+  roleBadgePatient: { backgroundColor: COLORS.accentLight },
+  roleBadgeCare: { backgroundColor: COLORS.lavender + '50' },
   roleBadgeText: {
     fontSize: FONTS.sizes.xs,
-    fontWeight: '700',
+    fontFamily: FONTS.bold,
   },
+  roleBadgeTextPatient: { color: COLORS.textPrimary },
+  roleBadgeTextCare: { color: COLORS.primary },
   nickname: {
-    fontSize: FONTS.sizes.sm,
-    color: COLORS.textSecondary,
-    fontWeight: '600',
     flex: 1,
+    fontSize: FONTS.sizes.sm,
+    fontFamily: FONTS.bold,
+    color: COLORS.textPrimary,
   },
   time: {
     fontSize: FONTS.sizes.xs,
-    color: COLORS.textTertiary,
+    fontFamily: FONTS.regular,
+    color: COLORS.textSecondary,
   },
   diaryText: {
     fontSize: FONTS.sizes.md,
+    fontFamily: FONTS.regular,
     color: COLORS.textPrimary,
     lineHeight: 24,
     marginBottom: 12,
   },
-
-  // 받은 응원
-  cheersPreview: {
-    marginBottom: 8,
-  },
+  cheersPreview: { marginBottom: 8 },
   cheersPreviewText: {
     fontSize: FONTS.sizes.sm,
+    fontFamily: FONTS.semibold,
     color: COLORS.primary,
-    fontWeight: '600',
   },
-  cheersToggle: {
-    fontWeight: '400',
-    color: COLORS.textTertiary,
-  },
-  cheersList: {
-    gap: 8,
-    marginBottom: 10,
-  },
+  cheersList: { gap: 8, marginBottom: 10 },
   cheerItem: {
-    backgroundColor: COLORS.primaryPale,
+    backgroundColor: COLORS.background,
     borderRadius: RADIUS.md,
     padding: 10,
     borderLeftWidth: 2,
-    borderLeftColor: COLORS.primary,
+    borderLeftColor: COLORS.accent,
   },
   cheerQuote: {
     fontSize: FONTS.sizes.sm,
+    fontFamily: FONTS.regular,
     color: COLORS.textPrimary,
     fontStyle: 'italic',
     lineHeight: 20,
   },
   cheerMeta: {
     fontSize: FONTS.sizes.xs,
-    color: COLORS.textTertiary,
+    fontFamily: FONTS.regular,
+    color: COLORS.textSecondary,
     marginTop: 4,
     textAlign: 'right',
   },
-
-  // 응원 버튼
   cheerBtn: {
     marginTop: 4,
     paddingVertical: 9,
-    borderRadius: RADIUS.md,
-    backgroundColor: COLORS.primaryPale,
-    borderWidth: 1,
+    borderRadius: RADIUS.full,
+    borderWidth: 1.5,
     borderColor: COLORS.primaryLight,
     alignItems: 'center',
   },
   cheerBtnText: {
     fontSize: FONTS.sizes.sm,
+    fontFamily: FONTS.bold,
     color: COLORS.primary,
-    fontWeight: '600',
   },
 });

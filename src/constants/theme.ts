@@ -1,48 +1,52 @@
-// 차트밖 v3 — Light Mode / Warm Neutral
-// 차분하고 읽기 편한 커뮤니티 앱
-
+// Wellness Aging Care Design System — Indigo + Yellow + Lavender
 export const COLORS = {
   // ── Brand ────────────────────────────────────────────
-  // 올리브 그린 계열 1색 — CTA / 액티브 상태에만 사용
-  primary: '#4A6741',
-  primaryLight: 'rgba(74,103,65,0.12)',
-  primaryPale: 'rgba(74,103,65,0.06)',
-  primaryDark: '#3A5130',
+  primary: '#3D3D8F',
+  primaryDark: '#2F2F7A',
+  primaryLight: 'rgba(61,61,143,0.15)',
+  accent: '#F5D547',
+  accentDark: '#DFC02E',
+  accentLight: 'rgba(245,213,71,0.18)',
 
-  // ── Background ──────────────────────────────────────
-  // 순수 흰색이 아닌 따뜻한 크림 — 눈이 편안함
-  background: '#F5F3EF',
+  // ── Backgrounds ──────────────────────────────────────
   surface: '#FFFFFF',
-  surfaceSecondary: '#F0EDE8',
+  background: '#EEEEF8',
+  lavender: '#D8D5F0',
 
   // ── Text ────────────────────────────────────────────
-  // 순수 블랙 대신 87% 불투명 — 크림 배경과 온도 맞춤
-  textPrimary: 'rgba(0,0,0,0.87)',
-  textSecondary: 'rgba(0,0,0,0.50)',
-  textTertiary: 'rgba(0,0,0,0.32)',
+  textPrimary: '#1A1B4B',
+  textSecondary: '#9B9BC4',
+  textOnDark: '#FFFFFF',
+  textOnDarkSoft: 'rgba(255,255,255,0.65)',
+  textOnAccent: '#1A1B4B',
+
+  // ── Borders ─────────────────────────────────────────
+  border: 'rgba(255,255,255,0.12)',
+  borderCard: 'rgba(0,0,0,0.06)',
+
+  // ── Role colors ────────────────────────────────────
+  patient: '#F5D547',
+  caregiver: 'rgba(255,255,255,0.75)',
+
+  // ── States ──────────────────────────────────────────
+  success: '#4CAF50',
+  warning: '#FF9800',
+  error: '#F44336',
+
+  // ── Backward-compat aliases (do not use in new code) ─
+  primaryPale: 'rgba(245,213,71,0.15)',
+  surfaceSecondary: '#EEEEF8',
+  borderDark: 'rgba(0,0,0,0.12)',
+  textTertiary: '#9B9BC4',
   textInverse: '#FFFFFF',
-
-  // ── 역할 색상 ───────────────────────────────────────
-  // 색을 줄이고 아이콘+텍스트로만 구분
-  // 아주 옅은 차별화만 유지
-  patient: '#4A6741',    // 올리브 그린 (환자)
-  caregiver: '#6B7280',  // 중립 슬레이트 (환우/보호자)
-
-  // ── 상태 ────────────────────────────────────────────
-  success: '#4A6741',
-  warning: '#92600A',
-  error: '#B91C1C',
-  info: 'rgba(0,0,0,0.55)',
-
-  // ── 구분선 ──────────────────────────────────────────
-  border: 'rgba(0,0,0,0.08)',
-  borderDark: 'rgba(0,0,0,0.14)',
+  info: 'rgba(61,61,143,0.55)',
 };
 
 export const FONTS = {
-  regular: 'System',
-  medium: 'System',
-  bold: 'System',
+  regular: 'Nunito_400Regular',
+  semibold: 'Nunito_600SemiBold',
+  bold: 'Nunito_700Bold',
+  extrabold: 'Nunito_800ExtraBold',
   sizes: {
     xs: 11,
     sm: 13,
@@ -64,27 +68,41 @@ export const SPACING = {
 };
 
 export const RADIUS = {
-  sm: 6,
-  md: 10,
-  lg: 16,
-  xl: 24,
+  sm: 8,
+  md: 12,
+  lg: 20,
+  xl: 28,
   full: 999,
 };
 
 export const SHADOWS = {
-  // 스택 섀도우 — 단일 무거운 그림자 대신 2겹 저알파
-  sm: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.06,
-    shadowRadius: 2,
-    elevation: 1,
+  card: {
+    shadowColor: '#3D3D8F',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.10,
+    shadowRadius: 16,
+    elevation: 6,
   },
-  md: {
-    shadowColor: '#000',
+  tabBar: {
+    shadowColor: '#3D3D8F',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.35,
+    shadowRadius: 24,
+    elevation: 12,
+  },
+  // aliases
+  sm: {
+    shadowColor: '#3D3D8F',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
-    shadowRadius: 6,
+    shadowRadius: 8,
     elevation: 3,
+  },
+  md: {
+    shadowColor: '#3D3D8F',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.10,
+    shadowRadius: 16,
+    elevation: 6,
   },
 };

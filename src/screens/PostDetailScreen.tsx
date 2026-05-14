@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, ScrollView,
-  TouchableOpacity, TextInput
+  TouchableOpacity, TextInput,
 } from 'react-native';
-import { COLORS, FONTS, SPACING, RADIUS } from '../constants/theme';
-import { Post, Comment, ReactionType, POST_TYPE_LABELS, POST_TYPE_EMOJIS } from '../types';
+import { COLORS, FONTS, SPACING, RADIUS, SHADOWS } from '../constants/theme';
+import { Post, Comment, ReactionType, POST_TYPE_LABELS } from '../types';
 import { DISEASES } from '../constants/diseases';
 import { MOCK_COMMENTS } from '../lib/mockData';
 import { formatDistanceToNow } from 'date-fns';
@@ -66,26 +66,25 @@ export default function PostDetailScreen({ route, navigation, nickname, userRole
 
   return (
     <View style={styles.container}>
-      {/* 헤더 */}
+      {/* 헤더 — 인디고 */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
           <Text style={styles.back}>← 뒤로</Text>
         </TouchableOpacity>
-        {disease && <Text style={styles.headerTitle}>{disease.name} 라운지</Text>}
+        {disease && <Text style={styles.headerTitle}>{disease.name}</Text>}
       </View>
 
-      {/* 전체 스크롤 */}
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
-        {/* 게시글 */}
-        <View style={styles.post}>
+        {/* 본문 카드 */}
+        <View style={styles.postCard}>
           <View style={styles.tags}>
-            <View style={[styles.roleTag, { backgroundColor: COLORS.surfaceSecondary }]}>
-              <Text style={[styles.roleTagText, { color: COLORS.textSecondary }]}>
+            <View style={styles.roleTag}>
+              <Text style={styles.roleTagText}>
                 {post.author_role === 'patient' ? '환자' : '환우'}
               </Text>
             </View>
@@ -105,7 +104,7 @@ export default function PostDetailScreen({ route, navigation, nickname, userRole
           <Text style={styles.content}>{post.content}</Text>
           <View style={styles.divider} />
 
-          {/* 공감 */}
+          {/* 공감 버튼 3개 */}
           <Text style={styles.reactionTitle}>이 글이 도움이 됐나요?</Text>
           <View style={styles.reactionRow}>
             {reactions.map(({ type, label }) => (
@@ -114,8 +113,10 @@ export default function PostDetailScreen({ route, navigation, nickname, userRole
                 style={[styles.reactionBtn, postState.user_reaction === type && styles.reactionBtnActive]}
                 onPress={() => handleReact(type)}
               >
-                <Text style={[styles.reactionLabel, postState.user_reaction === type && { color: COLORS.primary }]}>{label}</Text>
-                <Text style={[styles.reactionCount, postState.user_reaction === type && { color: COLORS.primary }]}>
+                <Text style={[styles.reactionLabel, postState.user_reaction === type && styles.reactionLabelActive]}>
+                  {label}
+                </Text>
+                <Text style={[styles.reactionCount, postState.user_reaction === type && styles.reactionCountActive]}>
                   {postState.reactions[type]}
                 </Text>
               </TouchableOpacity>
@@ -123,14 +124,17 @@ export default function PostDetailScreen({ route, navigation, nickname, userRole
           </View>
         </View>
 
-        {/* 댓글 */}
+        {/* 댓글 섹션 */}
         <View style={styles.commentsSection}>
           <Text style={styles.commentsTitle}>댓글 {comments.length}개</Text>
           {comments.map(comment => (
-            <View key={comment.id} style={[styles.commentCard, comment.parent_id && styles.commentReply]}>
+            <View
+              key={comment.id}
+              style={[styles.commentCard, comment.parent_id && styles.commentReply]}
+            >
               <View style={styles.commentHeader}>
-                <View style={[styles.roleTagSmall, { backgroundColor: COLORS.surfaceSecondary }]}>
-                  <Text style={[styles.roleTagSmallText, { color: COLORS.textSecondary }]}>
+                <View style={styles.commentRoleTag}>
+                  <Text style={styles.commentRoleText}>
                     {comment.author_role === 'patient' ? '환자' : '환우'}
                   </Text>
                 </View>
@@ -147,7 +151,7 @@ export default function PostDetailScreen({ route, navigation, nickname, userRole
           ))}
         </View>
 
-        {/* 댓글 입력 - 스크롤 안으로 이동 */}
+        {/* 댓글 입력 */}
         <View style={styles.commentInputArea}>
           {replyTo && (
             <View style={styles.replyIndicator}>
@@ -161,7 +165,7 @@ export default function PostDetailScreen({ route, navigation, nickname, userRole
             <TextInput
               style={styles.input}
               placeholder={replyTo ? '답글을 입력하세요' : '댓글을 입력하세요'}
-              placeholderTextColor={COLORS.textTertiary}
+              placeholderTextColor={COLORS.textSecondary}
               value={commentText}
               onChangeText={setCommentText}
               multiline
@@ -182,74 +186,194 @@ export default function PostDetailScreen({ route, navigation, nickname, userRole
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
+
+  // 헤더 — 인디고
   header: {
-    flexDirection: 'row', alignItems: 'center',
-    paddingHorizontal: SPACING.lg, paddingTop: 56, paddingBottom: SPACING.md,
-    backgroundColor: COLORS.surface, borderBottomWidth: 1, borderBottomColor: COLORS.border,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: SPACING.lg,
+    paddingTop: 56,
+    paddingBottom: SPACING.md,
+    backgroundColor: COLORS.primary,
   },
-  back: { fontSize: FONTS.sizes.md, color: COLORS.primary, marginRight: SPACING.md },
-  headerTitle: { fontSize: FONTS.sizes.sm, fontWeight: '600', color: COLORS.textPrimary },
+  backBtn: { marginRight: SPACING.md },
+  back: { fontSize: FONTS.sizes.md, fontFamily: FONTS.bold, color: COLORS.textOnDark },
+  headerTitle: {
+    fontSize: FONTS.sizes.sm,
+    fontFamily: FONTS.semibold,
+    color: COLORS.textOnDarkSoft,
+  },
+
   scroll: { flex: 1 },
-  scrollContent: { paddingBottom: SPACING.xxl },
-  post: { backgroundColor: COLORS.surface, padding: SPACING.lg, marginBottom: SPACING.sm },
+  scrollContent: { paddingBottom: 96 },
+
+  // 본문 카드
+  postCard: {
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.xl,
+    margin: SPACING.md,
+    padding: SPACING.lg,
+    ...SHADOWS.card,
+  },
   tags: { flexDirection: 'row', marginBottom: SPACING.sm },
-  roleTag: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: RADIUS.full, marginRight: 6 },
-  roleTagText: { fontSize: FONTS.sizes.xs, fontWeight: '700' },
-  typeTag: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: RADIUS.full, backgroundColor: COLORS.surfaceSecondary },
-  typeTagText: { fontSize: FONTS.sizes.xs, color: COLORS.textSecondary },
-  title: { fontSize: FONTS.sizes.xl, fontWeight: '800', color: COLORS.textPrimary, lineHeight: 28, marginBottom: SPACING.sm },
+  roleTag: {
+    backgroundColor: COLORS.background,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: RADIUS.full,
+    marginRight: 6,
+  },
+  roleTagText: {
+    fontSize: FONTS.sizes.xs,
+    fontFamily: FONTS.bold,
+    color: COLORS.primary,
+  },
+  typeTag: {
+    backgroundColor: COLORS.background,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: RADIUS.full,
+  },
+  typeTagText: {
+    fontSize: FONTS.sizes.xs,
+    fontFamily: FONTS.regular,
+    color: COLORS.textSecondary,
+  },
+  title: {
+    fontSize: FONTS.sizes.xl,
+    fontFamily: FONTS.extrabold,
+    color: COLORS.textPrimary,
+    lineHeight: 28,
+    marginBottom: SPACING.sm,
+  },
   metaRow: { flexDirection: 'row', alignItems: 'center', marginBottom: SPACING.md },
-  nicknameTxt: { fontSize: FONTS.sizes.sm, color: COLORS.textSecondary },
-  separator: { color: COLORS.textTertiary, marginHorizontal: 6 },
-  time: { fontSize: FONTS.sizes.sm, color: COLORS.textTertiary },
-  divider: { height: 1, backgroundColor: COLORS.border, marginVertical: SPACING.md },
-  content: { fontSize: FONTS.sizes.md, color: COLORS.textPrimary, lineHeight: 26 },
-  reactionTitle: { fontSize: FONTS.sizes.sm, fontWeight: '600', color: COLORS.textSecondary, marginBottom: SPACING.sm },
-  reactionRow: { flexDirection: 'row' },
+  nicknameTxt: { fontSize: FONTS.sizes.sm, fontFamily: FONTS.semibold, color: COLORS.textSecondary },
+  separator: { color: COLORS.textSecondary, marginHorizontal: 6 },
+  time: { fontSize: FONTS.sizes.sm, fontFamily: FONTS.regular, color: COLORS.textSecondary },
+  divider: { height: 1, backgroundColor: COLORS.borderCard, marginVertical: SPACING.md },
+  content: { fontSize: FONTS.sizes.md, fontFamily: FONTS.regular, color: COLORS.textPrimary, lineHeight: 26 },
+
+  // 공감 버튼
+  reactionTitle: {
+    fontSize: FONTS.sizes.sm,
+    fontFamily: FONTS.semibold,
+    color: COLORS.textSecondary,
+    marginBottom: SPACING.sm,
+  },
+  reactionRow: { flexDirection: 'row', gap: SPACING.sm },
   reactionBtn: {
-    flex: 1, alignItems: 'center', padding: SPACING.sm, marginRight: SPACING.xs,
-    borderRadius: RADIUS.md, borderWidth: 1.5, borderColor: COLORS.border, backgroundColor: COLORS.surface,
+    flex: 1,
+    alignItems: 'center',
+    padding: SPACING.sm,
+    borderRadius: RADIUS.full,
+    backgroundColor: COLORS.background,
+    borderWidth: 1.5,
+    borderColor: COLORS.borderCard,
   },
-  reactionBtnActive: { borderColor: COLORS.primary, backgroundColor: COLORS.primaryPale },
-  reactionEmoji: { fontSize: 22, marginBottom: 4 },
-  reactionLabel: { fontSize: FONTS.sizes.xs, color: COLORS.textSecondary, marginBottom: 2 },
-  reactionCount: { fontSize: FONTS.sizes.sm, fontWeight: '700', color: COLORS.textSecondary },
-  commentsSection: { backgroundColor: COLORS.surface, padding: SPACING.lg, marginBottom: SPACING.sm },
-  commentsTitle: { fontSize: FONTS.sizes.md, fontWeight: '700', color: COLORS.textPrimary, marginBottom: SPACING.md },
+  reactionBtnActive: {
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
+  },
+  reactionLabel: {
+    fontSize: FONTS.sizes.xs,
+    fontFamily: FONTS.regular,
+    color: COLORS.textSecondary,
+    marginBottom: 2,
+  },
+  reactionLabelActive: { color: COLORS.textOnDark },
+  reactionCount: {
+    fontSize: FONTS.sizes.sm,
+    fontFamily: FONTS.bold,
+    color: COLORS.textSecondary,
+  },
+  reactionCountActive: { color: COLORS.textOnDark },
+
+  // 댓글
+  commentsSection: {
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.xl,
+    margin: SPACING.md,
+    marginTop: 0,
+    padding: SPACING.lg,
+    ...SHADOWS.card,
+  },
+  commentsTitle: {
+    fontSize: FONTS.sizes.md,
+    fontFamily: FONTS.bold,
+    color: COLORS.textPrimary,
+    marginBottom: SPACING.md,
+  },
   commentCard: {
-    padding: SPACING.md, backgroundColor: COLORS.surfaceSecondary,
-    borderRadius: RADIUS.md, marginBottom: SPACING.sm,
+    padding: SPACING.md,
+    backgroundColor: COLORS.background,
+    borderRadius: RADIUS.md,
+    marginBottom: SPACING.sm,
   },
-  commentReply: { marginLeft: SPACING.lg, borderLeftWidth: 3, borderLeftColor: COLORS.primary + '40' },
+  commentReply: {
+    marginLeft: SPACING.lg,
+    borderLeftWidth: 3,
+    borderLeftColor: COLORS.lavender,
+  },
   commentHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: SPACING.xs },
-  roleTagSmall: { paddingHorizontal: 6, paddingVertical: 2, borderRadius: RADIUS.full, marginRight: 6 },
-  roleTagSmallText: { fontSize: 10, fontWeight: '700' },
-  commentNickname: { flex: 1, fontSize: FONTS.sizes.sm, fontWeight: '600', color: COLORS.textPrimary },
-  commentTime: { fontSize: FONTS.sizes.xs, color: COLORS.textTertiary },
-  commentContent: { fontSize: FONTS.sizes.sm, color: COLORS.textPrimary, lineHeight: 20, marginBottom: SPACING.xs },
-  replyBtn: { fontSize: FONTS.sizes.xs, color: COLORS.primary, fontWeight: '600' },
-  // 댓글 입력창 - 스크롤 안에 포함
+  commentRoleTag: {
+    backgroundColor: COLORS.primaryLight,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: RADIUS.full,
+    marginRight: 6,
+  },
+  commentRoleText: { fontSize: 10, fontFamily: FONTS.bold, color: COLORS.primary },
+  commentNickname: {
+    flex: 1,
+    fontSize: FONTS.sizes.sm,
+    fontFamily: FONTS.bold,
+    color: COLORS.textPrimary,
+  },
+  commentTime: { fontSize: FONTS.sizes.xs, fontFamily: FONTS.regular, color: COLORS.textSecondary },
+  commentContent: {
+    fontSize: FONTS.sizes.sm,
+    fontFamily: FONTS.regular,
+    color: COLORS.textPrimary,
+    lineHeight: 20,
+    marginBottom: SPACING.xs,
+  },
+  replyBtn: { fontSize: FONTS.sizes.xs, fontFamily: FONTS.bold, color: COLORS.primary },
+
+  // 댓글 입력
   commentInputArea: {
-    backgroundColor: COLORS.surface, margin: SPACING.md,
-    borderRadius: RADIUS.lg, padding: SPACING.md,
-    borderWidth: 1, borderColor: COLORS.border,
+    backgroundColor: COLORS.surface,
+    margin: SPACING.md,
+    marginTop: 0,
+    borderRadius: RADIUS.xl,
+    padding: SPACING.md,
+    ...SHADOWS.card,
   },
   replyIndicator: {
-    flexDirection: 'row', justifyContent: 'space-between',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     paddingBottom: SPACING.xs,
   },
-  replyIndicatorText: { fontSize: FONTS.sizes.xs, color: COLORS.primary },
-  replyCancel: { fontSize: FONTS.sizes.xs, color: COLORS.textTertiary },
+  replyIndicatorText: { fontSize: FONTS.sizes.xs, fontFamily: FONTS.semibold, color: COLORS.primary },
+  replyCancel: { fontSize: FONTS.sizes.xs, color: COLORS.textSecondary },
   inputRow: { flexDirection: 'row', alignItems: 'flex-end' },
   input: {
-    flex: 1, backgroundColor: COLORS.surfaceSecondary,
-    borderRadius: RADIUS.md, paddingHorizontal: SPACING.md, paddingVertical: SPACING.sm,
-    fontSize: FONTS.sizes.sm, color: COLORS.textPrimary, maxHeight: 100, marginRight: SPACING.sm,
+    flex: 1,
+    backgroundColor: COLORS.background,
+    borderRadius: RADIUS.md,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.sm,
+    fontSize: FONTS.sizes.sm,
+    fontFamily: FONTS.regular,
+    color: COLORS.textPrimary,
+    maxHeight: 100,
+    marginRight: SPACING.sm,
   },
   sendBtn: {
-    backgroundColor: COLORS.primary, borderRadius: RADIUS.md,
-    paddingHorizontal: SPACING.md, paddingVertical: SPACING.sm,
+    backgroundColor: COLORS.primary,
+    borderRadius: RADIUS.full,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.sm,
   },
-  sendBtnDisabled: { backgroundColor: COLORS.border },
-  sendBtnText: { color: '#fff', fontWeight: '700', fontSize: FONTS.sizes.sm },
+  sendBtnDisabled: { backgroundColor: COLORS.lavender },
+  sendBtnText: { color: COLORS.textOnDark, fontFamily: FONTS.bold, fontSize: FONTS.sizes.sm },
 });

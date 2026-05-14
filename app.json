@@ -30,6 +30,9 @@
     },
     "experiments": {
       "baseUrl": "/chartbak"
-    }
+    },
+    "plugins": [
+      "expo-font"
+    ]
   }
 }
