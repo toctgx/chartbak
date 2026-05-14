@@ -161,6 +161,7 @@ export default function HomeFeedScreen({ navigation, userDiseaseIds, nickname }:
       </View>
 
       {/* 피드 */}
+      <View style={{ flex: 1, overflow: 'hidden' }}>
       <FlatList
         style={{ flex: 1 }}
         data={filtered}
@@ -188,6 +189,8 @@ export default function HomeFeedScreen({ navigation, userDiseaseIds, nickname }:
           </View>
         }
       />
+
+      </View>
 
       {/* 정렬 모달 */}
       <Modal transparent visible={sortOpen} animationType="fade" onRequestClose={() => setSortOpen(false)}>
