@@ -92,3 +92,22 @@ export const REACTION_LABELS: Record<ReactionType, string> = {
 };
 
 export const AGE_GROUPS = ['10대', '20대', '30대', '40대', '50대', '60대', '70대 이상'];
+
+// ── 식단 분석 ─────────────────────────────────────────────
+export interface DietEntry {
+  id: string;
+  author_id: string;
+  imageUri?: string;
+  description: string;
+  meal_type: 'breakfast' | 'lunch' | 'dinner' | 'snack';
+  created_at: string;
+  analysis?: import('../lib/dietAI').DietAnalysisResult;
+  isAnalyzing?: boolean;
+}
+
+export const MEAL_TYPE_LABELS: Record<DietEntry['meal_type'], string> = {
+  breakfast: '아침',
+  lunch: '점심',
+  dinner: '저녁',
+  snack: '간식',
+};

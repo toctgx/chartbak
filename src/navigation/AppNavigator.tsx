@@ -5,11 +5,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { COLORS, FONTS } from '../constants/theme';
 import {
   IconHome, IconHomeActive,
+  IconDiet, IconDietActive,
   IconDiary, IconDiaryActive,
   IconMyPage, IconMyPageActive,
 } from '../components/Icons';
 
 import HomeFeedScreen from '../screens/HomeFeedScreen';
+import DietScreen from '../screens/DietScreen';
 import DiaryScreen from '../screens/DiaryScreen';
 import WritePostScreen from '../screens/WritePostScreen';
 import PostDetailScreen from '../screens/PostDetailScreen';
@@ -103,6 +105,26 @@ export default function AppNavigator({ user, onLogout, onNewPost }: AppNavigator
         }}
       >
         {() => <HomeStack user={user} onNewPost={onNewPost} />}
+      </Tab.Screen>
+
+      {/* 식단 */}
+      <Tab.Screen
+        name="DietTab"
+        options={{
+          tabBarLabel: '식단',
+          tabBarIcon: ({ focused }) => (
+            <View style={focused ? iconBoxStyle : undefined}>
+              {focused ? <IconDietActive size={24} /> : <IconDiet size={24} />}
+            </View>
+          ),
+        }}
+      >
+        {() => (
+          <DietScreen
+            userDiseaseIds={user.disease_ids}
+            userId={user.id}
+          />
+        )}
       </Tab.Screen>
 
       {/* 한줄일기 */}

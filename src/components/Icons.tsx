@@ -176,6 +176,25 @@ const SVG_TYPE_HOSPITAL = `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/200
   <path d="M21 7l1.5 1.5 3-3" stroke="#C8D9C4" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>`;
 
+// ── 탭바: 식단 ────────────────────────────────────────────
+const SVG_DIET = `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="24" cy="34" rx="16" ry="6" fill="rgba(0,0,0,0.14)"/>
+  <ellipse cx="24" cy="32" rx="16" ry="6" fill="rgba(0,0,0,0.22)"/>
+  <ellipse cx="24" cy="31" rx="14" ry="4.5" fill="rgba(0,0,0,0.10)"/>
+  <rect x="22" y="10" width="4" height="20" rx="2" fill="rgba(0,0,0,0.32)"/>
+  <path d="M18 10 Q18 18 22 22" stroke="rgba(0,0,0,0.32)" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M30 10 Q30 18 26 22" stroke="rgba(0,0,0,0.32)" stroke-width="3" fill="none" stroke-linecap="round"/>
+</svg>`;
+
+const SVG_DIET_ACTIVE = `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="24" cy="34" rx="16" ry="6" fill="#7BA374"/>
+  <ellipse cx="24" cy="32" rx="16" ry="6" fill="#4A6741"/>
+  <ellipse cx="24" cy="31" rx="14" ry="4.5" fill="#7BA374"/>
+  <rect x="22" y="10" width="4" height="20" rx="2" fill="#3A5130"/>
+  <path d="M18 10 Q18 18 22 22" stroke="#4A6741" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M30 10 Q30 18 26 22" stroke="#4A6741" stroke-width="3" fill="none" stroke-linecap="round"/>
+</svg>`;
+
 // ── 글쓰기 버튼 아이콘 ────────────────────────────────────
 const SVG_WRITE = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z" fill="white"/>
@@ -210,6 +229,8 @@ export const IconLounge       = ({ size = 26 }: IconProps) => <Image source={{ u
 export const IconLoungeActive = ({ size = 26 }: IconProps) => <Image source={{ uri: svg2uri(SVG_LOUNGE_ACTIVE) }} style={{ width: size, height: size }} />;
 export const IconMyPage       = ({ size = 26 }: IconProps) => <Image source={{ uri: svg2uri(SVG_MYPAGE) }} style={{ width: size, height: size }} />;
 export const IconMyPageActive = ({ size = 26 }: IconProps) => <Image source={{ uri: svg2uri(SVG_MYPAGE_ACTIVE) }} style={{ width: size, height: size }} />;
+export const IconDiet        = ({ size = 26 }: IconProps) => <Image source={{ uri: svg2uri(SVG_DIET) }} style={{ width: size, height: size }} />;
+export const IconDietActive  = ({ size = 26 }: IconProps) => <Image source={{ uri: svg2uri(SVG_DIET_ACTIVE) }} style={{ width: size, height: size }} />;
 export const IconDiary       = ({ size = 26 }: IconProps) => <Image source={{ uri: svg2uri(SVG_DIARY) }} style={{ width: size, height: size }} />;
 export const IconDiaryActive = ({ size = 26 }: IconProps) => <Image source={{ uri: svg2uri(SVG_DIARY_ACTIVE) }} style={{ width: size, height: size }} />;
 
