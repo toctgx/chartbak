@@ -8,7 +8,6 @@ import {
   IconDiet, IconDietActive,
   IconDiary, IconDiaryActive,
   IconMyPage, IconMyPageActive,
-  IconLounge, IconLoungeActive,
   IconWrite,
 } from '../components/Icons';
 
@@ -17,8 +16,7 @@ import DietScreen from '../screens/DietScreen';
 import DiaryScreen from '../screens/DiaryScreen';
 import WritePostScreen from '../screens/WritePostScreen';
 import PostDetailScreen from '../screens/PostDetailScreen';
-import LoungeListScreen from '../screens/LoungeListScreen';
-import LoungeDetailScreen from '../screens/LoungeDetailScreen';
+
 import MyPageScreen from '../screens/MyPageScreen';
 import { User } from '../types';
 
@@ -68,58 +66,16 @@ function HomeStack({ user, onNewPost }: { user: User; onNewPost: (post: any) => 
   );
 }
 
-function LoungeStack({ user, onNewPost }: { user: User; onNewPost: (post: any) => void }) {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="LoungeList">
-        {(props) => (
-          <LoungeListScreen
-            {...props}
-            userDiseaseIds={user.disease_ids}
-          />
-        )}
-      </Stack.Screen>
-      <Stack.Screen name="LoungeDetail">
-        {(props) => (
-          <LoungeDetailScreen
-            {...props}
-            nickname={user.nickname}
-            userRole={user.role}
-          />
-        )}
-      </Stack.Screen>
-      <Stack.Screen name="PostDetail">
-        {(props) => (
-          <PostDetailScreen
-            {...props}
-            nickname={user.nickname}
-            userRole={user.role}
-          />
-        )}
-      </Stack.Screen>
-      <Stack.Screen name="WritePost">
-        {(props) => (
-          <WritePostScreen
-            {...props}
-            userDiseaseIds={user.disease_ids}
-            userRole={user.role}
-            nickname={user.nickname}
-            onSubmit={onNewPost}
-          />
-        )}
-      </Stack.Screen>
-    </Stack.Navigator>
-  );
-}
+
 
 // ── 플로팅 커스텀 탭바 ────────────────────────────────────
 function CustomTabBar({ state, descriptors, navigation }: any) {
   const tabs = [
-    { name: 'HomeTab',   label: '피드',    Icon: IconHome,   IconActive: IconHomeActive },
-    { name: 'LoungeTab', label: '라운지',  Icon: IconLounge, IconActive: IconLoungeActive },
-    { name: 'WriteTab',  label: '',        Icon: null,       IconActive: null, isFab: true },
-    { name: 'DietTab',   label: '식단',    Icon: IconDiet,   IconActive: IconDietActive },
-    { name: 'MyPage',    label: '마이',    Icon: IconMyPage, IconActive: IconMyPageActive },
+    { name: 'HomeTab',  label: '피드',  Icon: IconHome,   IconActive: IconHomeActive },
+    { name: 'DietTab',  label: '식단',  Icon: IconDiet,   IconActive: IconDietActive },
+    { name: 'WriteTab', label: '',      Icon: null,       IconActive: null, isFab: true },
+    { name: 'DiaryTab', label: '일기',  Icon: IconDiary,  IconActive: IconDiaryActive },
+    { name: 'MyPage',   label: '마이',  Icon: IconMyPage, IconActive: IconMyPageActive },
   ];
 
   return (
@@ -252,8 +208,13 @@ export default function AppNavigator({ user, onLogout, onNewPost }: AppNavigator
         {() => <HomeStack user={user} onNewPost={onNewPost} />}
       </Tab.Screen>
 
-      <Tab.Screen name="LoungeTab">
-        {() => <LoungeStack user={user} onNewPost={onNewPost} />}
+      <Tab.Screen name="DietTab">
+        {() => (
+          <DietScreen
+            userDiseaseIds={user.disease_ids}
+            userId={user.id}
+          />
+        )}
       </Tab.Screen>
 
       {/* WriteTab — 실제로 렌더링 안 됨, FAB이 처리 */}
@@ -261,11 +222,11 @@ export default function AppNavigator({ user, onLogout, onNewPost }: AppNavigator
         {() => <View style={{ flex: 1, backgroundColor: COLORS.background }} />}
       </Tab.Screen>
 
-      <Tab.Screen name="DietTab">
+      <Tab.Screen name="DiaryTab">
         {() => (
-          <DietScreen
-            userDiseaseIds={user.disease_ids}
-            userId={user.id}
+          <DiaryScreen
+            nickname={user.nickname}
+            userRole={user.role}
           />
         )}
       </Tab.Screen>
