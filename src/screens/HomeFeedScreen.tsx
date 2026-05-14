@@ -40,8 +40,8 @@ export default function HomeFeedScreen({ navigation, userDiseaseIds, nickname }:
   const [refreshing, setRefreshing] = useState(false);
 
   const tabs: { key: FeedTab; label: string }[] = [
-    { key: 'my',      label: '내 질환' },
     { key: 'all',     label: '전체' },
+    { key: 'my',      label: '내 질환' },
     { key: 'popular', label: '인기' },
   ];
 
@@ -162,6 +162,7 @@ export default function HomeFeedScreen({ navigation, userDiseaseIds, nickname }:
 
       {/* 피드 */}
       <FlatList
+        style={{ flex: 1 }}
         data={filtered}
         keyExtractor={item => item.id}
         renderItem={({ item, index }) => {
@@ -176,6 +177,7 @@ export default function HomeFeedScreen({ navigation, userDiseaseIds, nickname }:
           );
         }}
         contentContainerStyle={styles.list}
+        showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); setTimeout(() => setRefreshing(false), 1000); }} tintColor={COLORS.accent} />}
         keyboardShouldPersistTaps="handled"
         ListEmptyComponent={
